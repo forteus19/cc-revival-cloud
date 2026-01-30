@@ -11,16 +11,17 @@ public final class Main {
 
 		ServerGui.func_120016_a(cloud.getCloudManager());
 
-		while (cloud.isRunning) {
+		while (!cloud.getCloudManager().isCloudStopped) {
 			cloud.onUpdate();
 
 			try {
 				Thread.sleep(50);
 			} catch (InterruptedException e) {
-				cloud.isRunning = false;
+				cloud.getCloudManager().initiateShutdown();
 			}
 		}
 
 		cloud.onShutdown();
+		System.exit(0);
 	}
 }

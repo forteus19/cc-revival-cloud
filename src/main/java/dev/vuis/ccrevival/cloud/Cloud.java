@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import lombok.Getter;
 
 public final class Cloud implements ICloud {
-	boolean isRunning = true;
-
 	@Getter
 	private final G_CloudManager cloudManager = new G_CloudManager(this);
 	{
@@ -21,6 +19,7 @@ public final class Cloud implements ICloud {
 	}
 
 	void onShutdown() {
+		cloudManager.log("Shutting down...");
 	}
 
 	@Override
@@ -65,7 +64,7 @@ public final class Cloud implements ICloud {
 	@Override
 	public void handleCommand(String command) {
 		if (command.equals("stop")) {
-			isRunning = false;
+			cloudManager.initiateShutdown();
 		}
 	}
 
