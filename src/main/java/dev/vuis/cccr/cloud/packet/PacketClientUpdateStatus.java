@@ -28,7 +28,10 @@ public final class PacketClientUpdateStatus extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(connectionHandler.getConnectionUsername());
+		IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(connectionHandler.getConnectionUsername(), false);
+		if (playerData == null) {
+			return;
+		}
 		playerData.setStatus(status);
 	}
 }

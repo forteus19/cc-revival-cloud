@@ -9,11 +9,22 @@ public final class Main {
 	}
 
 	static void main(String[] args) {
+		if (args.length < 1) {
+			System.err.println("Args: <port>");
+			return;
+		}
+
+		int port = Integer.parseInt(args[0]);
+		if (port >= 10000) {
+			System.err.println("Port must less than 10000");
+			return;
+		}
+
 //		G_CloudNetworkManager.LOG_PACKETS_PROCESSED = true;
 		G_CloudNetworkManager.LOG_LOGIN_PROCESS = true;
 		PacketRegistry.registerPackets();
 
-		Cloud cloud = new Cloud();
+		Cloud cloud = new Cloud(port);
 
 		ServerGui.func_120016_a(cloud.getCloudManager());
 

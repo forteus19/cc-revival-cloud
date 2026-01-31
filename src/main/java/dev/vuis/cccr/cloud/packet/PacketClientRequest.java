@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.RequestType;
+import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.IPlayerData;
 import dev.vuis.cccr.cloud.main.Cloud;
 import java.io.DataInputStream;
@@ -32,13 +33,25 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) {
-		if (type == RequestType.PLAYER_DATA && requestData.length == 1) {
-			IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(requestData[0]);
+		switch (type) {
+			case PLAYER_DATA -> {
+				if (requestData.length == 1) {
+					IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(requestData[0], false);
+					if (playerData == null) {
+						return;
+					}
 
-			PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
-			packet.username = requestData[0];
-			playerData.putTag(packet.tag);
-			connectionHandler.sendPacket(packet);
+					PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
+					packet.username = requestData[0];
+					playerData.putTag(packet.tag);
+					connectionHandler.sendPacket(packet);
+				}
+			}
+			case CLOUDSTATS -> {
+				PacketRequestedCloudData packet = new PacketRequestedCloudData();
+				CloudStats.putTag(packet.tag);
+				connectionHandler.sendPacket(packet);
+			}
 		}
 	}
 }

@@ -7,6 +7,7 @@ import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.IDataHolder;
 import dev.vuis.cccr.cloud.data.IPlayerData;
 import dev.vuis.cccr.cloud.data.InMemoryDataHolder;
+import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
@@ -22,10 +23,17 @@ public final class Cloud implements ICloud {
 		instance = this;
 	}
 
+	private final int port;
+
 	@Getter
-	private final G_CloudManager cloudManager = new G_CloudManager(this);
+	private final G_CloudManager cloudManager;
 	@Getter
 	private final IDataHolder dataHolder = new InMemoryDataHolder();
+
+	public Cloud(int port) {
+		this.port = port;
+		cloudManager = new G_CloudManager(this);
+	}
 
 	public static Cloud getInstance() {
 		if (instance == null) {
@@ -54,7 +62,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public int getCloudPort() {
-		return 1923;
+		return port;
 	}
 
 	@Override
@@ -80,13 +88,19 @@ public final class Cloud implements ICloud {
 		cloudManager.log("Client \"" + username + "\" established connection");
 		cloudManager.log("Login info: " + loginData);
 
-		IPlayerData playerData = dataHolder.getPlayerData(username);
+		IPlayerData playerData = dataHolder.getPlayerData(username, true);
 		playerData.setOnline(true);
 
 		PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 		packet.username = username;
 		playerData.putTag(packet.tag);
 		connectionHandler.sendPacket(packet);
+
+		for (G_CloudTcpConnectionHandler onlineConnection : cloudManager.getNetwork().getNetChannel("player")) {
+			if (onlineConnection.isLoginSuccessful && !username.equals(onlineConnection.getConnectionUsername())) {
+				onlineConnection.sendPacket(new PacketNotificationFromCloud("CounterCraft", username + " has logged in.", 0));
+			}
+		}
 	}
 
 	@Override
@@ -95,7 +109,7 @@ public final class Cloud implements ICloud {
 
 		cloudManager.log("Client \"" + username + "\" disconnected (reason: \"" + ReflectUtil.getTerminationReason(connectionHandler.tcpConnection) + "\")");
 
-		IPlayerData playerData = dataHolder.getPlayerData(username);
+		IPlayerData playerData = dataHolder.getPlayerData(username, true);
 		playerData.setOnline(false);
 	}
 
