@@ -27,5 +27,5 @@ java {
 }
 
 application {
-    mainClass = "dev.vuis.cccr.cloud.Main"
+    mainClass = "dev.vuis.cccr.cloud.main.Main"
 }

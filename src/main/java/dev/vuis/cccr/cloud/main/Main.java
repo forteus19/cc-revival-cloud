@@ -1,7 +1,8 @@
-package dev.vuis.cccr.cloud;
+package dev.vuis.cccr.cloud.main;
 
 import com.f3rullo14.cloud.server.G_CloudNetworkManager;
 import com.f3rullo14.cloud.server.gui.ServerGui;
+import dev.vuis.cccr.cloud.PacketRegistry;
 
 public final class Main {
 	private Main() {
@@ -10,6 +11,7 @@ public final class Main {
 	static void main(String[] args) {
 //		G_CloudNetworkManager.LOG_PACKETS_PROCESSED = true;
 		G_CloudNetworkManager.LOG_LOGIN_PROCESS = true;
+		PacketRegistry.registerPackets();
 
 		Cloud cloud = new Cloud();
 
