@@ -4,6 +4,7 @@ import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
 import lombok.Getter;
 
@@ -11,7 +12,7 @@ public final class Cloud implements ICloud {
 	@Getter
 	private final G_CloudManager cloudManager = new G_CloudManager(this);
 	{
-		cloudManager.getNetwork().registerPacketHandler(new CloudPacketHandler());
+		cloudManager.getNetwork().registerPacketHandler(new CloudPacketHandler(cloudManager));
 	}
 
 	void onUpdate() {
@@ -61,7 +62,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public void onConnectionDisconnected(G_CloudTcpConnectionHandler connectionHandler) {
-		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" disconnected");
+		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" disconnected (reason: \"" + ReflectUtil.getTerminationReason(connectionHandler.tcpConnection) + "\")");
 	}
 
 	@Override

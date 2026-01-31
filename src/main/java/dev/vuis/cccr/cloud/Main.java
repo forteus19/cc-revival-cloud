@@ -8,6 +8,7 @@ public final class Main {
 	}
 
 	static void main(String[] args) {
+//		G_CloudNetworkManager.LOG_PACKETS_PROCESSED = true;
 		G_CloudNetworkManager.LOG_LOGIN_PROCESS = true;
 
 		Cloud cloud = new Cloud();
