@@ -11,6 +11,7 @@ import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
+import java.util.Arrays;
 import lombok.Getter;
 
 public final class Cloud implements ICloud {
@@ -111,12 +112,41 @@ public final class Cloud implements ICloud {
 
 		IPlayerData playerData = dataHolder.getPlayerData(username, true);
 		playerData.setOnline(false);
+
+		for (G_CloudTcpConnectionHandler onlineConnection : cloudManager.getNetwork().getNetChannel("player")) {
+			if (onlineConnection.isLoginSuccessful && !username.equals(onlineConnection.getConnectionUsername())) {
+				onlineConnection.sendPacket(new PacketNotificationFromCloud("CounterCraft", username + " has logged out.", 0));
+			}
+		}
 	}
 
 	@Override
 	public void handleCommand(String command) {
-		if (command.equals("stop")) {
-			cloudManager.initiateShutdown();
+		String[] parts = command.split(" ");
+		boolean success = true;
+
+		switch (parts[0]) {
+			case "stop" -> {
+				cloudManager.initiateShutdown();
+			}
+			case "tell" -> {
+				if (parts.length < 3) {
+					cloudManager.log("tell - Missing args: <username> <message>");
+					break;
+				}
+				String username = parts[1];
+				String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
+
+				cloudManager.getNetwork().sendPacketToClient("player", username, new PacketNotificationFromCloud("Cloud", message, 0));
+			}
+			default -> {
+				cloudManager.log("Unknown command \"" + parts[0] + "\".");
+				success = false;
+			}
+		}
+
+		if (success) {
+			cloudManager.log("Command: " + command);
 		}
 	}
 
