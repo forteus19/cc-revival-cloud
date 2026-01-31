@@ -27,5 +27,5 @@ java {
 }
 
 application {
-    mainClass = "dev.vuis.ccrevival.cloud.Main"
+    mainClass = "dev.vuis.cccr.cloud.Main"
 }

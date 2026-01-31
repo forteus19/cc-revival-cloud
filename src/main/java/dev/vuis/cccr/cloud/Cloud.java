@@ -1,4 +1,4 @@
-package dev.vuis.ccrevival.cloud;
+package dev.vuis.cccr.cloud;
 
 import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
@@ -34,7 +34,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public int getCloudPort() {
-		return 1490;
+		return 1923;
 	}
 
 	@Override
@@ -43,22 +43,25 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public boolean onConnectionReached(G_CloudTcpConnectionHandler connectionHandler) {
-		cloudManager.log("Connection reached with player \"" + connectionHandler.getConnectionUsername() + "\"");
+		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" is attemping connection");
 		return true;
 	}
 
 	@Override
 	public boolean onConnectionAddedToThread(G_CloudTcpConnectionHandler connectionHandler) {
+		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" added to thread");
 		return true;
 	}
 
 	@Override
 	public void onConnectionEstablished(G_CloudTcpConnectionHandler connectionHandler, FDSTagCompound loginData) {
-		cloudManager.log("Connection established with player \"" + connectionHandler.getConnectionUsername() + "\"");
+		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" established connection");
+		cloudManager.log("Login info: " + loginData);
 	}
 
 	@Override
 	public void onConnectionDisconnected(G_CloudTcpConnectionHandler connectionHandler) {
+		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" disconnected");
 	}
 
 	@Override
@@ -70,5 +73,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public void getChannels(ArrayList<String> target) {
+		target.add("player");
+		target.add("server");
 	}
 }

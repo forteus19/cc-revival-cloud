@@ -1,5 +1,6 @@
-package dev.vuis.ccrevival.cloud;
+package dev.vuis.cccr.cloud;
 
+import com.f3rullo14.cloud.server.G_CloudNetworkManager;
 import com.f3rullo14.cloud.server.gui.ServerGui;
 
 public final class Main {
@@ -7,6 +8,8 @@ public final class Main {
 	}
 
 	static void main(String[] args) {
+		G_CloudNetworkManager.LOG_LOGIN_PROCESS = true;
+
 		Cloud cloud = new Cloud();
 
 		ServerGui.func_120016_a(cloud.getCloudManager());
