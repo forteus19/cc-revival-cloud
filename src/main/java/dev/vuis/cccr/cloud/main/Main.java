@@ -17,7 +17,8 @@ public final class Main {
 
 		Cloud cloud = new Cloud(
 			Util.getEnvInt("CCCR_PORT", 1923),
-			Util.getEnv("CCCR_MM_PASSWORD", null)
+			Util.getEnv("CCCR_MM_PASSWORD", null),
+			Util.getEnv("CCCR_MC_HOST", "localhost")
 		);
 
 		ServerGui.func_120016_a(cloud.getCloudManager());

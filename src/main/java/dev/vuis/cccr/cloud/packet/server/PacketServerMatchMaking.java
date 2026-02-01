@@ -4,7 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import dev.vuis.cccr.cloud.Cloud;
-import dev.vuis.cccr.cloud.data.server.ServerStatus;
+import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -42,6 +42,7 @@ public final class PacketServerMatchMaking extends G_TcpPacketCustomPayload {
 		String previous = ServerStatus.REGION.put(connectionHandler.getConnectionUsername(), serverRegion);
 		if (previous == null) {
 			connectionHandler.sendPacket(new PacketServerMatchMakingAccepted());
+			Cloud.getInstance().getCloudManager().log("Registered " + connectionHandler.getConnectionUsername() + " for matchmaking");
 		}
 	}
 }

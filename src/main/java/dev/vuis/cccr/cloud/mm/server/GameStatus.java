@@ -1,4 +1,4 @@
-package dev.vuis.cccr.cloud.data.server;
+package dev.vuis.cccr.cloud.mm.server;
 
 public final class GameStatus {
 	public String gameType;

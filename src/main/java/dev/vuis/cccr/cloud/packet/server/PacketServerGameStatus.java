@@ -2,14 +2,15 @@ package dev.vuis.cccr.cloud.packet.server;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
-import dev.vuis.cccr.cloud.data.server.GameStatus;
-import dev.vuis.cccr.cloud.data.server.ServerStatus;
+import dev.vuis.cccr.cloud.mm.server.GameStatus;
+import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
+	private boolean hasGame;
 	private String gameType;
 	private String mapType;
 	private int remainingPlayerSlots;
@@ -23,7 +24,7 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void readPacketFromStream(DataInputStream in) throws IOException {
-		boolean hasGame = in.readBoolean();
+		hasGame = in.readBoolean();
 		readString(in);
 		if (!hasGame) {
 			return;
@@ -44,14 +45,18 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 		if (Util.kickIfServer(connectionHandler)) {
 			return;
 		}
-		GameStatus game = ServerStatus.GAME.get(connectionHandler.getConnectionUsername());
-		if (game != null) {
-			game.gameType = gameType;
-			game.mapType = mapType;
-			game.remainingPlayerSlots = remainingPlayerSlots;
-			game.remainingSpectatorSlots = remainingSpectatorSlots;
-			game.numPlayers = numPlayers;
-			game.acceptingPlayers = acceptingPlayers;
+
+		if (!hasGame) {
+			ServerStatus.GAME.remove(connectionHandler.getConnectionUsername());
+			return;
 		}
+
+		GameStatus game = ServerStatus.GAME.computeIfAbsent(connectionHandler.getConnectionUsername(), k -> new GameStatus());
+		game.gameType = gameType;
+		game.mapType = mapType;
+		game.remainingPlayerSlots = remainingPlayerSlots;
+		game.remainingSpectatorSlots = remainingSpectatorSlots;
+		game.numPlayers = numPlayers;
+		game.acceptingPlayers = acceptingPlayers;
 	}
 }

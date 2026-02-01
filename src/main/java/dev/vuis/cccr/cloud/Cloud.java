@@ -7,7 +7,8 @@ import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.IDataHolder;
 import dev.vuis.cccr.cloud.data.IPlayerData;
 import dev.vuis.cccr.cloud.data.memory.InMemoryDataHolder;
-import dev.vuis.cccr.cloud.data.server.ServerStatus;
+import dev.vuis.cccr.cloud.mm.SearchHandler;
+import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
@@ -27,15 +28,17 @@ public final class Cloud implements ICloud {
 
 	private final int port;
 	private final String mmPassword;
+	public final String mcHost;
 
 	@Getter
 	private final G_CloudManager cloudManager;
 	@Getter
 	private final IDataHolder dataHolder = new InMemoryDataHolder();
 
-	public Cloud(int port, String mmPassword) {
+	public Cloud(int port, String mmPassword, String mcHost) {
 		this.port = port;
 		this.mmPassword = mmPassword;
+		this.mcHost = mcHost;
 		this.cloudManager = new G_CloudManager(this);
 	}
 
@@ -48,6 +51,7 @@ public final class Cloud implements ICloud {
 
 	public void onUpdate() {
 		cloudManager.onUpdate();
+		SearchHandler.onUpdate();
 	}
 
 	public void onShutdown() {
@@ -92,18 +96,23 @@ public final class Cloud implements ICloud {
 		cloudManager.log("Client \"" + username + "\" established connection");
 		cloudManager.log("Login info: " + loginData);
 
-		if (connectionHandler.channel.equals(CloudConstants.CHANNEL_PLAYER)) {
-			IPlayerData playerData = dataHolder.getPlayerData(username, true);
-			playerData.setOnline(true);
+		switch (connectionHandler.channel) {
+			case CloudConstants.CHANNEL_PLAYER -> {
+				IPlayerData playerData = dataHolder.getPlayerData(username, true);
+				playerData.setOnline(true);
 
-			PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
-			packet.username = username;
-			playerData.putDataTag(packet.tag);
-			connectionHandler.sendPacket(packet);
+				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
+				packet.username = username;
+				playerData.putDataTag(packet.tag);
+				connectionHandler.sendPacket(packet);
 
-			connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
-			for (String user : playerData.getFriends()) {
-				cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged in.", CloudConstants.CC_NAME, 0));
+				connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
+				for (String user : playerData.getFriends()) {
+					cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged in.", CloudConstants.CC_NAME, 0));
+				}
+			}
+			case CloudConstants.CHANNEL_SERVER -> {
+				ServerStatus.PORT.put(connectionHandler.getConnectionUsername(), loginData.getInteger("port"));
 			}
 		}
 	}
