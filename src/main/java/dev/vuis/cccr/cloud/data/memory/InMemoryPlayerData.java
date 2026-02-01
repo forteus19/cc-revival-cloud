@@ -1,13 +1,20 @@
-package dev.vuis.cccr.cloud.data;
+package dev.vuis.cccr.cloud.data.memory;
 
+import dev.vuis.cccr.cloud.data.IPlayerData;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public class InMemoryPlayerData implements IPlayerData {
+	// player data
 	private int exp = 0;
 	private boolean online = false;
 	private String mood = "super awesome mood";
 	private String status = "Main Menu";
 	private UUID uuid = UUID.randomUUID(); // FIXME
+
+	// friends
+	private final ArrayList<String> friends = new ArrayList<>();
+	private final ArrayList<String> friendRequests = new ArrayList<>();
 
 	@Override
 	public int getExp() {
@@ -57,5 +64,15 @@ public class InMemoryPlayerData implements IPlayerData {
 	@Override
 	public void setUuid(UUID uuid) {
 		this.uuid = uuid;
+	}
+
+	@Override
+	public ArrayList<String> getFriends() {
+		return friends;
+	}
+
+	@Override
+	public ArrayList<String> getFriendRequests() {
+		return friendRequests;
 	}
 }

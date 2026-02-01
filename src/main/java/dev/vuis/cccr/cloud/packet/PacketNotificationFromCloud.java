@@ -17,8 +17,8 @@ public final class PacketNotificationFromCloud extends G_TcpPacketCustomPayload 
 
 	@Override
 	public void writePacketToStream(DataOutputStream out) throws IOException {
-		writeString(out, message);
 		writeString(out, title);
+		writeString(out, message);
 		writeString(out, Integer.toString(type));
 	}
 

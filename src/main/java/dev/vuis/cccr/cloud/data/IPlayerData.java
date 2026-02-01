@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import java.util.ArrayList;
 import java.util.UUID;
 
 public interface IPlayerData {
@@ -24,7 +25,11 @@ public interface IPlayerData {
 
 	void setUuid(UUID uuid);
 
-	default void putTag(FDSTagCompound tag) {
+	ArrayList<String> getFriends();
+
+	ArrayList<String> getFriendRequests();
+
+	default void putDataTag(FDSTagCompound tag) {
 		tag.setInteger("exp", getExp());
 		tag.setBoolean("online", isOnline());
 		tag.setString("mood", getMood());
@@ -41,5 +46,10 @@ public interface IPlayerData {
 		tag.setBoolean("isSupporter", false);
 		tag.setBoolean("enableCape", false);
 		tag.setBoolean("hasparty", false);
+	}
+
+	default void putFriendsTag(FDSTagCompound tag) {
+		tag.setStringArrayList("friends", getFriends());
+		tag.setStringArrayList("pending", getFriendRequests());
 	}
 }

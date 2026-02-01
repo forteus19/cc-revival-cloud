@@ -35,17 +35,31 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) {
 		switch (type) {
 			case PLAYER_DATA -> {
-				if (requestData.length == 1) {
-					IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(requestData[0], false);
-					if (playerData == null) {
-						return;
-					}
-
-					PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
-					packet.username = requestData[0];
-					playerData.putTag(packet.tag);
-					connectionHandler.sendPacket(packet);
+				if (requestData.length != 1) {
+					break;
 				}
+				IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(requestData[0], false);
+				if (playerData == null) {
+					break;
+				}
+
+				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
+				packet.username = requestData[0];
+				playerData.putDataTag(packet.tag);
+				connectionHandler.sendPacket(packet);
+			}
+			case PLAYER_FRIENDS -> {
+				if (requestData.length != 1) {
+					break;
+				}
+				IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(requestData[0], false);
+				if (playerData == null) {
+					break;
+				}
+
+				PacketRequestedFriends packet = new PacketRequestedFriends();
+				playerData.putFriendsTag(packet.tag);
+				connectionHandler.sendPacket(packet);
 			}
 			case CLOUDSTATS -> {
 				PacketRequestedCloudData packet = new PacketRequestedCloudData();

@@ -4,9 +4,10 @@ import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.IDataHolder;
 import dev.vuis.cccr.cloud.data.IPlayerData;
-import dev.vuis.cccr.cloud.data.InMemoryDataHolder;
+import dev.vuis.cccr.cloud.data.memory.InMemoryDataHolder;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
@@ -94,13 +95,12 @@ public final class Cloud implements ICloud {
 
 		PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 		packet.username = username;
-		playerData.putTag(packet.tag);
+		playerData.putDataTag(packet.tag);
 		connectionHandler.sendPacket(packet);
 
-		for (G_CloudTcpConnectionHandler onlineConnection : cloudManager.getNetwork().getNetChannel("player")) {
-			if (onlineConnection.isLoginSuccessful && !username.equals(onlineConnection.getConnectionUsername())) {
-				onlineConnection.sendPacket(new PacketNotificationFromCloud("CounterCraft", username + " has logged in.", 0));
-			}
+		connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
+		for (String user : playerData.getFriends()) {
+			cloudManager.getNetwork().sendPacketToClient("player", user, new PacketNotificationFromCloud(username + " has logged in.", CloudConstants.CC_NAME, 0));
 		}
 	}
 
@@ -113,10 +113,8 @@ public final class Cloud implements ICloud {
 		IPlayerData playerData = dataHolder.getPlayerData(username, true);
 		playerData.setOnline(false);
 
-		for (G_CloudTcpConnectionHandler onlineConnection : cloudManager.getNetwork().getNetChannel("player")) {
-			if (onlineConnection.isLoginSuccessful && !username.equals(onlineConnection.getConnectionUsername())) {
-				onlineConnection.sendPacket(new PacketNotificationFromCloud("CounterCraft", username + " has logged out.", 0));
-			}
+		for (String user : playerData.getFriends()) {
+			cloudManager.getNetwork().sendPacketToClient("player", user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
 		}
 	}
 
@@ -137,7 +135,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
 
-				cloudManager.getNetwork().sendPacketToClient("player", username, new PacketNotificationFromCloud("Cloud", message, 0));
+				cloudManager.getNetwork().sendPacketToClient("player", username, new PacketNotificationFromCloud(message, "Cloud", 0));
 			}
 			default -> {
 				cloudManager.log("Unknown command \"" + parts[0] + "\".");

@@ -1,5 +1,7 @@
-package dev.vuis.cccr.cloud.data;
+package dev.vuis.cccr.cloud.data.memory;
 
+import dev.vuis.cccr.cloud.data.IDataHolder;
+import dev.vuis.cccr.cloud.data.IPlayerData;
 import dev.vuis.cccr.cloud.main.Cloud;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
