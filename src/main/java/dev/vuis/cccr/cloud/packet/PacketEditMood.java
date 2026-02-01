@@ -2,8 +2,8 @@ package dev.vuis.cccr.cloud.packet;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.data.IPlayerData;
-import dev.vuis.cccr.cloud.main.Cloud;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;

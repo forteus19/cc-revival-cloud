@@ -14,6 +14,11 @@ import dev.vuis.cccr.cloud.packet.PacketRequestedFriends;
 import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.packet.mm.PacketPartyCreate;
+import dev.vuis.cccr.cloud.packet.server.PacketPlayerDataIncreaseValue;
+import dev.vuis.cccr.cloud.packet.server.PacketPlayerDataRandomDrop;
+import dev.vuis.cccr.cloud.packet.server.PacketServerGameStatus;
+import dev.vuis.cccr.cloud.packet.server.PacketServerMatchMaking;
+import dev.vuis.cccr.cloud.packet.server.PacketServerMatchMakingAccepted;
 
 public final class PacketRegistry {
 	private PacketRegistry() {
@@ -31,8 +36,13 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(17, PacketFriendRequestAccept.class);
 		G_TcpPacket.addPacketMapping(18, PacketFriendRemove.class);
 		G_TcpPacket.addPacketMapping(24, PacketFriendPoke.class);
+		G_TcpPacket.addPacketMapping(39, PacketServerMatchMaking.class);
+		G_TcpPacket.addPacketMapping(41, PacketServerGameStatus.class);
 		G_TcpPacket.addPacketMapping(45, PacketRequestedCloudData.class);
 		G_TcpPacket.addPacketMapping(53, PacketEditMood.class);
+		G_TcpPacket.addPacketMapping(63, PacketServerMatchMakingAccepted.class);
+		G_TcpPacket.addPacketMapping(66, PacketPlayerDataIncreaseValue.class);
+		G_TcpPacket.addPacketMapping(67, PacketPlayerDataRandomDrop.class);
 		G_TcpPacket.addPacketMapping(69, PacketClientUpdateStatus.class);
 	}
 }

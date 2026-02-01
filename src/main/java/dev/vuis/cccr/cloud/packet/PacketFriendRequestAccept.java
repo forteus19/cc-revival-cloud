@@ -2,10 +2,10 @@ package dev.vuis.cccr.cloud.packet;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.IDataHolder;
 import dev.vuis.cccr.cloud.data.IPlayerData;
-import dev.vuis.cccr.cloud.main.Cloud;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -59,7 +59,7 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 			new PacketNotificationFromCloud("Accepted friend request from " + user + "!", CloudConstants.CC_NAME, 0)
 		);
 		Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(
-			"player", user,
+			CloudConstants.CHANNEL_PLAYER, user,
 			new PacketNotificationFromCloud(connectionHandler.getConnectionUsername() + " accepted your friend request!", CloudConstants.CC_NAME, 0)
 		);
 	}
