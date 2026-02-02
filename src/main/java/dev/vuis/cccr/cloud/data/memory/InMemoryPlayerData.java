@@ -8,7 +8,7 @@ public class InMemoryPlayerData implements IPlayerData {
 	// player data
 	private int exp = 0;
 	private boolean online = false;
-	private String mood = "super awesome mood";
+	private String mood = "I haven't set a mood yet...";
 	private String status = "Main Menu";
 	private UUID uuid = UUID.randomUUID(); // FIXME
 
