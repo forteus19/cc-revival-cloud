@@ -14,7 +14,7 @@ public class InMemoryDataHolder implements IDataHolder {
 		if (createIfAbsent && !playerDataMap.containsKey(username)) {
 			Cloud.getInstance().getCloudManager().log("[InMemoryDataHolder] Creating new player data for " + username);
 
-			IPlayerData playerData = new InMemoryPlayerData();
+			IPlayerData playerData = new InMemoryPlayerData(username);
 			playerDataMap.put(username, playerData);
 			return playerData;
 		}

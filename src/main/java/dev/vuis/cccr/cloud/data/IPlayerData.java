@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.util.Util;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -34,7 +35,7 @@ public interface IPlayerData {
 		tag.setBoolean("online", isOnline());
 		tag.setString("mood", getMood());
 		tag.setString("status", getStatus());
-		tag.setString("playerUUID", getUuid().toString());
+		tag.setString("playerUUID", Util.getUndashedUuid(getUuid()));
 		tag.setBoolean("enableNotification_FriendRequest", true);
 		tag.setBoolean("enableNotification_FriendPoke", true);
 		tag.setBoolean("enableNotification_TradeRequest", true);

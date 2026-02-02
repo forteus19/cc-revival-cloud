@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation(files("libs/cclib.jar"))
+    implementation("com.google.code.gson:gson:2.13.2")
 
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")

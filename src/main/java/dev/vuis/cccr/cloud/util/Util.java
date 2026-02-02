@@ -3,8 +3,13 @@ package dev.vuis.cccr.cloud.util;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import dev.vuis.cccr.cloud.CloudConstants;
+import java.net.http.HttpClient;
+import java.util.UUID;
 
 public final class Util {
+	public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
+	public static final UUID NULL_UUID = new UUID(0, 0);
+
 	private Util() {
 	}
 
@@ -39,5 +44,19 @@ public final class Util {
 			return true;
 		}
 		return false;
+	}
+
+	public static String getUndashedUuid(UUID uuid) {
+		return uuid.toString().replace("-", "");
+	}
+
+	public static UUID parseUndashedUuid(String uuidStr) {
+		if (uuidStr.length() != 32) {
+			throw new IllegalArgumentException("Invalid undashed UUID");
+		}
+		return new UUID(
+			Long.parseUnsignedLong(uuidStr.substring(0, 16), 16),
+			Long.parseUnsignedLong(uuidStr.substring(16, 32), 16)
+		);
 	}
 }
