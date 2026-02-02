@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.RequestType;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -40,6 +41,9 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				}
 				PlayerData playerData = DataMaps.getPlayerData(requestData[0], false);
 				if (playerData == null) {
+					break;
+				}
+				if (playerData.uuid.get().equals(Util.NULL_UUID)) {
 					break;
 				}
 

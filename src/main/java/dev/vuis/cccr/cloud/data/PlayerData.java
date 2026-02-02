@@ -22,8 +22,13 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public final class PlayerData {
 	// player data
+	public final AtomicInteger trophies = new AtomicInteger(0);
+	public final AtomicInteger kills = new AtomicInteger(0);
+	public final AtomicInteger deaths = new AtomicInteger(0);
+	public final AtomicInteger games = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
+	public final AtomicInteger emeralds = new AtomicInteger(0);
 	public final AtomicReference<String> mood = new AtomicReference<>("I haven't set a mood yet...");
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 	public final AtomicReference<UUID> uuid = new AtomicReference<>(Util.NULL_UUID);
@@ -67,8 +72,13 @@ public final class PlayerData {
 	}
 
 	public void putDataTag(FDSTagCompound tag) {
+		tag.setInteger("trophies", trophies.get());
+		tag.setInteger("kills", kills.get());
+		tag.setInteger("deaths", deaths.get());
+		tag.setInteger("games", games.get());
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());
+		tag.setInteger("emeralds", emeralds.get());
 		tag.setString("mood", mood.get());
 		tag.setString("status", status.get());
 		tag.setString("playerUUID", Util.getUndashedUuid(uuid.get()));
