@@ -4,7 +4,8 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.IPlayerData;
+import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,12 +26,12 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		IPlayerData targetData = Cloud.getInstance().getDataHolder().getPlayerData(user, false);
+		PlayerData targetData = DataMaps.getPlayerData(user, false);
 		if (targetData == null) {
 			return;
 		}
 
-		if (!targetData.getFriends().contains(connectionHandler.getConnectionUsername())) {
+		if (!targetData.friends.contains(connectionHandler.getConnectionUsername())) {
 			return;
 		}
 

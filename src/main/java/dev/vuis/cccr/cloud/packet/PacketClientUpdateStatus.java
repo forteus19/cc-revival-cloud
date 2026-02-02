@@ -3,14 +3,14 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.fds.tag.FDSTagCompound;
-import dev.vuis.cccr.cloud.Cloud;
-import dev.vuis.cccr.cloud.data.IPlayerData;
+import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 
 public final class PacketClientUpdateStatus extends G_TcpPacketCustomPayload {
-	FDSTagCompound tag = new FDSTagCompound("data");
+	private final FDSTagCompound tag = new FDSTagCompound("data");
 
 	@Override
 	public void writePacketToStream(DataOutputStream out) {
@@ -28,10 +28,10 @@ public final class PacketClientUpdateStatus extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		IPlayerData playerData = Cloud.getInstance().getDataHolder().getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData playerData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
 		if (playerData == null) {
 			return;
 		}
-		playerData.setStatus(status);
+		playerData.status.set(status);
 	}
 }

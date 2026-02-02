@@ -4,9 +4,8 @@ import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
-import dev.vuis.cccr.cloud.data.IDataHolder;
-import dev.vuis.cccr.cloud.data.IPlayerData;
-import dev.vuis.cccr.cloud.data.memory.InMemoryDataHolder;
+import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -32,8 +31,6 @@ public final class Cloud implements ICloud {
 
 	@Getter
 	private final G_CloudManager cloudManager;
-	@Getter
-	private final IDataHolder dataHolder = new InMemoryDataHolder();
 
 	public Cloud(int port, String mmPassword, String mcHost) {
 		this.port = port;
@@ -98,8 +95,8 @@ public final class Cloud implements ICloud {
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
-				IPlayerData playerData = dataHolder.getPlayerData(username, true);
-				playerData.setOnline(true);
+				PlayerData playerData = DataMaps.getPlayerData(username, true);
+				playerData.online.set(true);
 
 				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 				packet.username = username;
@@ -107,7 +104,7 @@ public final class Cloud implements ICloud {
 				connectionHandler.sendPacket(packet);
 
 				connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
-				for (String user : playerData.getFriends()) {
+				for (String user : playerData.friends) {
 					cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged in.", CloudConstants.CC_NAME, 0));
 				}
 			}
@@ -125,10 +122,10 @@ public final class Cloud implements ICloud {
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
-				IPlayerData playerData = dataHolder.getPlayerData(username, true);
-				playerData.setOnline(false);
+				PlayerData playerData = DataMaps.getPlayerData(username, true);
+				playerData.online.set(false);
 
-				for (String user : playerData.getFriends()) {
+				for (String user : playerData.friends) {
 					cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
 				}
 			}

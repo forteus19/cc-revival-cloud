@@ -4,12 +4,11 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.IDataHolder;
-import dev.vuis.cccr.cloud.data.IPlayerData;
+import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
 
 public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 	private String user;
@@ -28,19 +27,16 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		IDataHolder dataHolder = Cloud.getInstance().getDataHolder();
-
-		IPlayerData accepterData = dataHolder.getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData accepterData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
 		if (accepterData == null) {
 			return;
 		}
-		IPlayerData requesterData = dataHolder.getPlayerData(user, false);
+		PlayerData requesterData = DataMaps.getPlayerData(user, false);
 		if (requesterData == null) {
 			return;
 		}
 
-		ArrayList<String> friendRequests = accepterData.getFriendRequests();
-		if (!friendRequests.contains(user)) {
+		if (!accepterData.friendRequests.contains(user)) {
 			return;
 		}
 
@@ -51,9 +47,9 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		friendRequests.remove(user);
-		accepterData.getFriends().add(user);
-		requesterData.getFriends().add(connectionHandler.getConnectionUsername());
+		accepterData.friendRequests.remove(user);
+		accepterData.friends.add(user);
+		requesterData.friends.add(connectionHandler.getConnectionUsername());
 
 		connectionHandler.sendPacket(
 			new PacketNotificationFromCloud("Accepted friend request from " + user + "!", CloudConstants.CC_NAME, 0)
