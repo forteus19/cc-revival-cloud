@@ -11,14 +11,15 @@ import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ThreadLocalRandom;
 
 public final class SearchHandler {
+	// TODO configurable
 	private static final Map<String, List<String>> VALID_MAPS = Map.ofEntries(
-		Map.entry("tdm", List.of("Dust"))
+		Map.entry("cas", List.of("Dust", "Mirage", "Toxic")),
+		Map.entry("tdm", List.of("Dust", "Range"))
 	);
 
 	private static final Map<String, Data> ONGOING = new ConcurrentHashMap<>();
@@ -72,17 +73,13 @@ public final class SearchHandler {
 			String server = gameEntry.getKey();
 			GameStatus status = gameEntry.getValue();
 
-			if (!canJoinRegion(data.region(), ServerStatus.REGION.getOrDefault(server, "ALL"))) {
-				continue;
+			if (canJoinRegion(data.region(), ServerStatus.REGION.getOrDefault(server, "ALL")) &&
+				data.game().equals(status.gameType) &&
+				data.maps().contains(status.mapType) &&
+				status.remainingPlayerSlots > 0
+			) {
+				gameCandidates.add(gameEntry);
 			}
-			if (!data.game().equals(status.gameType)) {
-				continue;
-			}
-			if (!data.maps().contains(status.mapType)) {
-				continue;
-			}
-
-			gameCandidates.add(gameEntry);
 		}
 
 		if (gameCandidates.isEmpty()) {
@@ -90,42 +87,37 @@ public final class SearchHandler {
 				String entryServer = entry.getKey();
 				String entryRegion = entry.getValue();
 
-				if (ServerStatus.GAME.containsKey(entryServer)) {
+				if (ServerStatus.GAME.containsKey(entryServer) || !canJoinRegion(data.region(), entryRegion)) {
 					continue;
 				}
 
-				if (canJoinRegion(data.region(), entryRegion)) {
-					String map = getRandomMap(data.game());
-					if (map == null) {
-						return null;
-					}
-
-					PacketMMJoinServer packet = new PacketMMJoinServer();
-					packet.tag.setString("address", String.format("%s:%d", Cloud.getInstance().mcHost, ServerStatus.PORT.get(entryServer)));
-					packet.tag.setString("game", data.game());
-					packet.tag.setString("map", map);
-					packet.tag.setString("team", getTeam(data.game()));
-
-					return packet;
+				String map = getRandomMap(data.game());
+				if (map == null) {
+					return null;
 				}
+
+				PacketMMJoinServer packet = new PacketMMJoinServer();
+				packet.tag.setString("address", getServerAddress(entryServer));
+				packet.tag.setString("game", data.game());
+				packet.tag.setString("map", map);
+				packet.tag.setString("team", getTeam(data.game()));
+
+				return packet;
 			}
 
 			return null;
 		}
 
-		Optional<Map.Entry<String, GameStatus>> resultOptional = gameCandidates.stream()
+		Map.Entry<String, GameStatus> result = gameCandidates.stream()
 			.filter(e -> e.getValue().remainingPlayerSlots != 0)
-			.min(Comparator.comparingInt((Map.Entry<String, GameStatus> e) -> e.getValue().remainingPlayerSlots));
-		if (resultOptional.isEmpty()) {
-			return null;
-		}
-		Map.Entry<String, GameStatus> result = resultOptional.get();
+			.min(Comparator.comparingInt((Map.Entry<String, GameStatus> e) -> e.getValue().remainingPlayerSlots))
+			.orElseThrow();
 
 		String resultServer = result.getKey();
 		GameStatus resultStatus = result.getValue();
 
 		PacketMMJoinServer packet = new PacketMMJoinServer();
-		packet.tag.setString("address", String.format("%s:%d", Cloud.getInstance().mcHost, ServerStatus.PORT.get(resultServer)));
+		packet.tag.setString("address", getServerAddress(resultServer));
 		packet.tag.setString("game", resultStatus.gameType);
 		packet.tag.setString("map", resultStatus.mapType);
 		packet.tag.setString("team", getTeam(resultStatus.gameType));
@@ -139,6 +131,10 @@ public final class SearchHandler {
 		} else {
 			return selected.equalsIgnoreCase(target);
 		}
+	}
+
+	private static String getServerAddress(String server) {
+		return String.format("%s:%d", Cloud.getInstance().mcHost, ServerStatus.PORT.get(server));
 	}
 
 	private static String getTeam(String gameType) {
