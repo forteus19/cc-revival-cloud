@@ -2,15 +2,18 @@ package dev.vuis.cccr.cloud.packet;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.RequestType;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.List;
 
 public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 	private RequestType type;
@@ -39,18 +42,39 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				if (requestData.length != 1) {
 					break;
 				}
-				PlayerData playerData = DataMaps.getPlayerData(requestData[0], false);
-				if (playerData == null) {
+				PlayerData data = DataMaps.getPlayerData(requestData[0], false);
+				if (data == null) {
 					break;
 				}
-				if (playerData.uuid.get().equals(Util.NULL_UUID)) {
+				if (data.uuid.get().equals(Util.NULL_UUID)) {
 					break;
 				}
 
 				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 				packet.username = requestData[0];
-				playerData.putDataTag(packet.tag);
+				data.putDataTag(packet.tag);
 				connectionHandler.sendPacket(packet);
+			}
+			case PLAYER_INVENTORY -> {
+				if (requestData.length != 1) {
+					break;
+				}
+				PlayerInventory inventory = DataMaps.getPlayerInventory(requestData[0], false);
+				if (data == null) {
+					break;
+				}
+
+				List<FDSTagCompound> tags = inventory.writeTagList();
+				System.out.println(tags);
+				for (int i = 0; i < tags.size(); i++) {
+					PacketRequestedInventory packet = new PacketRequestedInventory();
+					packet.username = connectionHandler.getConnectionUsername();
+					packet.section = i;
+					packet.hasInv = true;
+					packet.tagSplit = tags.get(i);
+
+					connectionHandler.sendPacket(packet);
+				}
 			}
 			case PLAYER_FRIENDS -> {
 				if (requestData.length != 1) {

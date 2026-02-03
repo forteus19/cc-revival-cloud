@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.packet.PacketFriendPoke;
 import dev.vuis.cccr.cloud.packet.PacketFriendRemove;
 import dev.vuis.cccr.cloud.packet.PacketFriendRequest;
 import dev.vuis.cccr.cloud.packet.PacketFriendRequestAccept;
+import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedCloudData;
 import dev.vuis.cccr.cloud.packet.PacketRequestedFriends;
@@ -39,6 +40,7 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(16, PacketFriendRequest.class);
 		G_TcpPacket.addPacketMapping(17, PacketFriendRequestAccept.class);
 		G_TcpPacket.addPacketMapping(18, PacketFriendRemove.class);
+		G_TcpPacket.addPacketMapping(21, PacketInventoryItemAdded.class);
 		G_TcpPacket.addPacketMapping(24, PacketFriendPoke.class);
 		G_TcpPacket.addPacketMapping(39, PacketServerMatchMaking.class);
 		G_TcpPacket.addPacketMapping(41, PacketServerGameStatus.class);

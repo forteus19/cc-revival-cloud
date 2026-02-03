@@ -9,7 +9,6 @@ import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
-import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -98,10 +97,7 @@ public final class Cloud implements ICloud {
 				PlayerData playerData = DataMaps.getPlayerData(username, true);
 				playerData.online.set(true);
 
-				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
-				packet.username = username;
-				playerData.putDataTag(packet.tag);
-				connectionHandler.sendPacket(packet);
+				DataMaps.getPlayerInventory(username, true);
 
 				connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
 				for (String user : playerData.friends) {

@@ -45,6 +45,9 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 		if (Util.kickIfServer(connectionHandler)) {
 			return;
 		}
+		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {
+			return;
+		}
 
 		if (!hasGame) {
 			ServerStatus.GAME.remove(connectionHandler.getConnectionUsername());
