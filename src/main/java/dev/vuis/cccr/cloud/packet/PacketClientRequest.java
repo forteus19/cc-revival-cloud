@@ -65,7 +65,6 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				}
 
 				List<FDSTagCompound> tags = inventory.writeTagList();
-				System.out.println(tags);
 				for (int i = 0; i < tags.size(); i++) {
 					PacketRequestedInventory packet = new PacketRequestedInventory();
 					packet.username = connectionHandler.getConnectionUsername();

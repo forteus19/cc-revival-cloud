@@ -1,12 +1,8 @@
 package dev.vuis.cccr.cloud.item;
 
-import java.util.HashMap;
-import java.util.Map;
 import lombok.Getter;
 
 public class CloudItem {
-	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
-
 	@Getter
 	private final int id;
 	@Getter
@@ -36,10 +32,10 @@ public class CloudItem {
 		this.isShowcasable = isShowcasable;
 		this.isNamable = isNamable;
 		this.isContractable = isContractable;
-		ID_MAP.put(id, this);
-	}
 
-	public static CloudItem getById(int id) {
-		return ID_MAP.get(id);
+		CloudItems.ID_MAP.put(id, this);
+		if (isDefault) {
+			CloudItems.DEFAULTS.add(this);
+		}
 	}
 }

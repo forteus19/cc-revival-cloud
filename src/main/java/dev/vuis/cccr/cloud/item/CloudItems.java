@@ -2,9 +2,16 @@ package dev.vuis.cccr.cloud.item;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 @SuppressWarnings("unused")
 public final class CloudItems {
+	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
+	static final Set<CloudItem> DEFAULTS = new HashSet<>();
+
 	public static final CloudItem M4A4 = new CloudItem(100, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
 	public static final CloudItem M4A4_WAVES = new CloudItem(101, CloudItemRarity.IRON, "Waves", false, true, true, true, true, true);
 	public static final CloudItem M4A4_EVILDAIMYO = new CloudItem(102, CloudItemRarity.GOLD, "EvilDaimyo", false, true, true, true, true, true);
@@ -306,7 +313,15 @@ public final class CloudItems {
 	private CloudItems() {
 	}
 
+	public static CloudItem getById(int id) {
+		return CloudItems.ID_MAP.get(id);
+	}
+
 	public static Collection<CloudItem> all() {
-		return Collections.unmodifiableCollection(CloudItem.ID_MAP.values());
+		return Collections.unmodifiableCollection(ID_MAP.values());
+	}
+
+	public static Set<CloudItem> defaults() {
+		return Collections.unmodifiableSet(DEFAULTS);
 	}
 }

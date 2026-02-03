@@ -12,6 +12,7 @@ repositories {
 
 dependencies {
     implementation(files("libs/cclib.jar"))
+    implementation("com.google.guava:guava:33.5.0-jre")
     implementation("com.google.code.gson:gson:2.13.2")
 
     compileOnly("org.projectlombok:lombok:1.18.42")

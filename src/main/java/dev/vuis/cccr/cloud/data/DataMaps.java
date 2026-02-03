@@ -1,7 +1,6 @@
 package dev.vuis.cccr.cloud.data;
 
 import dev.vuis.cccr.cloud.Cloud;
-import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import java.util.Map;
@@ -35,14 +34,16 @@ public final class DataMaps {
 	}
 
 	private static PlayerInventory initializeInventory(PlayerInventory inventory) {
-		for (CloudItem item : CloudItems.all()) {
-			if (item.isDefault()) {
-				inventory.addItemStack(new CloudItemStack(item), false);
-			}
-		}
+		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
 
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), true);
+
 		return inventory;
 	}
 }
