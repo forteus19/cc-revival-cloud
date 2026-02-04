@@ -1,6 +1,8 @@
 package dev.vuis.cccr.cloud.item;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -23,6 +25,14 @@ public class CloudItemCase extends CloudItem {
 		contents.add(new Content(item, totalWeight, totalWeight + weight));
 		totalWeight += weight;
 		return this;
+	}
+
+	public List<CloudItem> getRandomContents(int count) {
+		List<CloudItem> items = new ArrayList<>(count);
+		for (int i = 0; i < count; i++) {
+			items.add(getRandomContent());
+		}
+		return items;
 	}
 
 	public CloudItem getRandomContent() {

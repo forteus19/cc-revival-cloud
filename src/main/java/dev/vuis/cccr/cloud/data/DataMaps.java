@@ -37,12 +37,19 @@ public final class DataMaps {
 		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
 
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), true);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), true);
+
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA2), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA3), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HAT), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN1), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), false);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_EXO), false);
 
 		return inventory;
 	}

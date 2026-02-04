@@ -5,8 +5,10 @@ import com.google.common.collect.Iterators;
 import com.google.common.collect.Streams;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
+import dev.vuis.cccr.cloud.packet.PacketInventoryItemRemoved;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,38 @@ public final class PlayerInventory {
 	private final Map<UUID, CloudItemStack> stackMap = new ConcurrentHashMap<>();
 
 	private final String username;
+
+	public CloudItemStack getItemStack(UUID uuid) {
+		return stackMap.get(uuid);
+	}
+
+	public Stream<CloudItemStack> getItemStacks(CloudItem item) {
+		return stackMap.values().stream().filter(stack -> stack.item == item);
+	}
+
+	public void addItemStack(CloudItemStack itemStack, boolean sendPacket) {
+		stackMap.put(itemStack.uuid, itemStack);
+		if (sendPacket) {
+			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();
+			itemStack.writeTag(packet.tag);
+
+			Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, packet);
+		}
+	}
+
+	public void addItemStacks(Stream<CloudItemStack> itemStacks) {
+		stackMap.putAll(itemStacks.collect(Collectors.toMap(stack -> stack.uuid, stack -> stack)));
+	}
+
+	public void removeItemStack(UUID uuid, boolean sendPacket) {
+		CloudItemStack previous = stackMap.remove(uuid);
+		if (sendPacket && previous != null) {
+			PacketInventoryItemRemoved packet = new PacketInventoryItemRemoved();
+			previous.writeTag(packet.tag);
+
+			Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, packet);
+		}
+	}
 
 	public List<FDSTagCompound> writeTagList() {
 		return Streams.stream(Iterators.partition(
@@ -45,19 +79,5 @@ public final class PlayerInventory {
 
 			return tag;
 		}).toList();
-	}
-
-	public void addItemStack(CloudItemStack itemStack, boolean sendPacket) {
-		stackMap.put(itemStack.uuid, itemStack);
-		if (sendPacket) {
-			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();
-			itemStack.writeTag(packet.tag);
-
-			Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, packet);
-		}
-	}
-
-	public void addItemStacks(Stream<CloudItemStack> itemStacks) {
-		stackMap.putAll(itemStacks.collect(Collectors.toMap(stack -> stack.uuid, stack -> stack)));
 	}
 }
