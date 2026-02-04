@@ -4,7 +4,9 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import dev.vuis.cccr.cloud.CloudConstants;
 import java.net.http.HttpClient;
+import java.util.Collection;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 
 public final class Util {
 	public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
@@ -33,6 +35,16 @@ public final class Util {
 				return def;
 			}
 		}
+	}
+
+	public static <T> T getRandomFromCollection(Collection<T> collection) {
+		if (collection.isEmpty()) {
+			throw new IllegalArgumentException("Empty collection");
+		}
+		return collection.stream()
+			.skip(ThreadLocalRandom.current().nextInt(collection.size()))
+			.findFirst()
+			.orElseThrow();
 	}
 
 	public static boolean kickIfServer(G_ITcpConnectionHandler connectionHandler) {

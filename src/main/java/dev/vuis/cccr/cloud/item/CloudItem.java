@@ -34,8 +34,6 @@ public class CloudItem {
 		this.isContractable = isContractable;
 
 		CloudItems.ID_MAP.put(id, this);
-		if (isDefault) {
-			CloudItems.DEFAULTS.add(this);
-		}
+		CloudItems.RARITY_MAP.put(rarity, this);
 	}
 }

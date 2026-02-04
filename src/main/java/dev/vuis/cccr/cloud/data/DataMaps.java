@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.data;
 
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.item.CloudItemRarity;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import java.util.Map;
@@ -34,7 +35,7 @@ public final class DataMaps {
 	}
 
 	private static PlayerInventory initializeInventory(PlayerInventory inventory) {
-		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
+		inventory.addItemStacks(CloudItems.getByRarity(CloudItemRarity.DEFAULT).stream().map(CloudItemStack::new));
 
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 

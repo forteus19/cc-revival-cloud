@@ -1,16 +1,17 @@
 package dev.vuis.cccr.cloud.item;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Multimap;
+import dev.vuis.cccr.cloud.util.Util;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.Map;
-import java.util.Set;
 
 @SuppressWarnings("unused")
 public final class CloudItems {
 	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
-	static final Set<CloudItem> DEFAULTS = new HashSet<>();
+	static final Multimap<CloudItemRarity, CloudItem> RARITY_MAP = HashMultimap.create();
 
 	public static final CloudItem M4A4 = new CloudItem(100, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
 	public static final CloudItem M4A4_WAVES = new CloudItem(101, CloudItemRarity.IRON, "Waves", false, true, true, true, true, true);
@@ -313,15 +314,19 @@ public final class CloudItems {
 	private CloudItems() {
 	}
 
-	public static CloudItem getById(int id) {
-		return CloudItems.ID_MAP.get(id);
-	}
-
 	public static Collection<CloudItem> all() {
 		return Collections.unmodifiableCollection(ID_MAP.values());
 	}
 
-	public static Set<CloudItem> defaults() {
-		return Collections.unmodifiableSet(DEFAULTS);
+	public static CloudItem getById(int id) {
+		return ID_MAP.get(id);
+	}
+
+	public static Collection<CloudItem> getByRarity(CloudItemRarity rarity) {
+		return RARITY_MAP.get(rarity);
+	}
+
+	public static CloudItem getRandomDrop() {
+		return Util.getRandomFromCollection(getByRarity(CloudItemRarity.getRandomWeighted()));
 	}
 }

@@ -6,6 +6,9 @@ import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItemStack;
+import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -137,6 +140,24 @@ public final class Cloud implements ICloud {
 		boolean success = true;
 
 		switch (parts[0]) {
+			case "randomdrop" -> {
+				if (parts.length < 2) {
+					cloudManager.log("randomdrop - Missing args: <username> <count>");
+					break;
+				}
+				String username = parts[1];
+				int count = Integer.parseInt(parts[2]);
+
+				PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+				if (inventory == null) {
+					cloudManager.log("randomdrop - Player " + username + " does not have an inventory!");
+					break;
+				}
+
+				for (int i = 0; i < count; i++) {
+					inventory.addItemStack(new CloudItemStack(CloudItems.getRandomDrop()), true);
+				}
+			}
 			case "stop" -> {
 				cloudManager.initiateShutdown();
 			}
