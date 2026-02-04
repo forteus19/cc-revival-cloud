@@ -1,9 +1,9 @@
 package dev.vuis.cccr.cloud.main;
 
-public final class PacketIdList {
+public final class PacketIdListMain {
 	private static int nextPacket = 10;
 
-	private PacketIdList() {
+	private PacketIdListMain() {
 	}
 
 	static void main() {

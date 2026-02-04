@@ -6,8 +6,8 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.PacketRegistry;
 import dev.vuis.cccr.cloud.util.Util;
 
-public final class Main {
-	private Main() {
+public final class CloudMain {
+	private CloudMain() {
 	}
 
 	static void main(String[] args) {

@@ -36,4 +36,13 @@ public class CloudItem {
 		CloudItems.ID_MAP.put(id, this);
 		CloudItems.RARITY_MAP.put(rarity, this);
 	}
+
+	public record Settings(
+		boolean isTradable,
+		boolean isSellable,
+		boolean isShowcasable,
+		boolean isNamable,
+		boolean isContractable
+	) {
+	}
 }

@@ -34,7 +34,7 @@ public final class PacketRegistry {
 	}
 
 	public static void registerPackets() {
-		// see PacketIdList for packet ids
+		// see PacketIdListMain for packet ids
 		G_TcpPacket.addPacketMapping(10, PacketClientRequest.class);
 		G_TcpPacket.addPacketMapping(11, PacketRequestedPlayerData.class);
 		G_TcpPacket.addPacketMapping(12, PacketRequestedInventory.class);
