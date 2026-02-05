@@ -2,47 +2,50 @@ package dev.vuis.cccr.cloud.item;
 
 import lombok.Getter;
 
-public class CloudItem {
+public abstract class CloudItem {
 	@Getter
 	private final int id;
 	@Getter
 	private final CloudItemRarity rarity;
 	@Getter
-	private final String suffix;
+	private final String displayName;
 	@Getter
 	private final boolean isDefault;
-	@Getter
-	private final boolean isTradable;
-	@Getter
-	private final boolean isSellable;
-	@Getter
-	private final boolean isShowcasable;
-	@Getter
-	private final boolean isNamable;
-	@Getter
-	private final boolean isContractable;
 
-	public CloudItem(int id, CloudItemRarity rarity, String suffix, boolean isDefault, boolean isTradable, boolean isSellable, boolean isShowcasable, boolean isNamable, boolean isContractable) {
+	protected CloudItem(int id, CloudItemRarity rarity, String displayName, boolean isDefault) {
+		if (CloudItems.ID_MAP.containsKey(id)) {
+			throw new IllegalStateException("Duplicate CloudItem id " + id + "!");
+		}
+
 		this.id = id;
 		this.rarity = rarity;
-		this.suffix = suffix;
+		this.displayName = displayName;
 		this.isDefault = isDefault;
-		this.isTradable = isTradable;
-		this.isSellable = isSellable;
-		this.isShowcasable = isShowcasable;
-		this.isNamable = isNamable;
-		this.isContractable = isContractable;
 
+		if (isDefault) {
+			CloudItems.DEFAULTS.add(this);
+		}
 		CloudItems.ID_MAP.put(id, this);
 		CloudItems.RARITY_MAP.put(rarity, this);
 	}
 
-	public record Settings(
-		boolean isTradable,
-		boolean isSellable,
-		boolean isShowcasable,
-		boolean isNamable,
-		boolean isContractable
-	) {
+	public abstract boolean isTradable();
+
+	public abstract boolean isSellable();
+
+	public abstract boolean isShowcasable();
+
+	public abstract boolean isNamable();
+
+	public abstract boolean isContractable();
+
+	@Override
+	public boolean equals(Object obj) {
+		return obj instanceof CloudItem item && id == item.id;
+	}
+
+	@Override
+	public int hashCode() {
+		return Integer.hashCode(id);
 	}
 }

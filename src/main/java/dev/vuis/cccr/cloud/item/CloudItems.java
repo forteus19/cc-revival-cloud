@@ -2,314 +2,329 @@ package dev.vuis.cccr.cloud.item;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
-import dev.vuis.cccr.cloud.util.Util;
+import dev.vuis.cccr.cloud.item.impl.CloudItemBooster;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCallingCard;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCape;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCoin;
+import dev.vuis.cccr.cloud.item.impl.CloudItemGeneric;
+import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
+import dev.vuis.cccr.cloud.item.impl.CloudItemHat;
+import dev.vuis.cccr.cloud.item.impl.CloudItemKey;
+import dev.vuis.cccr.cloud.item.impl.CloudItemKnife;
+import dev.vuis.cccr.cloud.item.impl.CloudItemSticker;
+import dev.vuis.cccr.cloud.item.impl.CloudItemStickerCapsule;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ThreadLocalRandom;
 
 @SuppressWarnings("unused")
 public final class CloudItems {
+	static final List<CloudItem> DEFAULTS = new ArrayList<>();
 	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
 	static final Multimap<CloudItemRarity, CloudItem> RARITY_MAP = HashMultimap.create();
 
-	public static final CloudItem M4A4 = new CloudItem(100, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem M4A4_WAVES = new CloudItem(101, CloudItemRarity.IRON, "Waves", false, true, true, true, true, true);
-	public static final CloudItem M4A4_EVILDAIMYO = new CloudItem(102, CloudItemRarity.GOLD, "EvilDaimyo", false, true, true, true, true, true);
-	public static final CloudItem M4A4_CAKEY = new CloudItem(103, CloudItemRarity.IRON, "Cakey", false, true, true, true, true, true);
-	public static final CloudItem M4A4_HOWL = new CloudItem(104, CloudItemRarity.OBSIDIAN, "Howl", false, true, true, true, true, true);
-	public static final CloudItem M4A4_NERFED = new CloudItem(105, CloudItemRarity.IRON, "Nerfed", false, true, true, true, true, true);
-	public static final CloudItem M4A4_PUMPKIN = new CloudItem(106, CloudItemRarity.GOLD, "Pumpkin", false, true, true, true, true, true);
-	public static final CloudItem M4A4_PATRIOT = new CloudItem(107, CloudItemRarity.LAPIS, "Patriot", false, true, true, true, true, true);
-	public static final CloudItem AK47 = new CloudItem(200, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem AK47_PROPAGANDA = new CloudItem(201, CloudItemRarity.GOLD, "Propaganda", false, true, true, true, true, true);
-	public static final CloudItem AK47_ASMO = new CloudItem(202, CloudItemRarity.DIAMOND, "Asmo", false, true, true, true, true, true);
-	public static final CloudItem AK47_NEONREVOLUTION = new CloudItem(203, CloudItemRarity.GOLD, "Neon Revolution", false, true, true, true, true, true);
-	public static final CloudItem AK47_HAUNTED = new CloudItem(204, CloudItemRarity.DIAMOND, "Haunted", false, true, true, true, true, true);
-	public static final CloudItem AK47_BLOODSPORT = new CloudItem(205, CloudItemRarity.IRON, "Bloodsport", false, true, true, true, true, true);
-	public static final CloudItem AK47_FOX = new CloudItem(206, CloudItemRarity.LAPIS, "Fox", false, true, true, true, true, true);
-	public static final CloudItem FAMAS = new CloudItem(300, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem FAMAS_AKARI = new CloudItem(301, CloudItemRarity.LAPIS, "Akari", false, true, true, true, true, true);
-	public static final CloudItem FAMAS_WARHAWK = new CloudItem(302, CloudItemRarity.DIAMOND, "Warhawk", false, true, true, true, true, true);
-	public static final CloudItem FAMAS_SPOOKY = new CloudItem(303, CloudItemRarity.LAPIS, "Spooky", false, true, true, true, true, true);
-	public static final CloudItem FNFAL = new CloudItem(400, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem FNFAL_VAPORWAVE = new CloudItem(401, CloudItemRarity.GOLD, "Vaporwave", false, true, true, true, true, true);
-	public static final CloudItem FNFAL_ASMO = new CloudItem(402, CloudItemRarity.GOLD, "Asmo", false, true, true, true, true, true);
-	public static final CloudItem GALIL = new CloudItem(450, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem M1911 = new CloudItem(500, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem M1911_DRAGON = new CloudItem(501, CloudItemRarity.LAPIS, "Dragon", false, true, true, true, true, true);
-	public static final CloudItem M1911_TUXEDO = new CloudItem(502, CloudItemRarity.IRON, "Tuxedo", false, true, true, true, true, true);
-	public static final CloudItem G18 = new CloudItem(600, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem G18_RACE = new CloudItem(601, CloudItemRarity.IRON, "Race", false, true, true, true, true, true);
-	public static final CloudItem G18_HIGHROLLER = new CloudItem(602, CloudItemRarity.DIAMOND, "Highroller", false, true, true, true, true, true);
-	public static final CloudItem G18_DEEP_BLUE = new CloudItem(603, CloudItemRarity.IRON, "Deep Blue", false, true, true, true, true, true);
-	public static final CloudItem TEC9 = new CloudItem(650, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem TEC9_QUAKORONIC = new CloudItem(651, CloudItemRarity.IRON, "Quakoronic", false, true, true, true, true, true);
-	public static final CloudItem TEC9_ECO = new CloudItem(652, CloudItemRarity.IRON, "Eco", false, true, true, true, true, true);
-	public static final CloudItem TEC9_AQUARIUM = new CloudItem(653, CloudItemRarity.DIAMOND, "Aquarium", false, true, true, true, true, true);
-	public static final CloudItem DEAGLE = new CloudItem(700, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem DEAGLE_NIGHTRAZER = new CloudItem(701, CloudItemRarity.LAPIS, "NightRazer", false, true, true, true, true, true);
-	public static final CloudItem DEAGLE_DEADHORIZON = new CloudItem(702, CloudItemRarity.GOLD, "Dead Horizon", false, true, true, true, true, true);
-	public static final CloudItem DEAGLE_GRIN = new CloudItem(703, CloudItemRarity.LAPIS, "Grin", false, true, true, true, true, true);
-	public static final CloudItem P250 = new CloudItem(750, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem P250_IRRADIATED = new CloudItem(751, CloudItemRarity.IRON, "Irradiated", false, true, true, true, true, true);
-	public static final CloudItem P250_SEEYALATER = new CloudItem(752, CloudItemRarity.DIAMOND, "SeeYaLater", false, true, true, true, true, true);
-	public static final CloudItem P250_CITY = new CloudItem(753, CloudItemRarity.IRON, "City", false, true, true, true, true, true);
-	public static final CloudItem P250_BEAST = new CloudItem(754, CloudItemRarity.GOLD, "Beast", false, true, true, true, true, true);
-	public static final CloudItem P90 = new CloudItem(800, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem P90_RUST = new CloudItem(801, CloudItemRarity.IRON, "Rust", false, true, true, true, true, true);
-	public static final CloudItem P90_KRAKEN = new CloudItem(802, CloudItemRarity.GOLD, "Kraken", false, true, true, true, true, true);
-	public static final CloudItem MAC10 = new CloudItem(900, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem MAC10_RACE = new CloudItem(901, CloudItemRarity.IRON, "Race", false, true, true, true, true, true);
-	public static final CloudItem MAC10_PUMPKIN = new CloudItem(902, CloudItemRarity.LAPIS, "Pumpkin", false, true, true, true, true, true);
-	public static final CloudItem VECTOR = new CloudItem(1000, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem VECTOR_CIRCUIT = new CloudItem(1001, CloudItemRarity.IRON, "Circuit", false, true, true, true, true, true);
-	public static final CloudItem VECTOR_BLOODYEQUATION = new CloudItem(1002, CloudItemRarity.IRON, "Bloody Equation", false, true, true, true, true, true);
-	public static final CloudItem AWP = new CloudItem(1100, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem AWP_DRAGON = new CloudItem(1101, CloudItemRarity.OBSIDIAN, "Dragon", false, true, true, true, true, true);
-	public static final CloudItem AWP_MANOWAR = new CloudItem(1102, CloudItemRarity.LAPIS, "Man O War", false, true, true, true, true, true);
-	public static final CloudItem AWP_ASMO = new CloudItem(1103, CloudItemRarity.DIAMOND, "Asmo", false, true, true, true, true, true);
-	public static final CloudItem AWP_BONES = new CloudItem(1104, CloudItemRarity.GOLD, "Bones", false, true, true, true, true, true);
-	public static final CloudItem AWP_REDLINE = new CloudItem(1105, CloudItemRarity.IRON, "Redline", false, true, true, true, true, true);
-	public static final CloudItem AWP_BOOM = new CloudItem(1106, CloudItemRarity.GOLD, "Boom", false, true, true, true, true, true);
-	public static final CloudItem DRAGUNOV = new CloudItem(1200, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem DRAGUNOV_SKY = new CloudItem(1201, CloudItemRarity.IRON, "Sky", false, true, true, true, true, true);
-	public static final CloudItem DRAGUNOV_STEAMPUNK = new CloudItem(1202, CloudItemRarity.LAPIS, "Steampunk", false, true, true, true, true, true);
-	public static final CloudItem SCAR20 = new CloudItem(1300, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem SCAR20_CYREX = new CloudItem(1301, CloudItemRarity.LAPIS, "Cyrex", false, true, true, true, true, true);
-	public static final CloudItem SCAR20_UNICORN = new CloudItem(1302, CloudItemRarity.DIAMOND, "Unicorn", false, true, true, true, true, true);
-	public static final CloudItem SSG08 = new CloudItem(1400, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC = new CloudItem(1500, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_DISPLAY = new CloudItem(1501, CloudItemRarity.OBSIDIAN, "Item", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_MARBLE = new CloudItem(1502, CloudItemRarity.DIAMOND, "Marble", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_TIGER = new CloudItem(1503, CloudItemRarity.DIAMOND, "Tiger", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_STEEL = new CloudItem(1504, CloudItemRarity.DIAMOND, "Steel", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_DOPPLAR = new CloudItem(1505, CloudItemRarity.DIAMOND, "Doppler", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_LORE = new CloudItem(1506, CloudItemRarity.DIAMOND, "Lore", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_TAC_GAMMA = new CloudItem(1507, CloudItemRarity.DIAMOND, "Gamma", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY = new CloudItem(1510, CloudItemRarity.DIAMOND, null, false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_MARBLE = new CloudItem(1511, CloudItemRarity.DIAMOND, "Marble", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_TIGER = new CloudItem(1512, CloudItemRarity.DIAMOND, "Tiger", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_STEEL = new CloudItem(1513, CloudItemRarity.DIAMOND, "Steel", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_DOPPLAR = new CloudItem(1514, CloudItemRarity.DIAMOND, "Doppler", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_LORE = new CloudItem(1515, CloudItemRarity.DIAMOND, "Lore", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_GAMMA = new CloudItem(1516, CloudItemRarity.DIAMOND, "Gamma", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BAY_DRAGONLORE = new CloudItem(1517, CloudItemRarity.DIAMOND, "Dragonlore", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR = new CloudItem(1520, CloudItemRarity.DIAMOND, null, false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_MARBLE = new CloudItem(1521, CloudItemRarity.DIAMOND, "Marble", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_TIGER = new CloudItem(1522, CloudItemRarity.DIAMOND, "Tiger", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_STEEL = new CloudItem(1523, CloudItemRarity.DIAMOND, "Steel", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_DOPPLAR = new CloudItem(1524, CloudItemRarity.DIAMOND, "Doppler", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_LORE = new CloudItem(1525, CloudItemRarity.DIAMOND, "Lore", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_GAMMA = new CloudItem(1526, CloudItemRarity.DIAMOND, "Gamma", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_KAR_EAGLE = new CloudItem(1527, CloudItemRarity.DIAMOND, "Eagle", false, true, true, true, true, true);
-	public static final CloudItem KNIFE_BUTTERFLY = new CloudItem(1530, CloudItemRarity.DIAMOND, null, false, true, true, true, true, true);
-	public static final CloudItem NOVA = new CloudItem(1600, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem NOVA_OXIDEBLAZE = new CloudItem(1601, CloudItemRarity.IRON, "Oxide Blaze", false, true, true, true, true, true);
-	public static final CloudItem NOVA_HYPER_BEAST = new CloudItem(1602, CloudItemRarity.DIAMOND, "Hyper Beast", false, true, true, true, true, true);
-	public static final CloudItem SAWEDOFF = new CloudItem(1650, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem SAWEDOFF_WASTELANDPRINCESS = new CloudItem(1651, CloudItemRarity.GOLD, "WastelandPrincess", false, true, true, true, true, true);
-	public static final CloudItem SAWEDOFF_KRAKEN = new CloudItem(1652, CloudItemRarity.LAPIS, "Kraken", false, true, true, true, true, true);
-	public static final CloudItem SAWEDOFF_MIDNIGHT = new CloudItem(1653, CloudItemRarity.IRON, "Midnight", false, true, true, true, true, true);
-	public static final CloudItem MAG7 = new CloudItem(1700, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem MAG7_ROYALFIRE = new CloudItem(1701, CloudItemRarity.LAPIS, "Royal Fire", false, true, true, true, true, true);
-	public static final CloudItem MAG7_VAMPIRE = new CloudItem(1702, CloudItemRarity.GOLD, "Vampire", false, true, true, true, true, true);
-	public static final CloudItem M249 = new CloudItem(1750, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem M249_NEON = new CloudItem(1751, CloudItemRarity.LAPIS, "Neon", false, true, true, true, true, true);
-	public static final CloudItem M249_GHOST = new CloudItem(1752, CloudItemRarity.IRON, "Ghost", false, true, true, true, true, true);
-	public static final CloudItem CZ75 = new CloudItem(1800, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem CZ75_PHANTOM = new CloudItem(1801, CloudItemRarity.GOLD, "Phantom", false, true, true, true, true, true);
-	public static final CloudItem FIVESEVEN = new CloudItem(1815, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem R8 = new CloudItem(1826, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem R8_FADE = new CloudItem(1827, CloudItemRarity.DIAMOND, "Fade", false, true, true, true, true, true);
-	public static final CloudItem R8_GOLD = new CloudItem(1828, CloudItemRarity.LAPIS, "Gold", false, true, true, true, true, true);
-	public static final CloudItem UMP45 = new CloudItem(1850, CloudItemRarity.DEFAULT, null, true, true, true, true, true, true);
-	public static final CloudItem UMP45_PRIMAL = new CloudItem(1851, CloudItemRarity.LAPIS, "Primal", false, true, true, true, true, true);
-	public static final CloudItem UMP45_EDIFICE = new CloudItem(1852, CloudItemRarity.IRON, "Edifice", false, true, true, true, true, true);
-	public static final CloudItem HAT_TOPHAT = new CloudItem(1900, CloudItemRarity.LAPIS, null, false, true, true, true, true, false);
-	public static final CloudItem HAT_CATHAT = new CloudItem(1901, CloudItemRarity.DIAMOND, null, false, true, true, true, true, false);
-	public static final CloudItem HAT_HARDRED = new CloudItem(1902, CloudItemRarity.COAL, "Red", false, true, true, true, true, false);
-	public static final CloudItem HAT_HARDORANGE = new CloudItem(1903, CloudItemRarity.COAL, "Orange", false, true, true, true, true, false);
-	public static final CloudItem HAT_HARDYELLOW = new CloudItem(1904, CloudItemRarity.COAL, "Yellow", false, true, true, true, true, false);
-	public static final CloudItem HAT_VIKING = new CloudItem(1905, CloudItemRarity.GOLD, "Helmet", false, true, true, true, true, false);
-	public static final CloudItem HAT_FIREMAN = new CloudItem(1906, CloudItemRarity.IRON, "Hat", false, true, true, true, true, false);
-	public static final CloudItem HAT_FIREMANCHIEF = new CloudItem(1907, CloudItemRarity.IRON, "Hat", false, true, true, true, true, false);
-	public static final CloudItem HAT_TV = new CloudItem(1908, CloudItemRarity.LAPIS, null, false, true, true, true, true, false);
-	public static final CloudItem TRADE_CONTRACT = new CloudItem(2040, CloudItemRarity.DEFAULT, "Contract", true, true, true, true, true, true);
-	public static final CloudItem NAME_TAG = new CloudItem(2041, CloudItemRarity.COAL, "", false, true, true, false, false, false);
-	public static final CloudItem COIN_BETA = new CloudItem(2050, CloudItemRarity.LAPIS, "BETA Age", false, false, false, true, false, false);
-	public static final CloudItem COIN_ALPHA = new CloudItem(2051, CloudItemRarity.LAPIS, "ALPHA Age", false, false, false, true, false, false);
-	public static final CloudItem COIN_DISCORD = new CloudItem(2052, CloudItemRarity.LAPIS, "Discord", false, false, false, true, false, false);
-	public static final CloudItem COIN_SKINNER = new CloudItem(2053, CloudItemRarity.LAPIS, "Skinning", false, false, false, true, false, false);
-	public static final CloudItem COIN_DEV = new CloudItem(2054, CloudItemRarity.OBSIDIAN, "Developer", false, false, false, true, false, false);
-	public static final CloudItem COIN_STAFF = new CloudItem(2055, CloudItemRarity.LAPIS, "Staffing", false, false, false, true, false, false);
-	public static final CloudItem COIN_SUPPORTER = new CloudItem(2056, CloudItemRarity.LAPIS, "Supporter", false, false, false, true, false, false);
-	public static final CloudItem COIN_MODELER = new CloudItem(2057, CloudItemRarity.LAPIS, "Modelling", false, false, false, true, false, false);
-	public static final CloudItem COIN_PRESTIGE = new CloudItem(2058, CloudItemRarity.LAPIS, "Prestige", false, false, false, true, false, false);
-	public static final CloudItem COIN_ASSETDEV = new CloudItem(2059, CloudItemRarity.LAPIS, "Asset Dev", false, false, false, true, false, false);
-	public static final CloudItem COIN_FUZE = new CloudItem(2060, CloudItemRarity.LAPIS, "Team Fuze", false, false, false, true, false, false);
-	public static final CloudItem COIN_ALXTON = new CloudItem(2061, CloudItemRarity.LAPIS, "Team Alxton", false, false, false, true, false, false);
-	public static final CloudItem COIN_JEROME = new CloudItem(2062, CloudItemRarity.LAPIS, "Team Jerome", false, false, false, true, false, false);
-	public static final CloudItem COIN_PEDRO = new CloudItem(2063, CloudItemRarity.LAPIS, "Team Pedro", false, false, false, true, false, false);
-	public static final CloudItem COIN_EDGE = new CloudItem(2064, CloudItemRarity.LAPIS, "Team CreepersEdge", false, false, false, true, false, false);
-	public static final CloudItem COIN_JABUTI = new CloudItem(2065, CloudItemRarity.LAPIS, "Team Jabuti", false, false, false, true, false, false);
-	public static final CloudItem COIN_INEMAFOO = new CloudItem(2066, CloudItemRarity.LAPIS, "Team Inemafoo", false, false, false, true, false, false);
-	public static final CloudItem COIN_MAPPER = new CloudItem(2067, CloudItemRarity.LAPIS, "Mapper", false, false, false, true, false, false);
-	public static final CloudItem COIN_NITRO = new CloudItem(2068, CloudItemRarity.OBSIDIAN, "Nitro", false, false, false, true, false, false);
-	public static final CloudItem COIN_BATTLEFIELDS = new CloudItem(2069, CloudItemRarity.LAPIS, "Battlefields", false, false, false, true, false, false);
-	public static final CloudItem COIN_CCLEAGUE_BRONZE = new CloudItem(2070, CloudItemRarity.OBSIDIAN, "CCL Bronze", false, false, false, true, false, false);
-	public static final CloudItem COIN_CCLEAGUE_SILVER = new CloudItem(2071, CloudItemRarity.OBSIDIAN, "CCL Silver", false, false, false, true, false, false);
-	public static final CloudItem COIN_CCLEAGUE_GOLD = new CloudItem(2072, CloudItemRarity.OBSIDIAN, "CCL Gold", false, false, false, true, false, false);
-	public static final CloudItem BOOSTER_EXP_2 = new CloudItem(2100, CloudItemRarity.DIAMOND, "30m Boost", false, false, false, false, false, false);
-	public static final CloudItem BOOSTER_EXP_3 = new CloudItem(2101, CloudItemRarity.DIAMOND, "30m Boost", false, false, false, false, false, false);
-	public static final CloudItem BOOSTER_EMD_2 = new CloudItem(2102, CloudItemRarity.DIAMOND, "30m Boost", false, false, false, false, false, false);
-	public static final CloudItem STICKER_CAMP = new CloudItem(2200, CloudItemRarity.IRON, "Camper", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CHICKEN_STRIKE = new CloudItem(2201, CloudItemRarity.IRON, "Chicken Strike", false, true, true, true, true, true);
-	public static final CloudItem STICKER_DINKED = new CloudItem(2202, CloudItemRarity.IRON, "Dinked", false, true, true, true, true, true);
-	public static final CloudItem STICKER_KATO2014_IBUYPOWER = new CloudItem(2203, CloudItemRarity.LAPIS, "iBuyPower (Katowice 2014)", false, true, true, true, true, true);
-	public static final CloudItem STICKER_KAWAIIKILLER = new CloudItem(2204, CloudItemRarity.LAPIS, "Kawaii Killer", false, true, true, true, true, true);
-	public static final CloudItem STICKER_LUCKY13 = new CloudItem(2205, CloudItemRarity.GOLD, "Lucky 13", false, true, true, true, true, true);
-	public static final CloudItem STICKER_HOWL = new CloudItem(2206, CloudItemRarity.DIAMOND, "Howl", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_GIS = new CloudItem(2207, CloudItemRarity.IRON, "GIS", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_GRAVITY = new CloudItem(2208, CloudItemRarity.IRON, "Gravity", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_KINGDEAD = new CloudItem(2209, CloudItemRarity.IRON, "KingDead", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_PARADISE9 = new CloudItem(2210, CloudItemRarity.IRON, "Paradise 9", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_SEALTEAM6 = new CloudItem(2211, CloudItemRarity.IRON, "SEAL Team 6", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_SIKA = new CloudItem(2212, CloudItemRarity.IRON, "SIKA", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_TBK = new CloudItem(2213, CloudItemRarity.IRON, "TBK", false, true, true, true, true, true);
-	public static final CloudItem STICKER_CCL_2020_S1_CLAN_CCTN = new CloudItem(2214, CloudItemRarity.IRON, "CCTN", false, true, true, true, true, true);
-	public static final CloudItem SC_ALPHA = new CloudItem(3000, CloudItemRarity.COAL, "Capsule", false, true, true, false, false, false);
-	public static final CloudItem SC_CCL_2020_S1 = new CloudItem(3001, CloudItemRarity.COAL, "Capsule", false, true, true, false, false, false);
-	public static final CloudItem CAPE_SUPPORTER = new CloudItem(3100, CloudItemRarity.GOLD, "Supporter", false, false, false, true, false, false);
-	public static final CloudItem CAPE_COUNTERCRAFT = new CloudItem(3101, CloudItemRarity.GOLD, "CounterCraft", false, false, false, true, false, false);
-	public static final CloudItem CAPE_DAWAE = new CloudItem(3102, CloudItemRarity.GOLD, "DaWae", false, false, false, true, false, false);
-	public static final CloudItem CAPE_BOEHMOD = new CloudItem(3103, CloudItemRarity.GOLD, "BoehMod", false, false, false, true, false, false);
-	public static final CloudItem CAPE_POGCHAMP = new CloudItem(3104, CloudItemRarity.GOLD, "PogChamp", false, false, false, true, false, false);
-	public static final CloudItem CAPE_PEPEDANK = new CloudItem(3105, CloudItemRarity.GOLD, "PepeDank", false, false, false, true, false, false);
-	public static final CloudItem CAPE_MCGA = new CloudItem(3106, CloudItemRarity.GOLD, "MCGA", false, false, false, true, false, false);
-	public static final CloudItem CAPE_PUMPKIN = new CloudItem(3107, CloudItemRarity.GOLD, "Pumpkin", false, false, false, true, false, false);
-	public static final CloudItem CARD_DEFAULT = new CloudItem(4000, CloudItemRarity.DEFAULT, "Default", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_GB = new CloudItem(4001, CloudItemRarity.DEFAULT, "GB", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_USA = new CloudItem(4002, CloudItemRarity.DEFAULT, "USA", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_RUS = new CloudItem(4003, CloudItemRarity.DEFAULT, "RUS", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_CAN = new CloudItem(4004, CloudItemRarity.DEFAULT, "CAN", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_BR = new CloudItem(4005, CloudItemRarity.DEFAULT, "BR", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_AU = new CloudItem(4006, CloudItemRarity.DEFAULT, "AU", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_NZ = new CloudItem(4007, CloudItemRarity.DEFAULT, "NZ", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_CN = new CloudItem(4008, CloudItemRarity.DEFAULT, "CN", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_HK = new CloudItem(4009, CloudItemRarity.DEFAULT, "HK", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_SCOT = new CloudItem(4010, CloudItemRarity.DEFAULT, "SCOT", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_ENG = new CloudItem(4011, CloudItemRarity.DEFAULT, "ENG", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_IE = new CloudItem(4012, CloudItemRarity.DEFAULT, "IE", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_UA = new CloudItem(4013, CloudItemRarity.DEFAULT, "UA", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_FR = new CloudItem(4014, CloudItemRarity.DEFAULT, "FR", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_GER = new CloudItem(4015, CloudItemRarity.DEFAULT, "GER", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_JP = new CloudItem(4016, CloudItemRarity.DEFAULT, "JP", true, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_ES = new CloudItem(4017, CloudItemRarity.DEFAULT, "ES", true, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_SLIME_GHOST = new CloudItem(4018, CloudItemRarity.LAPIS, "Slime Ghost", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_FLOWER_WARFARE = new CloudItem(4019, CloudItemRarity.LAPIS, "Flower Warfare", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_FLOWER_POWER = new CloudItem(4020, CloudItemRarity.LAPIS, "Flower Power", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_BOOM = new CloudItem(4021, CloudItemRarity.LAPIS, "Cartoon Boom", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_HEY = new CloudItem(4022, CloudItemRarity.LAPIS, "Cartoon Hey", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_OH = new CloudItem(4023, CloudItemRarity.LAPIS, "Cartoon Oh", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_OOPS = new CloudItem(4024, CloudItemRarity.LAPIS, "Cartoon Oops", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_SMILE = new CloudItem(4025, CloudItemRarity.LAPIS, "Cartoon Smile", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_WOW = new CloudItem(4026, CloudItemRarity.LAPIS, "Cartoon Wow", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CARTOON_WTF = new CloudItem(4027, CloudItemRarity.LAPIS, "Cartoon WTF", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_CHILI_PEPPER = new CloudItem(4028, CloudItemRarity.LAPIS, "Chili Pepper", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_WITCH_KITTY = new CloudItem(4029, CloudItemRarity.LAPIS, "Witch Kitty", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_PURPLE_NINJA = new CloudItem(4030, CloudItemRarity.LAPIS, "Purple Ninja", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_GAME_OVER = new CloudItem(4031, CloudItemRarity.LAPIS, "Game Over", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_SKULL_PATRIOT = new CloudItem(4032, CloudItemRarity.LAPIS, "Skull Patriot", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_GAMER_FLARE = new CloudItem(4033, CloudItemRarity.LAPIS, "Gamer Flare", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_GREEN_VIP = new CloudItem(4034, CloudItemRarity.LAPIS, "Green VIP", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_RANGER = new CloudItem(4035, CloudItemRarity.LAPIS, "Ranger", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_INSERTION = new CloudItem(4036, CloudItemRarity.LAPIS, "Insertion", false, false, false, true, false, false);
-	public static final CloudItem CARD_CUSTOM_SOLDIER_SILHOUETTE = new CloudItem(4037, CloudItemRarity.LAPIS, "Soldier Silhouette", false, false, false, true, false, false);
-	public static final CloudItem CARD_NATION_BE = new CloudItem(4038, CloudItemRarity.DEFAULT, "BE", true, false, false, true, false, false);
-	public static final CloudItem CASE_KEY_ALPHA = new CloudItem(4500, CloudItemRarity.COAL, "Alpha", false, false, true, true, false, false);
-	public static final CloudItem CASE_KEY_ALPHA2 = new CloudItem(4501, CloudItemRarity.COAL, "Alpha 2", false, false, true, true, false, false);
-	public static final CloudItem CASE_KEY_ALPHA3 = new CloudItem(4502, CloudItemRarity.COAL, "Alpha 3", false, false, true, true, false, false);
-	public static final CloudItem CASE_KEY_HAT = new CloudItem(4503, CloudItemRarity.COAL, "Hats 1", false, false, true, true, false, false);
-	public static final CloudItem CASE_KEY_HALLOWEEN1 = new CloudItem(4504, CloudItemRarity.COAL, "Halloween 1", false, false, true, true, false, false);
-	public static final CloudItem CASE_KEY_EXO = new CloudItem(4505, CloudItemRarity.COAL, "Exo", false, false, true, true, false, false);
-	public static final CloudItem WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA, false, true, true, false, false, false)
-		.addContent(SAWEDOFF_WASTELANDPRINCESS, 4)
+	public static final CloudItemGun M4A4 = new CloudItemGun(100, CloudItemRarity.DEFAULT, "M4A4", true);
+	public static final CloudItemGun M4A4_WAVES = new CloudItemGun(101, CloudItemRarity.IRON, "M4A4 Waves", false);
+	public static final CloudItemGun M4A4_EVILDAIMYO = new CloudItemGun(102, CloudItemRarity.GOLD, "M4A4 EvilDaimyo", false);
+	public static final CloudItemGun M4A4_CAKEY = new CloudItemGun(103, CloudItemRarity.IRON, "M4A4 Cakey", false);
+	public static final CloudItemGun M4A4_HOWL = new CloudItemGun(104, CloudItemRarity.OBSIDIAN, "M4A4 Howl", false);
+	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, CloudItemRarity.IRON, "M4A4 Nerfed", false);
+	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, CloudItemRarity.GOLD, "M4A4 Pumpkin", false);
+	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, CloudItemRarity.LAPIS, "M4A4 Patriot", false);
+	public static final CloudItemGun AK47 = new CloudItemGun(200, CloudItemRarity.DEFAULT, "AK47", true);
+	public static final CloudItemGun AK47_PROPAGANDA = new CloudItemGun(201, CloudItemRarity.GOLD, "AK47 Propaganda", false);
+	public static final CloudItemGun AK47_ASMO = new CloudItemGun(202, CloudItemRarity.DIAMOND, "AK47 Asmo", false);
+	public static final CloudItemGun AK47_NEONREVOLUTION = new CloudItemGun(203, CloudItemRarity.GOLD, "AK47 Neon Revolution", false);
+	public static final CloudItemGun AK47_HAUNTED = new CloudItemGun(204, CloudItemRarity.DIAMOND, "AK47 Haunted", false);
+	public static final CloudItemGun AK47_BLOODSPORT = new CloudItemGun(205, CloudItemRarity.IRON, "AK47 Bloodsport", false);
+	public static final CloudItemGun AK47_FOX = new CloudItemGun(206, CloudItemRarity.LAPIS, "AK47 Fox", false);
+	public static final CloudItemGun FAMAS = new CloudItemGun(300, CloudItemRarity.DEFAULT, "Famas", true);
+	public static final CloudItemGun FAMAS_AKARI = new CloudItemGun(301, CloudItemRarity.LAPIS, "Famas Akari", false);
+	public static final CloudItemGun FAMAS_WARHAWK = new CloudItemGun(302, CloudItemRarity.DIAMOND, "Famas Warhawk", false);
+	public static final CloudItemGun FAMAS_SPOOKY = new CloudItemGun(303, CloudItemRarity.LAPIS, "Famas Spooky", false);
+	public static final CloudItemGun FNFAL = new CloudItemGun(400, CloudItemRarity.DEFAULT, "FN FAL", true);
+	public static final CloudItemGun FNFAL_VAPORWAVE = new CloudItemGun(401, CloudItemRarity.GOLD, "FN FAL Vaporwave", false);
+	public static final CloudItemGun FNFAL_ASMO = new CloudItemGun(402, CloudItemRarity.GOLD, "FN FAL Asmo", false);
+	public static final CloudItemGun GALIL = new CloudItemGun(450, CloudItemRarity.DEFAULT, "Galil AR", true);
+	public static final CloudItemGun M1911 = new CloudItemGun(500, CloudItemRarity.DEFAULT, "M1911", true);
+	public static final CloudItemGun M1911_DRAGON = new CloudItemGun(501, CloudItemRarity.LAPIS, "M1911 Dragon", false);
+	public static final CloudItemGun M1911_TUXEDO = new CloudItemGun(502, CloudItemRarity.IRON, "M1911 Tuxedo", false);
+	public static final CloudItemGun G18 = new CloudItemGun(600, CloudItemRarity.DEFAULT, "G18", true);
+	public static final CloudItemGun G18_RACE = new CloudItemGun(601, CloudItemRarity.IRON, "G18 Race", false);
+	public static final CloudItemGun G18_HIGHROLLER = new CloudItemGun(602, CloudItemRarity.DIAMOND, "G18 Highroller", false);
+	public static final CloudItemGun G18_DEEP_BLUE = new CloudItemGun(603, CloudItemRarity.IRON, "G18 Deep Blue", false);
+	public static final CloudItemGun TEC9 = new CloudItemGun(650, CloudItemRarity.DEFAULT, "TEC9", true);
+	public static final CloudItemGun TEC9_QUAKORONIC = new CloudItemGun(651, CloudItemRarity.IRON, "TEC9 Quakoronic", false);
+	public static final CloudItemGun TEC9_ECO = new CloudItemGun(652, CloudItemRarity.IRON, "TEC9 Eco", false);
+	public static final CloudItemGun TEC9_AQUARIUM = new CloudItemGun(653, CloudItemRarity.DIAMOND, "TEC9 Aquarium", false);
+	public static final CloudItemGun DEAGLE = new CloudItemGun(700, CloudItemRarity.DEFAULT, "Deagle", true);
+	public static final CloudItemGun DEAGLE_NIGHTRAZER = new CloudItemGun(701, CloudItemRarity.LAPIS, "Deagle NightRazer", false);
+	public static final CloudItemGun DEAGLE_DEADHORIZON = new CloudItemGun(702, CloudItemRarity.GOLD, "Deagle Dead Horizon", false);
+	public static final CloudItemGun DEAGLE_GRIN = new CloudItemGun(703, CloudItemRarity.LAPIS, "Deagle Grin", false);
+	public static final CloudItemGun P250 = new CloudItemGun(750, CloudItemRarity.DEFAULT, "P250", true);
+	public static final CloudItemGun P250_IRRADIATED = new CloudItemGun(751, CloudItemRarity.IRON, "P250 Irradiated", false);
+	public static final CloudItemGun P250_SEEYALATER = new CloudItemGun(752, CloudItemRarity.DIAMOND, "P250 SeeYaLater", false);
+	public static final CloudItemGun P250_CITY = new CloudItemGun(753, CloudItemRarity.IRON, "P250 City", false);
+	public static final CloudItemGun P250_BEAST = new CloudItemGun(754, CloudItemRarity.GOLD, "P250 Beast", false);
+	public static final CloudItemGun P90 = new CloudItemGun(800, CloudItemRarity.DEFAULT, "P90", true);
+	public static final CloudItemGun P90_RUST = new CloudItemGun(801, CloudItemRarity.IRON, "P90 Rust", false);
+	public static final CloudItemGun P90_KRAKEN = new CloudItemGun(802, CloudItemRarity.GOLD, "P90 Kraken", false);
+	public static final CloudItemGun MAC10 = new CloudItemGun(900, CloudItemRarity.DEFAULT, "MAC10", true);
+	public static final CloudItemGun MAC10_RACE = new CloudItemGun(901, CloudItemRarity.IRON, "MAC10 Race", false);
+	public static final CloudItemGun MAC10_PUMPKIN = new CloudItemGun(902, CloudItemRarity.LAPIS, "MAC10 Pumpkin", false);
+	public static final CloudItemGun VECTOR = new CloudItemGun(1000, CloudItemRarity.DEFAULT, "Vector", true);
+	public static final CloudItemGun VECTOR_CIRCUIT = new CloudItemGun(1001, CloudItemRarity.IRON, "Vector Circuit", false);
+	public static final CloudItemGun VECTOR_BLOODYEQUATION = new CloudItemGun(1002, CloudItemRarity.IRON, "Vector Bloody Equation", false);
+	public static final CloudItemGun AWP = new CloudItemGun(1100, CloudItemRarity.DEFAULT, "AWP", true);
+	public static final CloudItemGun AWP_DRAGON = new CloudItemGun(1101, CloudItemRarity.OBSIDIAN, "AWP Dragon", false);
+	public static final CloudItemGun AWP_MANOWAR = new CloudItemGun(1102, CloudItemRarity.LAPIS, "AWP Man O War", false);
+	public static final CloudItemGun AWP_ASMO = new CloudItemGun(1103, CloudItemRarity.DIAMOND, "AWP Asmo", false);
+	public static final CloudItemGun AWP_BONES = new CloudItemGun(1104, CloudItemRarity.GOLD, "AWP Bones", false);
+	public static final CloudItemGun AWP_REDLINE = new CloudItemGun(1105, CloudItemRarity.IRON, "AWP Redline", false);
+	public static final CloudItemGun AWP_BOOM = new CloudItemGun(1106, CloudItemRarity.GOLD, "AWP Boom", false);
+	public static final CloudItemGun DRAGUNOV = new CloudItemGun(1200, CloudItemRarity.DEFAULT, "Dragunov", true);
+	public static final CloudItemGun DRAGUNOV_SKY = new CloudItemGun(1201, CloudItemRarity.IRON, "Dragunov Sky", false);
+	public static final CloudItemGun DRAGUNOV_STEAMPUNK = new CloudItemGun(1202, CloudItemRarity.LAPIS, "Dragunov Steampunk", false);
+	public static final CloudItemGun SCAR20 = new CloudItemGun(1300, CloudItemRarity.DEFAULT, "Scar20", true);
+	public static final CloudItemGun SCAR20_CYREX = new CloudItemGun(1301, CloudItemRarity.LAPIS, "Scar20 Cyrex", false);
+	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, CloudItemRarity.DIAMOND, "Scar20 Unicorn", false);
+	public static final CloudItemGun SSG08 = new CloudItemGun(1400, CloudItemRarity.DEFAULT, "SSG-08", true);
+	public static final CloudItemKnife KNIFE_TAC = new CloudItemKnife(1500, CloudItemRarity.DEFAULT, "Tac Knife", true);
+	public static final CloudItemKnife KNIFE_TAC_DISPLAY = new CloudItemKnife(1501, CloudItemRarity.OBSIDIAN, "Special Item", false);
+	public static final CloudItemKnife KNIFE_TAC_MARBLE = new CloudItemKnife(1502, CloudItemRarity.DIAMOND, "Tac Knife Marble", false);
+	public static final CloudItemKnife KNIFE_TAC_TIGER = new CloudItemKnife(1503, CloudItemRarity.DIAMOND, "Tac Knife Tiger", false);
+	public static final CloudItemKnife KNIFE_TAC_STEEL = new CloudItemKnife(1504, CloudItemRarity.DIAMOND, "Tac Knife Steel", false);
+	public static final CloudItemKnife KNIFE_TAC_DOPPLAR = new CloudItemKnife(1505, CloudItemRarity.DIAMOND, "Tac Knife Doppler", false);
+	public static final CloudItemKnife KNIFE_TAC_LORE = new CloudItemKnife(1506, CloudItemRarity.DIAMOND, "Tac Knife Lore", false);
+	public static final CloudItemKnife KNIFE_TAC_GAMMA = new CloudItemKnife(1507, CloudItemRarity.DIAMOND, "Tac Knife Gamma", false);
+	public static final CloudItemKnife KNIFE_BAY = new CloudItemKnife(1510, CloudItemRarity.DIAMOND, "Bayonet", false);
+	public static final CloudItemKnife KNIFE_BAY_MARBLE = new CloudItemKnife(1511, CloudItemRarity.DIAMOND, "Bayonet Marble", false);
+	public static final CloudItemKnife KNIFE_BAY_TIGER = new CloudItemKnife(1512, CloudItemRarity.DIAMOND, "Bayonet Tiger", false);
+	public static final CloudItemKnife KNIFE_BAY_STEEL = new CloudItemKnife(1513, CloudItemRarity.DIAMOND, "Bayonet Steel", false);
+	public static final CloudItemKnife KNIFE_BAY_DOPPLAR = new CloudItemKnife(1514, CloudItemRarity.DIAMOND, "Bayonet Doppler", false);
+	public static final CloudItemKnife KNIFE_BAY_LORE = new CloudItemKnife(1515, CloudItemRarity.DIAMOND, "Bayonet Lore", false);
+	public static final CloudItemKnife KNIFE_BAY_GAMMA = new CloudItemKnife(1516, CloudItemRarity.DIAMOND, "Bayonet Gamma", false);
+	public static final CloudItemKnife KNIFE_BAY_DRAGONLORE = new CloudItemKnife(1517, CloudItemRarity.DIAMOND, "Bayonet Dragonlore", false);
+	public static final CloudItemKnife KNIFE_KAR = new CloudItemKnife(1520, CloudItemRarity.DIAMOND, "Karambit", false);
+	public static final CloudItemKnife KNIFE_KAR_MARBLE = new CloudItemKnife(1521, CloudItemRarity.DIAMOND, "Karambit Marble", false);
+	public static final CloudItemKnife KNIFE_KAR_TIGER = new CloudItemKnife(1522, CloudItemRarity.DIAMOND, "Karambit Tiger", false);
+	public static final CloudItemKnife KNIFE_KAR_STEEL = new CloudItemKnife(1523, CloudItemRarity.DIAMOND, "Karambit Steel", false);
+	public static final CloudItemKnife KNIFE_KAR_DOPPLAR = new CloudItemKnife(1524, CloudItemRarity.DIAMOND, "Karambit Doppler", false);
+	public static final CloudItemKnife KNIFE_KAR_LORE = new CloudItemKnife(1525, CloudItemRarity.DIAMOND, "Karambit Lore", false);
+	public static final CloudItemKnife KNIFE_KAR_GAMMA = new CloudItemKnife(1526, CloudItemRarity.DIAMOND, "Karambit Gamma", false);
+	public static final CloudItemKnife KNIFE_KAR_EAGLE = new CloudItemKnife(1527, CloudItemRarity.DIAMOND, "Karambit Eagle", false);
+	public static final CloudItemKnife KNIFE_BUTTERFLY = new CloudItemKnife(1530, CloudItemRarity.DIAMOND, "Butterfly", false);
+	public static final CloudItemGun NOVA = new CloudItemGun(1600, CloudItemRarity.DEFAULT, "Nova", true);
+	public static final CloudItemGun NOVA_OXIDEBLAZE = new CloudItemGun(1601, CloudItemRarity.IRON, "Nova Oxide Blaze", false);
+	public static final CloudItemGun NOVA_HYPER_BEAST = new CloudItemGun(1602, CloudItemRarity.DIAMOND, "Nova Hyper Beast", false);
+	public static final CloudItemGun SAWEDOFF = new CloudItemGun(1650, CloudItemRarity.DEFAULT, "Sawed-Off", true);
+	public static final CloudItemGun SAWEDOFF_WASTELANDPRINCESS = new CloudItemGun(1651, CloudItemRarity.GOLD, "Sawed-Off WastelandPrincess", false);
+	public static final CloudItemGun SAWEDOFF_KRAKEN = new CloudItemGun(1652, CloudItemRarity.LAPIS, "Sawed-Off Kraken", false);
+	public static final CloudItemGun SAWEDOFF_MIDNIGHT = new CloudItemGun(1653, CloudItemRarity.IRON, "Sawed-Off Midnight", false);
+	public static final CloudItemGun MAG7 = new CloudItemGun(1700, CloudItemRarity.DEFAULT, "Mag-7", true);
+	public static final CloudItemGun MAG7_ROYALFIRE = new CloudItemGun(1701, CloudItemRarity.LAPIS, "Mag-7 Royal Fire", false);
+	public static final CloudItemGun MAG7_VAMPIRE = new CloudItemGun(1702, CloudItemRarity.GOLD, "Mag-7 Vampire", false);
+	public static final CloudItemGun M249 = new CloudItemGun(1750, CloudItemRarity.DEFAULT, "M249", true);
+	public static final CloudItemGun M249_NEON = new CloudItemGun(1751, CloudItemRarity.LAPIS, "M249 Neon", false);
+	public static final CloudItemGun M249_GHOST = new CloudItemGun(1752, CloudItemRarity.IRON, "M249 Ghost", false);
+	public static final CloudItemGun CZ75 = new CloudItemGun(1800, CloudItemRarity.DEFAULT, "CZ75", true);
+	public static final CloudItemGun CZ75_PHANTOM = new CloudItemGun(1801, CloudItemRarity.GOLD, "CZ75 Phantom", false);
+	public static final CloudItemGun FIVESEVEN = new CloudItemGun(1815, CloudItemRarity.DEFAULT, "Fiveseven", true);
+	public static final CloudItemGun R8 = new CloudItemGun(1826, CloudItemRarity.DEFAULT, "R8", true);
+	public static final CloudItemGun R8_FADE = new CloudItemGun(1827, CloudItemRarity.DIAMOND, "R8 Fade", false);
+	public static final CloudItemGun R8_GOLD = new CloudItemGun(1828, CloudItemRarity.LAPIS, "R8 Gold", false);
+	public static final CloudItemGun UMP45 = new CloudItemGun(1850, CloudItemRarity.DEFAULT, "UMP-45", true);
+	public static final CloudItemGun UMP45_PRIMAL = new CloudItemGun(1851, CloudItemRarity.LAPIS, "UMP-45 Primal", false);
+	public static final CloudItemGun UMP45_EDIFICE = new CloudItemGun(1852, CloudItemRarity.IRON, "UMP-45 Edifice", false);
+	public static final CloudItemHat HAT_TOPHAT = new CloudItemHat(1900, CloudItemRarity.LAPIS, "Top Hat", false);
+	public static final CloudItemHat HAT_CATHAT = new CloudItemHat(1901, CloudItemRarity.DIAMOND, "Cat's Hat", false);
+	public static final CloudItemHat HAT_HARDRED = new CloudItemHat(1902, CloudItemRarity.COAL, "Hardhat Red", false);
+	public static final CloudItemHat HAT_HARDORANGE = new CloudItemHat(1903, CloudItemRarity.COAL, "Hardhat Orange", false);
+	public static final CloudItemHat HAT_HARDYELLOW = new CloudItemHat(1904, CloudItemRarity.COAL, "Hardhat Yellow", false);
+	public static final CloudItemHat HAT_VIKING = new CloudItemHat(1905, CloudItemRarity.GOLD, "Viking Helmet", false);
+	public static final CloudItemHat HAT_FIREMAN = new CloudItemHat(1906, CloudItemRarity.IRON, "Fireman Hat", false);
+	public static final CloudItemHat HAT_FIREMANCHIEF = new CloudItemHat(1907, CloudItemRarity.IRON, "Fire Chief Hat", false);
+	public static final CloudItemHat HAT_TV = new CloudItemHat(1908, CloudItemRarity.LAPIS, "TV Hat", false);
+	public static final CloudItemGeneric TRADE_CONTRACT = new CloudItemGeneric(2040, CloudItemRarity.DEFAULT, "Trade Contract", true, true, true, true, true, true);
+	public static final CloudItemGeneric NAME_TAG = new CloudItemGeneric(2041, CloudItemRarity.COAL, "Name Tag", false, true, true, false, false, false);
+	public static final CloudItemCoin COIN_BETA = new CloudItemCoin(2050, CloudItemRarity.LAPIS, "Coin BETA Age", false);
+	public static final CloudItemCoin COIN_ALPHA = new CloudItemCoin(2051, CloudItemRarity.LAPIS, "Coin ALPHA Age", false);
+	public static final CloudItemCoin COIN_DISCORD = new CloudItemCoin(2052, CloudItemRarity.LAPIS, "Coin Discord", false);
+	public static final CloudItemCoin COIN_SKINNER = new CloudItemCoin(2053, CloudItemRarity.LAPIS, "Coin Skinning", false);
+	public static final CloudItemCoin COIN_DEV = new CloudItemCoin(2054, CloudItemRarity.OBSIDIAN, "Coin Developer", false);
+	public static final CloudItemCoin COIN_STAFF = new CloudItemCoin(2055, CloudItemRarity.LAPIS, "Coin Staffing", false);
+	public static final CloudItemCoin COIN_SUPPORTER = new CloudItemCoin(2056, CloudItemRarity.LAPIS, " Coin Supporter", false);
+	public static final CloudItemCoin COIN_MODELER = new CloudItemCoin(2057, CloudItemRarity.LAPIS, "Coin Modelling", false);
+	public static final CloudItemCoin COIN_PRESTIGE = new CloudItemCoin(2058, CloudItemRarity.LAPIS, "Coin Prestige", false);
+	public static final CloudItemCoin COIN_ASSETDEV = new CloudItemCoin(2059, CloudItemRarity.LAPIS, "Coin Asset Dev", false);
+	public static final CloudItemCoin COIN_FUZE = new CloudItemCoin(2060, CloudItemRarity.LAPIS, "Coin Team Fuze", false);
+	public static final CloudItemCoin COIN_ALXTON = new CloudItemCoin(2061, CloudItemRarity.LAPIS, "Coin Team Alxton", false);
+	public static final CloudItemCoin COIN_JEROME = new CloudItemCoin(2062, CloudItemRarity.LAPIS, "Coin Team Jerome", false);
+	public static final CloudItemCoin COIN_PEDRO = new CloudItemCoin(2063, CloudItemRarity.LAPIS, "Coin Team Pedro", false);
+	public static final CloudItemCoin COIN_EDGE = new CloudItemCoin(2064, CloudItemRarity.LAPIS, "Coin Team CreepersEdge", false);
+	public static final CloudItemCoin COIN_JABUTI = new CloudItemCoin(2065, CloudItemRarity.LAPIS, "Coin Team Jabuti", false);
+	public static final CloudItemCoin COIN_INEMAFOO = new CloudItemCoin(2066, CloudItemRarity.LAPIS, "Coin Team Inemafoo", false);
+	public static final CloudItemCoin COIN_MAPPER = new CloudItemCoin(2067, CloudItemRarity.LAPIS, "Coin Mapper", false);
+	public static final CloudItemCoin COIN_NITRO = new CloudItemCoin(2068, CloudItemRarity.OBSIDIAN, "Coin Nitro", false);
+	public static final CloudItemCoin COIN_BATTLEFIELDS = new CloudItemCoin(2069, CloudItemRarity.LAPIS, "Coin Battlefields", false);
+	public static final CloudItemCoin COIN_CCLEAGUE_BRONZE = new CloudItemCoin(2070, CloudItemRarity.OBSIDIAN, "Coin CCL Bronze", false);
+	public static final CloudItemCoin COIN_CCLEAGUE_SILVER = new CloudItemCoin(2071, CloudItemRarity.OBSIDIAN, "Coin CCL Silver", false);
+	public static final CloudItemCoin COIN_CCLEAGUE_GOLD = new CloudItemCoin(2072, CloudItemRarity.OBSIDIAN, "Coin CCL Gold", false);
+	public static final CloudItemBooster BOOSTER_EXP_2 = new CloudItemBooster(2100, CloudItemRarity.DIAMOND, "x2 EXP 30m Boost", false);
+	public static final CloudItemBooster BOOSTER_EXP_3 = new CloudItemBooster(2101, CloudItemRarity.DIAMOND, "x3 EXP 30m Boost", false);
+	public static final CloudItemBooster BOOSTER_EMD_2 = new CloudItemBooster(2102, CloudItemRarity.DIAMOND, "x2 Emerald 30m Boost", false);
+	public static final CloudItemSticker STICKER_CAMP = new CloudItemSticker(2200, CloudItemRarity.IRON, "Sticker Camper", false);
+	public static final CloudItemSticker STICKER_CHICKEN_STRIKE = new CloudItemSticker(2201, CloudItemRarity.IRON, "Sticker Chicken Strike", false);
+	public static final CloudItemSticker STICKER_DINKED = new CloudItemSticker(2202, CloudItemRarity.IRON, "Sticker Dinked", false);
+	public static final CloudItemSticker STICKER_KATO2014_IBUYPOWER = new CloudItemSticker(2203, CloudItemRarity.LAPIS, "Sticker iBuyPower (Katowice 2014)", false);
+	public static final CloudItemSticker STICKER_KAWAIIKILLER = new CloudItemSticker(2204, CloudItemRarity.LAPIS, "Sticker Kawaii Killer", false);
+	public static final CloudItemSticker STICKER_LUCKY13 = new CloudItemSticker(2205, CloudItemRarity.GOLD, "Sticker Lucky 13", false);
+	public static final CloudItemSticker STICKER_HOWL = new CloudItemSticker(2206, CloudItemRarity.DIAMOND, "Sticker Howl", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_GIS = new CloudItemSticker(2207, CloudItemRarity.IRON, "Sticker GIS", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_GRAVITY = new CloudItemSticker(2208, CloudItemRarity.IRON, "Sticker Gravity", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_KINGDEAD = new CloudItemSticker(2209, CloudItemRarity.IRON, "Sticker KingDead", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_PARADISE9 = new CloudItemSticker(2210, CloudItemRarity.IRON, "Sticker Paradise 9", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_SEALTEAM6 = new CloudItemSticker(2211, CloudItemRarity.IRON, "Sticker SEAL Team 6", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_SIKA = new CloudItemSticker(2212, CloudItemRarity.IRON, "Sticker SIKA", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_TBK = new CloudItemSticker(2213, CloudItemRarity.IRON, "Sticker TBK", false);
+	public static final CloudItemSticker STICKER_CCL_2020_S1_CLAN_CCTN = new CloudItemSticker(2214, CloudItemRarity.IRON, "Sticker CCTN", false);
+	public static final CloudItemStickerCapsule SC_ALPHA = new CloudItemStickerCapsule(3000, CloudItemRarity.COAL, "Alpha Capsule", false);
+	public static final CloudItemStickerCapsule SC_CCL_2020_S1 = new CloudItemStickerCapsule(3001, CloudItemRarity.COAL, "CCL '20 S1 Capsule", false);
+	public static final CloudItemCape CAPE_SUPPORTER = new CloudItemCape(3100, CloudItemRarity.GOLD, "Cape Supporter", false);
+	public static final CloudItemCape CAPE_COUNTERCRAFT = new CloudItemCape(3101, CloudItemRarity.GOLD, "Cape CounterCraft", false);
+	public static final CloudItemCape CAPE_DAWAE = new CloudItemCape(3102, CloudItemRarity.GOLD, "Cape DaWae", false);
+	public static final CloudItemCape CAPE_BOEHMOD = new CloudItemCape(3103, CloudItemRarity.GOLD, "Cape BoehMod", false);
+	public static final CloudItemCape CAPE_POGCHAMP = new CloudItemCape(3104, CloudItemRarity.GOLD, "Cape PogChamp", false);
+	public static final CloudItemCape CAPE_PEPEDANK = new CloudItemCape(3105, CloudItemRarity.GOLD, "Cape PepeDank", false);
+	public static final CloudItemCape CAPE_MCGA = new CloudItemCape(3106, CloudItemRarity.GOLD, "Cape MCGA", false);
+	public static final CloudItemCape CAPE_PUMPKIN = new CloudItemCape(3107, CloudItemRarity.GOLD, "Cape Pumpkin", false);
+	public static final CloudItemCallingCard CARD_DEFAULT = new CloudItemCallingCard(4000, CloudItemRarity.DEFAULT, "Card Default", true);
+	public static final CloudItemCallingCard CARD_NATION_GB = new CloudItemCallingCard(4001, CloudItemRarity.DEFAULT, "Card GB", true);
+	public static final CloudItemCallingCard CARD_NATION_USA = new CloudItemCallingCard(4002, CloudItemRarity.DEFAULT, "Card USA", true);
+	public static final CloudItemCallingCard CARD_NATION_RUS = new CloudItemCallingCard(4003, CloudItemRarity.DEFAULT, "Card RUS", true);
+	public static final CloudItemCallingCard CARD_NATION_CAN = new CloudItemCallingCard(4004, CloudItemRarity.DEFAULT, "Card CAN", true);
+	public static final CloudItemCallingCard CARD_NATION_BR = new CloudItemCallingCard(4005, CloudItemRarity.DEFAULT, "Card BR", true);
+	public static final CloudItemCallingCard CARD_NATION_AU = new CloudItemCallingCard(4006, CloudItemRarity.DEFAULT, "Card AU", true);
+	public static final CloudItemCallingCard CARD_NATION_NZ = new CloudItemCallingCard(4007, CloudItemRarity.DEFAULT, "Card NZ", true);
+	public static final CloudItemCallingCard CARD_NATION_CN = new CloudItemCallingCard(4008, CloudItemRarity.DEFAULT, "Card CN", true);
+	public static final CloudItemCallingCard CARD_NATION_HK = new CloudItemCallingCard(4009, CloudItemRarity.DEFAULT, "Card HK", true);
+	public static final CloudItemCallingCard CARD_NATION_SCOT = new CloudItemCallingCard(4010, CloudItemRarity.DEFAULT, "Card SCOT", true);
+	public static final CloudItemCallingCard CARD_NATION_ENG = new CloudItemCallingCard(4011, CloudItemRarity.DEFAULT, "Card ENG", true);
+	public static final CloudItemCallingCard CARD_NATION_IE = new CloudItemCallingCard(4012, CloudItemRarity.DEFAULT, "Card IE", true);
+	public static final CloudItemCallingCard CARD_NATION_UA = new CloudItemCallingCard(4013, CloudItemRarity.DEFAULT, "Card UA", true);
+	public static final CloudItemCallingCard CARD_NATION_FR = new CloudItemCallingCard(4014, CloudItemRarity.DEFAULT, "Card FR", true);
+	public static final CloudItemCallingCard CARD_NATION_GER = new CloudItemCallingCard(4015, CloudItemRarity.DEFAULT, "Card GER", true);
+	public static final CloudItemCallingCard CARD_NATION_JP = new CloudItemCallingCard(4016, CloudItemRarity.DEFAULT, "Card JP", true);
+	public static final CloudItemCallingCard CARD_NATION_ES = new CloudItemCallingCard(4017, CloudItemRarity.DEFAULT, "Card ES", true);
+	public static final CloudItemCallingCard CARD_CUSTOM_SLIME_GHOST = new CloudItemCallingCard(4018, CloudItemRarity.LAPIS, "Card Slime Ghost", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_FLOWER_WARFARE = new CloudItemCallingCard(4019, CloudItemRarity.LAPIS, "Card Flower Warfare", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_FLOWER_POWER = new CloudItemCallingCard(4020, CloudItemRarity.LAPIS, "Card Flower Power", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_BOOM = new CloudItemCallingCard(4021, CloudItemRarity.LAPIS, "Card Cartoon Boom", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_HEY = new CloudItemCallingCard(4022, CloudItemRarity.LAPIS, "Card Cartoon Hey", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_OH = new CloudItemCallingCard(4023, CloudItemRarity.LAPIS, "Card Cartoon Oh", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_OOPS = new CloudItemCallingCard(4024, CloudItemRarity.LAPIS, "Card Cartoon Oops", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_SMILE = new CloudItemCallingCard(4025, CloudItemRarity.LAPIS, "Card Cartoon Smile", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_WOW = new CloudItemCallingCard(4026, CloudItemRarity.LAPIS, "Card Cartoon Wow", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CARTOON_WTF = new CloudItemCallingCard(4027, CloudItemRarity.LAPIS, "Card Cartoon WTF", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_CHILI_PEPPER = new CloudItemCallingCard(4028, CloudItemRarity.LAPIS, "Card Chili Pepper", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_WITCH_KITTY = new CloudItemCallingCard(4029, CloudItemRarity.LAPIS, "Card Witch Kitty", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_PURPLE_NINJA = new CloudItemCallingCard(4030, CloudItemRarity.LAPIS, "Card Purple Ninja", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_GAME_OVER = new CloudItemCallingCard(4031, CloudItemRarity.LAPIS, "Card Game Over", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_SKULL_PATRIOT = new CloudItemCallingCard(4032, CloudItemRarity.LAPIS, "Card Skull Patriot", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_GAMER_FLARE = new CloudItemCallingCard(4033, CloudItemRarity.LAPIS, "Card Gamer Flare", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_GREEN_VIP = new CloudItemCallingCard(4034, CloudItemRarity.LAPIS, "Card Green VIP", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_RANGER = new CloudItemCallingCard(4035, CloudItemRarity.LAPIS, "Card Ranger", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_INSERTION = new CloudItemCallingCard(4036, CloudItemRarity.LAPIS, "Card Insertion", false);
+	public static final CloudItemCallingCard CARD_CUSTOM_SOLDIER_SILHOUETTE = new CloudItemCallingCard(4037, CloudItemRarity.LAPIS, "Card Soldier Silhouette", false);
+	public static final CloudItemCallingCard CARD_NATION_BE = new CloudItemCallingCard(4038, CloudItemRarity.DEFAULT, "Card BE", true);
+	public static final CloudItemKey CASE_KEY_ALPHA = new CloudItemKey(4500, CloudItemRarity.COAL, "Key Alpha", false);
+	public static final CloudItemKey CASE_KEY_ALPHA2 = new CloudItemKey(4501, CloudItemRarity.COAL, "Key Alpha 2", false);
+	public static final CloudItemKey CASE_KEY_ALPHA3 = new CloudItemKey(4502, CloudItemRarity.COAL, "Key Alpha 3", false);
+	public static final CloudItemKey CASE_KEY_HAT = new CloudItemKey(4503, CloudItemRarity.COAL, "Key Hats 1", false);
+	public static final CloudItemKey CASE_KEY_HALLOWEEN1 = new CloudItemKey(4504, CloudItemRarity.COAL, "Key Halloween 1", false);
+	public static final CloudItemKey CASE_KEY_EXO = new CloudItemKey(4505, CloudItemRarity.COAL, "Key Exo", false);
+	public static final CloudItemCase WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA, false)
+		.addContent(M4A4_WAVES, 110)
 		.addContent(P250_IRRADIATED, 110)
-		.addContent(M249_NEON, 10)
 		.addContent(DRAGUNOV_SKY, 110)
+		.addContent(VECTOR_CIRCUIT, 100)
+		.addContent(P90_RUST, 80)
 		.addContent(SCAR20_CYREX, 60)
 		.addContent(MAG7_ROYALFIRE, 40)
-		.addContent(VECTOR_CIRCUIT, 100)
 		.addContent(DEAGLE_NIGHTRAZER, 20)
-		.addContent(M4A4_WAVES, 110)
-		.addContent(AK47_ASMO, 1)
-		.addContent(R8_FADE, 1)
-		.addContent(M4A4_EVILDAIMYO, 4)
 		.addContent(AK47_PROPAGANDA, 10)
-		.addContent(P90_RUST, 80);
-	public static final CloudItem WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA2, false, true, true, false, false, false)
-		.addContent(P250_SEEYALATER, 1)
-		.addContent(MAC10_RACE, 60)
-		.addContent(AWP_MANOWAR, 20)
-		.addContent(TEC9_QUAKORONIC, 80)
-		.addContent(P90_KRAKEN, 4)
+		.addContent(M249_NEON, 10)
+		.addContent(M4A4_EVILDAIMYO, 4)
+		.addContent(SAWEDOFF_WASTELANDPRINCESS, 4)
+		.addContent(AK47_ASMO, 1)
+		.addContent(R8_FADE, 1);
+	public static final CloudItemCase WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA2, false)
 		.addContent(NOVA_OXIDEBLAZE, 100)
-		.addContent(SCAR20_UNICORN, 1)
+		.addContent(TEC9_QUAKORONIC, 80)
+		.addContent(MAC10_RACE, 60)
 		.addContent(M4A4_CAKEY, 40)
+		.addContent(AWP_MANOWAR, 20)
+		.addContent(FAMAS_AKARI, 10)
 		.addContent(SAWEDOFF_KRAKEN, 10)
 		.addContent(AK47_NEONREVOLUTION, 4)
-		.addContent(FAMAS_AKARI, 10);
-	public static final CloudItem WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA3, false, true, true, false, false, false)
-		.addContent(FAMAS_WARHAWK, 4)
-		.addContent(UMP45_PRIMAL, 40)
-		.addContent(M4A4_HOWL, 1)
+		.addContent(P90_KRAKEN, 4)
+		.addContent(P250_SEEYALATER, 1)
+		.addContent(SCAR20_UNICORN, 1);
+	public static final CloudItemCase WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA3, false)
 		.addContent(M4A4_NERFED, 100)
 		.addContent(G18_RACE, 90)
-		.addContent(DEAGLE_DEADHORIZON, 10)
-		.addContent(AWP_ASMO, 1)
-		.addContent(FNFAL_VAPORWAVE, 4)
-		.addContent(R8_GOLD, 20)
-		.addContent(M1911_DRAGON, 60)
+		.addContent(VECTOR_BLOODYEQUATION, 85)
 		.addContent(P250_CITY, 80)
+		.addContent(M1911_DRAGON, 60)
+		.addContent(UMP45_PRIMAL, 40)
+		.addContent(R8_GOLD, 20)
+		.addContent(DEAGLE_DEADHORIZON, 10)
 		.addContent(CZ75_PHANTOM, 10)
-		.addContent(VECTOR_BLOODYEQUATION, 85);
-	public static final CloudItem HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case", CASE_KEY_HAT, false, true, true, false, false, false)
+		.addContent(FAMAS_WARHAWK, 4)
+		.addContent(FNFAL_VAPORWAVE, 4)
+		.addContent(M4A4_HOWL, 1)
+		.addContent(AWP_ASMO, 1);
+	public static final CloudItemCase HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case", CASE_KEY_HAT, false)
 		.addContent(HAT_HARDRED, 110)
+		.addContent(HAT_HARDORANGE, 110)
 		.addContent(HAT_HARDYELLOW, 110)
-		.addContent(HAT_VIKING, 15)
-		.addContent(HAT_TV, 30)
-		.addContent(HAT_TOPHAT, 30)
-		.addContent(HAT_CATHAT, 6)
 		.addContent(HAT_FIREMAN, 80)
 		.addContent(HAT_FIREMANCHIEF, 80)
-		.addContent(HAT_HARDORANGE, 110);
-	public static final CloudItem WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case", CASE_KEY_HALLOWEEN1, false, true, true, false, false, false)
-		.addContent(G18_DEEP_BLUE, 60)
-		.addContent(M4A4_PUMPKIN, 10)
-		.addContent(DEAGLE_GRIN, 20)
-		.addContent(AK47_HAUNTED, 1)
-		.addContent(MAG7_VAMPIRE, 4)
-		.addContent(M249_GHOST, 80)
-		.addContent(G18_HIGHROLLER, 1)
-		.addContent(AWP_BONES, 4)
+		.addContent(HAT_TOPHAT, 30)
+		.addContent(HAT_TV, 30)
+		.addContent(HAT_VIKING, 15)
+		.addContent(HAT_CATHAT, 6);
+	public static final CloudItemCase WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case", CASE_KEY_HALLOWEEN1, false)
 		.addContent(UMP45_EDIFICE, 100)
-		.addContent(MAC10_PUMPKIN, 10)
+		.addContent(M1911_TUXEDO, 85)
+		.addContent(M249_GHOST, 80)
+		.addContent(G18_DEEP_BLUE, 60)
 		.addContent(FAMAS_SPOOKY, 40)
-		.addContent(M1911_TUXEDO, 85);
-	public static final CloudItem WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case", CASE_KEY_EXO, false, true, true, false, false, false)
-		.addContent(DRAGUNOV_STEAMPUNK, 50)
+		.addContent(DEAGLE_GRIN, 20)
+		.addContent(M4A4_PUMPKIN, 10)
+		.addContent(MAC10_PUMPKIN, 10)
+		.addContent(AWP_BONES, 4)
+		.addContent(MAG7_VAMPIRE, 4)
+		.addContent(AK47_HAUNTED, 1)
+		.addContent(G18_HIGHROLLER, 1);
+	public static final CloudItemCase WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case", CASE_KEY_EXO, false)
 		.addContent(TEC9_ECO, 90)
-		.addContent(TEC9_AQUARIUM, 10)
-		.addContent(P250_BEAST, 20)
-		.addContent(M4A4_PATRIOT, 50)
 		.addContent(SAWEDOFF_MIDNIGHT, 90)
-		.addContent(NOVA_HYPER_BEAST, 5)
+		.addContent(AK47_BLOODSPORT, 80)
 		.addContent(AWP_REDLINE, 70)
-		.addContent(FNFAL_ASMO, 30)
-		.addContent(AWP_BOOM, 40)
 		.addContent(AK47_FOX, 60)
-		.addContent(AK47_BLOODSPORT, 80);
+		.addContent(M4A4_PATRIOT, 50)
+		.addContent(DRAGUNOV_STEAMPUNK, 50)
+		.addContent(AWP_BOOM, 40)
+		.addContent(FNFAL_ASMO, 30)
+		.addContent(P250_BEAST, 20)
+		.addContent(TEC9_AQUARIUM, 10)
+		.addContent(NOVA_HYPER_BEAST, 5);
 
 	private CloudItems() {
 	}
@@ -318,15 +333,21 @@ public final class CloudItems {
 		return Collections.unmodifiableCollection(ID_MAP.values());
 	}
 
+	public static List<CloudItem> defaults() {
+		return Collections.unmodifiableList(DEFAULTS);
+	}
+
 	public static CloudItem getById(int id) {
 		return ID_MAP.get(id);
 	}
 
-	public static Collection<CloudItem> getByRarity(CloudItemRarity rarity) {
-		return RARITY_MAP.get(rarity);
-	}
-
 	public static CloudItem getRandomDrop() {
-		return Util.getRandomFromCollection(getByRarity(CloudItemRarity.getRandomWeighted()));
+		// [0, 3]
+		int value = ThreadLocalRandom.current().nextInt(4);
+		if (value < 3) {
+			return CloudItemCase.getRandomForDrop();
+		} else {
+			return CloudItemGun.getRandomForDrop();
+		}
 	}
 }

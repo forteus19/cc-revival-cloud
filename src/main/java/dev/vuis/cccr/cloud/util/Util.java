@@ -2,6 +2,7 @@ package dev.vuis.cccr.cloud.util;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
+import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.CloudConstants;
 import java.net.http.HttpClient;
 import java.util.Collection;
@@ -70,5 +71,22 @@ public final class Util {
 			Long.parseUnsignedLong(uuidStr.substring(0, 16), 16),
 			Long.parseUnsignedLong(uuidStr.substring(16, 32), 16)
 		);
+	}
+
+	public static <T> T getRandomFromMultiset(Multiset<T> multiset) {
+		if (multiset.isEmpty()) {
+			throw new IllegalArgumentException("Empty multiset");
+		}
+
+		int r = ThreadLocalRandom.current().nextInt(multiset.size());
+		int c = 0;
+
+		for (Multiset.Entry<T> entry : multiset.entrySet()) {
+			if (r < (c += entry.getCount())) {
+				return entry.getElement();
+			}
+		}
+
+		throw new AssertionError();
 	}
 }
