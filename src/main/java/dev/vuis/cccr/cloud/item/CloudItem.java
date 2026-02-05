@@ -41,6 +41,10 @@ public abstract class CloudItem {
 
 	public abstract boolean isContractable();
 
+	public boolean isEquippable() {
+		return getCategory().getId() != null;
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof CloudItem item && id == item.id;

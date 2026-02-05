@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -64,13 +65,35 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 					break;
 				}
 
-				List<FDSTagCompound> tags = inventory.writeTagList();
+				List<FDSTagCompound> tags = inventory.writeStacksTagList();
 				for (int i = 0; i < tags.size(); i++) {
 					PacketRequestedInventory packet = new PacketRequestedInventory();
 					packet.username = connectionHandler.getConnectionUsername();
 					packet.section = i;
 					packet.hasInv = true;
 					packet.tagSplit = tags.get(i);
+
+					connectionHandler.sendPacket(packet);
+				}
+			}
+			case PLAYER_INVENTORY_DEFAULTS -> {
+				if (requestData.length != 1) {
+					break;
+				}
+				PlayerInventory inventory = DataMaps.getPlayerInventory(requestData[0], false);
+				if (inventory == null) {
+					break;
+				}
+
+				for (CloudItemCategory category : CloudItemCategory.values()) {
+					if (category.getId() == null || !inventory.hasDefaults(category)) {
+						continue;
+					}
+
+					PacketRequestedItemDefault packet = new PacketRequestedItemDefault();
+					packet.username = connectionHandler.getConnectionUsername();
+					packet.category = category;
+					inventory.writeDefaultsTag(packet.tag, category);
 
 					connectionHandler.sendPacket(packet);
 				}

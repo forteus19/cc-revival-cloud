@@ -6,7 +6,11 @@ import com.google.common.collect.Streams;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
+import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
+import dev.vuis.cccr.cloud.item.impl.ItemDefaultGun;
+import dev.vuis.cccr.cloud.item.impl.ItemDefaultSingleton;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemRemoved;
 import java.util.Comparator;
@@ -23,6 +27,8 @@ public final class PlayerInventory {
 	private static final int SPLIT_SIZE = 64;
 
 	private final Map<UUID, CloudItemStack> stackMap = new ConcurrentHashMap<>();
+	private final Map<CloudItemCategory, ItemDefaultSingleton> singletonDefaults = new ConcurrentHashMap<>();
+	private final ItemDefaultGun gunDefaults = new ItemDefaultGun();
 
 	private final String username;
 
@@ -58,7 +64,31 @@ public final class PlayerInventory {
 		}
 	}
 
-	public List<FDSTagCompound> writeTagList() {
+	public boolean hasDefaults(CloudItemCategory category) {
+		if (category == CloudItemCategory.GUN) {
+			return true;
+		} else {
+			return singletonDefaults.containsKey(category);
+		}
+	}
+
+	public void setDefaultStack(UUID uuid) {
+		CloudItemStack stack = getItemStack(uuid);
+		if (stack == null) {
+			return;
+		}
+		if (!stack.item.isEquippable()) {
+			return;
+		}
+
+		if (stack.item instanceof CloudItemGun gunItem) {
+			gunDefaults.setStackUuid(uuid, gunItem);
+		} else {
+			singletonDefaults.computeIfAbsent(stack.item.getCategory(), ItemDefaultSingleton::new).setStackUuid(uuid);
+		}
+	}
+
+	public List<FDSTagCompound> writeStacksTagList() {
 		return Streams.stream(Iterators.partition(
 			stackMap.values().stream()
 				.sorted(Comparator.comparingInt(stack -> stack.item.getId()))
@@ -79,5 +109,17 @@ public final class PlayerInventory {
 
 			return tag;
 		}).toList();
+	}
+
+	public void writeDefaultsTag(FDSTagCompound tag, CloudItemCategory category) {
+		if (category == CloudItemCategory.GUN) {
+			gunDefaults.writeTag(tag);
+		} else {
+			ItemDefaultSingleton defaultSingleton = singletonDefaults.get(category);
+			if (defaultSingleton == null) {
+				return;
+			}
+			defaultSingleton.writeTag(tag);
+		}
 	}
 }
