@@ -29,6 +29,8 @@ public abstract class CloudItem {
 		CloudItems.RARITY_MAP.put(rarity, this);
 	}
 
+	public abstract CloudItemCategory getCategory();
+
 	public abstract boolean isTradable();
 
 	public abstract boolean isSellable();

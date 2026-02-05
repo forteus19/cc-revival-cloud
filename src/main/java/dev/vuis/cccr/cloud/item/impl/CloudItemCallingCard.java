@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.item.impl;
 
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemCallingCard extends CloudItem {
@@ -9,13 +10,18 @@ public class CloudItemCallingCard extends CloudItem {
 	}
 
 	@Override
+	public CloudItemCategory getCategory() {
+		return CloudItemCategory.CALLING_CARD;
+	}
+
+	@Override
 	public boolean isTradable() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isSellable() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -25,11 +31,11 @@ public class CloudItemCallingCard extends CloudItem {
 
 	@Override
 	public boolean isNamable() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isContractable() {
-		return true;
+		return false;
 	}
 }

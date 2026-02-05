@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.item.impl;
 
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemKey extends CloudItem {
@@ -9,8 +10,13 @@ public class CloudItemKey extends CloudItem {
 	}
 
 	@Override
+	public CloudItemCategory getCategory() {
+		return CloudItemCategory.KEY;
+	}
+
+	@Override
 	public boolean isTradable() {
-		return true;
+		return false;
 	}
 
 	@Override
@@ -25,11 +31,11 @@ public class CloudItemKey extends CloudItem {
 
 	@Override
 	public boolean isNamable() {
-		return true;
+		return false;
 	}
 
 	@Override
 	public boolean isContractable() {
-		return true;
+		return false;
 	}
 }

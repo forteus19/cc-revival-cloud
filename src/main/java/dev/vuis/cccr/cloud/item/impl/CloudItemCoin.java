@@ -1,11 +1,17 @@
 package dev.vuis.cccr.cloud.item.impl;
 
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemCoin extends CloudItem {
 	public CloudItemCoin(int id, CloudItemRarity rarity, String suffix, boolean isDefault) {
 		super(id, rarity, suffix, isDefault);
+	}
+
+	@Override
+	public CloudItemCategory getCategory() {
+		return CloudItemCategory.COIN;
 	}
 
 	@Override

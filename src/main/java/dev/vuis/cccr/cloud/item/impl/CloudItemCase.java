@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.item.impl;
 import com.google.common.collect.HashMultiset;
 import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import dev.vuis.cccr.cloud.util.Util;
@@ -40,6 +41,11 @@ public class CloudItemCase extends CloudItem {
 
 	public List<CloudItem> getRandomContentBulk(int count) {
 		return contents.getRandomBulk(count);
+	}
+
+	@Override
+	public CloudItemCategory getCategory() {
+		return CloudItemCategory.CASE;
 	}
 
 	@Override

@@ -52,7 +52,7 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 
 				PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 				packet.username = requestData[0];
-				data.putDataTag(packet.tag);
+				data.writeDataTag(packet.tag);
 				connectionHandler.sendPacket(packet);
 			}
 			case PLAYER_INVENTORY -> {
@@ -85,12 +85,12 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				}
 
 				PacketRequestedFriends packet = new PacketRequestedFriends();
-				playerData.putFriendsTag(packet.tag);
+				playerData.writeFriendsTag(packet.tag);
 				connectionHandler.sendPacket(packet);
 			}
 			case CLOUDSTATS -> {
 				PacketRequestedCloudData packet = new PacketRequestedCloudData();
-				CloudStats.putTag(packet.tag);
+				CloudStats.writeTag(packet.tag);
 				connectionHandler.sendPacket(packet);
 			}
 		}

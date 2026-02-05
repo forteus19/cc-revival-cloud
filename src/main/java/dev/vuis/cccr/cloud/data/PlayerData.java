@@ -71,7 +71,7 @@ public final class PlayerData {
 		cloudManager.log("Successfully retrieved UUID for player " + username);
 	}
 
-	public void putDataTag(FDSTagCompound tag) {
+	public void writeDataTag(FDSTagCompound tag) {
 		tag.setInteger("trophies", trophies.get());
 		tag.setInteger("kills", kills.get());
 		tag.setInteger("deaths", deaths.get());
@@ -95,7 +95,7 @@ public final class PlayerData {
 		tag.setBoolean("hasparty", false);
 	}
 
-	public void putFriendsTag(FDSTagCompound tag) {
+	public void writeFriendsTag(FDSTagCompound tag) {
 		tag.setStringArrayList("friends", new ArrayList<>(friends));
 		tag.setStringArrayList("pending", new ArrayList<>(friendRequests));
 	}

@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.item.impl;
 
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemGeneric extends CloudItem {
@@ -17,6 +18,11 @@ public class CloudItemGeneric extends CloudItem {
 		this.isShowcasable = isShowcasable;
 		this.isNamable = isNamable;
 		this.isContractable = isContractable;
+	}
+
+	@Override
+	public CloudItemCategory getCategory() {
+		return CloudItemCategory.GENERIC;
 	}
 
 	@Override
