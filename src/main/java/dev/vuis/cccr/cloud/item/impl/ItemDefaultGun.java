@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
-import java.util.stream.Collectors;
 
 public class ItemDefaultGun {
 	private final Map<CloudItemGun, UUID> uuidMap = new HashMap<>();
@@ -19,9 +18,20 @@ public class ItemDefaultGun {
 		uuidMap.put(item, uuid);
 	}
 
+	public void clearStackUuid(CloudItemGun item) {
+		uuidMap.remove(item);
+	}
+
 	public void writeTag(FDSTagCompound tag) {
 		tag.setString("cat", CloudItemCategory.GUN.getId());
-		tag.setIntegerArrayList("gunids", uuidMap.keySet().stream().map(CloudItemGun::getMcId).collect(Collectors.toCollection(ArrayList::new)));
-		tag.setStringArrayList("gunuuids", uuidMap.values().stream().map(UUID::toString).collect(Collectors.toCollection(ArrayList::new)));
+
+		ArrayList<Integer> ids = new ArrayList<>(uuidMap.size());
+		ArrayList<String> uuids = new ArrayList<>(uuidMap.size());
+		for (Map.Entry<CloudItemGun, UUID> entry : uuidMap.entrySet()) {
+			ids.add(entry.getKey().getMcId());
+			uuids.add(entry.getValue().toString());
+		}
+		tag.setIntegerArrayList("gunids", ids);
+		tag.setStringArrayList("gunuuids", uuids);
 	}
 }

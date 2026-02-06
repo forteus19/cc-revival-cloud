@@ -4,6 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -27,6 +28,14 @@ public final class PacketInventorySetItemDefault extends G_TcpPacketCustomPayloa
 		if (inventory == null) {
 			return;
 		}
-		inventory.setDefaultStack(stackUuid);
+
+		if (inventory.hasDefaultStack(stackUuid)) {
+			CloudItemCategory removedCategory = inventory.clearDefaultStack(stackUuid);
+			if (removedCategory != null) {
+				PacketRequestedItemDefault.sendForPlayer(connectionHandler, connectionHandler.getConnectionUsername(), removedCategory, true);
+			}
+		} else {
+			inventory.setDefaultStack(stackUuid);
+		}
 	}
 }

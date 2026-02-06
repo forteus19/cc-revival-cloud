@@ -36,6 +36,11 @@ public final class PlayerInventory {
 		return stackMap.get(uuid);
 	}
 
+	private CloudItemStack getEquippableItemStack(UUID uuid) {
+		CloudItemStack stack = getItemStack(uuid);
+		return (stack != null && stack.item.isEquippable()) ? stack : null;
+	}
+
 	public Stream<CloudItemStack> getItemStacks(CloudItem item) {
 		return stackMap.values().stream().filter(stack -> stack.item == item);
 	}
@@ -72,12 +77,22 @@ public final class PlayerInventory {
 		}
 	}
 
-	public void setDefaultStack(UUID uuid) {
-		CloudItemStack stack = getItemStack(uuid);
+	public boolean hasDefaultStack(UUID uuid) {
+		CloudItemStack stack = getEquippableItemStack(uuid);
 		if (stack == null) {
-			return;
+			return false;
 		}
-		if (!stack.item.isEquippable()) {
+
+		if (stack.item instanceof CloudItemGun gunItem) {
+			return gunDefaults.getStackUuid(gunItem) != null;
+		} else {
+			return singletonDefaults.containsKey(stack.item.getCategory());
+		}
+	}
+
+	public void setDefaultStack(UUID uuid) {
+		CloudItemStack stack = getEquippableItemStack(uuid);
+		if (stack == null) {
 			return;
 		}
 
@@ -86,6 +101,23 @@ public final class PlayerInventory {
 		} else {
 			singletonDefaults.computeIfAbsent(stack.item.getCategory(), ItemDefaultSingleton::new).setStackUuid(uuid);
 		}
+	}
+
+	public CloudItemCategory clearDefaultStack(UUID uuid) {
+		CloudItemStack stack = getEquippableItemStack(uuid);
+		if (stack == null) {
+			return null;
+		}
+
+		CloudItemCategory category = stack.item.getCategory();
+
+		if (stack.item instanceof CloudItemGun gunItem) {
+			gunDefaults.clearStackUuid(gunItem);
+		} else {
+			singletonDefaults.remove(category);
+		}
+
+		return category;
 	}
 
 	public List<FDSTagCompound> writeStacksTagList() {

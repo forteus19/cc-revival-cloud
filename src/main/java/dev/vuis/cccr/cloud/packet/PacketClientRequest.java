@@ -80,22 +80,10 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				if (requestData.length != 1) {
 					break;
 				}
-				PlayerInventory inventory = DataMaps.getPlayerInventory(requestData[0], false);
-				if (inventory == null) {
-					break;
-				}
+				String username = requestData[0];
 
 				for (CloudItemCategory category : CloudItemCategory.values()) {
-					if (category.getId() == null || !inventory.hasDefaults(category)) {
-						continue;
-					}
-
-					PacketRequestedItemDefault packet = new PacketRequestedItemDefault();
-					packet.username = connectionHandler.getConnectionUsername();
-					packet.category = category;
-					inventory.writeDefaultsTag(packet.tag, category);
-
-					connectionHandler.sendPacket(packet);
+					PacketRequestedItemDefault.sendForPlayer(connectionHandler, username, category, false);
 				}
 			}
 			case PLAYER_FRIENDS -> {
