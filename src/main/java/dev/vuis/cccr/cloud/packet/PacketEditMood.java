@@ -4,6 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -22,6 +23,10 @@ public final class PacketEditMood extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) {
+		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
 		PlayerData playerData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
 		if (playerData == null) {
 			return;

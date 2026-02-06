@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -25,6 +26,10 @@ public final class PacketFriendRequest extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
+		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
 		if (user.equals(connectionHandler.getConnectionUsername())) {
 			return;
 		}
@@ -36,12 +41,11 @@ public final class PacketFriendRequest extends G_TcpPacketCustomPayload {
 
 		targetData.friendRequests.add(connectionHandler.getConnectionUsername());
 
-		connectionHandler.sendPacket(
-			new PacketNotificationFromCloud("Sent friend request to " + user + "!", CloudConstants.CC_NAME, 0)
-		);
-		Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(
-			CloudConstants.CHANNEL_PLAYER, user,
-			new PacketNotificationFromCloud("Received friend request from " + connectionHandler.getConnectionUsername() + "!", CloudConstants.CC_NAME, 0)
-		);
+		Cloud.getInstance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
+			"Received friend request from " + connectionHandler.getConnectionUsername() + "!", CloudConstants.CC_NAME, 0
+		));
+		connectionHandler.sendPacket(new PacketNotificationFromCloud(
+			"Sent friend request to " + user + "!", CloudConstants.CC_NAME, 0
+		));
 	}
 }

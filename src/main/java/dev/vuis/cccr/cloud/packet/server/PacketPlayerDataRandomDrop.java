@@ -22,6 +22,6 @@ public final class PacketPlayerDataRandomDrop extends G_TcpPacketCustomPayload {
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
 		// TODO
-		Cloud.getInstance().getCloudManager().log("RANDOM DROP " + username);
+		Cloud.instanceLog("RANDOM DROP %s", username);
 	}
 }

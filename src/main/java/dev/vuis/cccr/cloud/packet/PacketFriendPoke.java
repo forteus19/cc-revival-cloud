@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -26,6 +27,10 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
+		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
 		PlayerData targetData = DataMaps.getPlayerData(user, false);
 		if (targetData == null) {
 			return;
@@ -35,12 +40,11 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		Cloud.getInstance().getCloudManager().getNetwork().sendPacketToClient(
-			CloudConstants.CHANNEL_PLAYER, user,
-			new PacketNotificationFromCloud("Poke from " + connectionHandler.getConnectionUsername() + ": " + message, CloudConstants.CC_NAME, 0)
-		);
-		connectionHandler.sendPacket(
-			new PacketNotificationFromCloud("Sent poke to " + user + "!", CloudConstants.CC_NAME, 0)
-		);
+		Cloud.getInstance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
+			"Poke from " + connectionHandler.getConnectionUsername() + ": " + message, CloudConstants.CC_NAME, 0
+		));
+		connectionHandler.sendPacket(new PacketNotificationFromCloud(
+			"Sent poke to " + user + "!", CloudConstants.CC_NAME, 0
+		));
 	}
 }

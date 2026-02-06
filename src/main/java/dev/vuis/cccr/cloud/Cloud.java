@@ -1,5 +1,6 @@
 package dev.vuis.cccr.cloud;
 
+import com.f3rullo14.cloud.G_TcpPacket;
 import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
@@ -33,7 +34,8 @@ public final class Cloud implements ICloud {
 
 	@Getter
 	private final G_CloudManager cloudManager;
-	private final CloudAuth auth = new CloudAuth();
+	@Getter
+	private final CloudAuth auth = new CloudAuth(this);
 
 	public Cloud(int port, String mmPassword, String mcHost) {
 		this.port = port;
@@ -49,13 +51,32 @@ public final class Cloud implements ICloud {
 		return instance;
 	}
 
+	public static Cloud instanceLog(String message) {
+		Cloud instance = getInstance();
+		instance.cloudManager.log(message);
+		return instance;
+	}
+
+	public static Cloud instanceLog(String format, Object... args) {
+		return instanceLog(String.format(format, args));
+	}
+
+	public Cloud log(String message) {
+		cloudManager.log(message);
+		return this;
+	}
+
+	public Cloud log(String format, Object... args) {
+		return log(String.format(format, args));
+	}
+
 	public void onUpdate() {
 		cloudManager.onUpdate();
 		SearchHandler.onUpdate();
 	}
 
 	public void onShutdown() {
-		cloudManager.log("Shutting down...");
+		log("Shutting down...");
 	}
 
 	@Override
@@ -79,13 +100,13 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public boolean onConnectionReached(G_CloudTcpConnectionHandler connectionHandler) {
-		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" is attemping connection");
+		log("Client %s is attemping connection", connectionHandler.getConnectionUsername());
 		return true;
 	}
 
 	@Override
 	public boolean onConnectionAddedToThread(G_CloudTcpConnectionHandler connectionHandler) {
-		cloudManager.log("Client \"" + connectionHandler.getConnectionUsername() + "\" added to thread");
+		log("Client %s added to thread", connectionHandler.getConnectionUsername());
 		return true;
 	}
 
@@ -93,20 +114,17 @@ public final class Cloud implements ICloud {
 	public void onConnectionEstablished(G_CloudTcpConnectionHandler connectionHandler, FDSTagCompound loginData) {
 		String username = connectionHandler.getConnectionUsername();
 
-		cloudManager.log("Client \"" + username + "\" established connection");
-//		cloudManager.log("Login info: " + loginData);
+		log("Client %s sent login", username);
+//		log("Login info: %s", loginData);
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
-				PlayerData playerData = DataMaps.getPlayerData(username, true);
-				playerData.online.set(true);
-
-				DataMaps.getPlayerInventory(username, true);
-
-				connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
-				for (String user : playerData.friends) {
-					cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged in.", CloudConstants.CC_NAME, 0));
+				String key = loginData.getString("key");
+				if (key == null) {
+					connectionHandler.kickClientConnection("Missing mod key");
+					return;
 				}
+				auth.submitAuthenticationJob(username, key);
 			}
 			case CloudConstants.CHANNEL_SERVER -> {
 				ServerStatus.PORT.put(connectionHandler.getConnectionUsername(), loginData.getInteger("port"));
@@ -114,22 +132,44 @@ public final class Cloud implements ICloud {
 		}
 	}
 
-	void onConnectionAuthenticated(G_CloudTcpConnectionHandler connectionHandler) {
+	void onConnectionAuthenticationSuccess(G_CloudTcpConnectionHandler connectionHandler) {
+		String username = connectionHandler.getConnectionUsername();
+
+		log("Client %s authenticated", username);
+
+		PlayerData playerData = DataMaps.getPlayerData(username, true);
+		playerData.online.set(true);
+
+		DataMaps.getPlayerInventory(username, true);
+
+		connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
+		for (String user : playerData.friends) {
+			sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " is online!", CloudConstants.CC_NAME, 0));
+		}
+	}
+
+	void onConnectionAuthenticationFailure(G_CloudTcpConnectionHandler connectionHandler) {
+		String username = connectionHandler.getConnectionUsername();
+
+		log("Client %s failed authentication", username);
+		connectionHandler.kickClientConnection("Authentication failed");
 	}
 
 	@Override
 	public void onConnectionDisconnected(G_CloudTcpConnectionHandler connectionHandler) {
 		String username = connectionHandler.getConnectionUsername();
 
-		cloudManager.log("Client \"" + username + "\" disconnected (reason: \"" + ReflectUtil.getTerminationReason(connectionHandler.tcpConnection) + "\")");
+		log("Client \"%s\" disconnected (reason: %s)", username, ReflectUtil.getTerminationReason(connectionHandler.tcpConnection));
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
 				PlayerData playerData = DataMaps.getPlayerData(username, true);
 				playerData.online.set(false);
 
+				auth.onClientDisconnected(username);
+
 				for (String user : playerData.friends) {
-					cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
+					sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
 				}
 			}
 			case CloudConstants.CHANNEL_SERVER -> {
@@ -146,7 +186,7 @@ public final class Cloud implements ICloud {
 		switch (parts[0]) {
 			case "randomdrop" -> {
 				if (parts.length < 2) {
-					cloudManager.log("randomdrop - Missing args: <username> <count>");
+					log("randomdrop - Missing args: <username> <count>");
 					break;
 				}
 				String username = parts[1];
@@ -154,7 +194,7 @@ public final class Cloud implements ICloud {
 
 				PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
 				if (inventory == null) {
-					cloudManager.log("randomdrop - Player " + username + " does not have an inventory!");
+					log("randomdrop - Player %s does not have an inventory!", username);
 					break;
 				}
 
@@ -167,22 +207,22 @@ public final class Cloud implements ICloud {
 			}
 			case "tell" -> {
 				if (parts.length < 3) {
-					cloudManager.log("tell - Missing args: <username> <message>");
+					log("tell - Missing args: <username> <message>");
 					break;
 				}
 				String username = parts[1];
 				String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
 
-				cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, new PacketNotificationFromCloud(message, "Cloud", 0));
+				sendPacketToPlayer(username, new PacketNotificationFromCloud(message, "Cloud", 0));
 			}
 			default -> {
-				cloudManager.log("Unknown command \"" + parts[0] + "\".");
+				log("Unknown command \"%s\"", parts[0]);
 				success = false;
 			}
 		}
 
 		if (success) {
-			cloudManager.log("Command: " + command);
+			log("Command: %s", command);
 		}
 	}
 
@@ -190,6 +230,15 @@ public final class Cloud implements ICloud {
 	public void getChannels(ArrayList<String> target) {
 		target.add(CloudConstants.CHANNEL_PLAYER);
 		target.add(CloudConstants.CHANNEL_SERVER);
+	}
+
+	public G_CloudTcpConnectionHandler getPlayerConnection(String username) {
+		return cloudManager.getNetwork().getClientConnectionHandler(CloudConstants.CHANNEL_PLAYER, username);
+	}
+
+	public Cloud sendPacketToPlayer(String username, G_TcpPacket packet) {
+		cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, packet);
+		return this;
 	}
 
 	public boolean checkMatchMakingPassword(String password) {

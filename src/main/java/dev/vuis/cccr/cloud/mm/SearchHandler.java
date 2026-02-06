@@ -37,12 +37,12 @@ public final class SearchHandler {
 	}
 
 	public static void addSearch(String username, String game, String region, ArrayList<String> maps) {
-		Cloud.getInstance().getCloudManager().log("Adding " + username + " to search handler");
+		Cloud.instanceLog("Adding %s to search handler", username);
 		ONGOING.put(username, new Data(game, region, new ArrayList<>(maps)));
 	}
 
 	public static void removeSearch(String username) {
-		Cloud.getInstance().getCloudManager().log("Removing " + username + " from search handler");
+		Cloud.instanceLog("Removing %s from search handler", username);
 		ONGOING.remove(username);
 	}
 
@@ -57,9 +57,8 @@ public final class SearchHandler {
 
 			PacketMMJoinServer result = findOngoingGame(data);
 			if (result != null) {
-				G_CloudManager cloudManager = Cloud.getInstance().getCloudManager();
-				cloudManager.log("Found match for player " + username + "! (" + result.tag.getString("address") + ")");
-				cloudManager.getNetwork().sendPacketToClient(CloudConstants.CHANNEL_PLAYER, username, result);
+				Cloud.instanceLog("Found match for player %s! (%s)", username, result.tag.getString("address"))
+					.sendPacketToPlayer(username, result);
 				return true;
 			} else {
 				return false;

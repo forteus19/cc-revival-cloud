@@ -1,12 +1,10 @@
 package dev.vuis.cccr.cloud.data;
 
-import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import dev.vuis.cccr.cloud.Cloud;
-import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.IOException;
 import java.net.URI;
@@ -43,8 +41,6 @@ public final class PlayerData {
 	}
 
 	private void retrievePlayerUuid(final String username) {
-		G_CloudManager cloudManager = Cloud.getInstance().getCloudManager();
-
 		HttpRequest request = HttpRequest.newBuilder()
 			.GET()
 			.uri(URI.create("https://api.minetools.eu/uuid/" + username))
@@ -58,8 +54,8 @@ public final class PlayerData {
 		}
 
 		if (response.statusCode() != 200) {
-			cloudManager.log("Failed to retrieve UUID for player " + username);
-			G_CloudTcpConnectionHandler connectionHandler = cloudManager.getNetwork().getClientConnectionHandler(CloudConstants.CHANNEL_PLAYER, username);
+			Cloud.instanceLog("Failed to retrieve UUID for player %s", username);
+			G_CloudTcpConnectionHandler connectionHandler = Cloud.getInstance().getPlayerConnection(username);
 			if (connectionHandler != null) {
 				connectionHandler.kickClientConnection("Failed to retrieve UUID");
 			}
@@ -69,7 +65,7 @@ public final class PlayerData {
 		JsonObject json = JsonParser.parseString(response.body()).getAsJsonObject();
 		uuid.set(Util.parseUndashedUuid(json.get("id").getAsString()));
 
-		cloudManager.log("Successfully retrieved UUID for player " + username);
+		Cloud.instanceLog("Successfully retrieved UUID for player %s", username);
 	}
 
 	public void writeDataTag(FDSTagCompound tag) {

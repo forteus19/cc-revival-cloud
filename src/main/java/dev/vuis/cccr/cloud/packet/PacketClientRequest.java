@@ -9,6 +9,7 @@ import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -38,6 +39,10 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) {
+		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
 		switch (type) {
 			case PLAYER_DATA -> {
 				if (requestData.length != 1) {

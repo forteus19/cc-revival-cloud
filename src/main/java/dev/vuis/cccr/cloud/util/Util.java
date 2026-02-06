@@ -1,9 +1,6 @@
 package dev.vuis.cccr.cloud.util;
 
-import com.f3rullo14.cloud.G_ITcpConnectionHandler;
-import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.google.common.collect.Multiset;
-import dev.vuis.cccr.cloud.CloudConstants;
 import java.net.http.HttpClient;
 import java.util.Collection;
 import java.util.UUID;
@@ -48,17 +45,6 @@ public final class Util {
 			.orElseThrow();
 	}
 
-	public static boolean kickIfServer(G_ITcpConnectionHandler connectionHandler) {
-		if (!(connectionHandler instanceof G_CloudTcpConnectionHandler cloudHandler)) {
-			return true;
-		}
-		if (!cloudHandler.channel.equals(CloudConstants.CHANNEL_SERVER)) {
-			cloudHandler.kickClientConnection("Attempted to send server packet on player channel");
-			return true;
-		}
-		return false;
-	}
-
 	public static String getUndashedUuid(UUID uuid) {
 		return uuid.toString().replace("-", "");
 	}
@@ -88,5 +74,9 @@ public final class Util {
 		}
 
 		throw new AssertionError();
+	}
+
+	public static boolean isHttpSuccess(int statusCode) {
+		return statusCode >= 200 && statusCode < 300;
 	}
 }

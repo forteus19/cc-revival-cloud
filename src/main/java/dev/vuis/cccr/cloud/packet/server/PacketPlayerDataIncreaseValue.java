@@ -6,7 +6,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
-import dev.vuis.cccr.cloud.util.Util;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,14 +29,14 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		if (Util.kickIfServer(connectionHandler)) {
+		if (PacketUtil.kickIfServer(connectionHandler)) {
 			return;
 		}
 		if (!ServerStatus.GAME.containsKey(connectionHandler.getConnectionUsername())) {
 			return;
 		}
 
-		Cloud.getInstance().getCloudManager().log(String.format("INCREASE VALUE %s %s %d", username, value, amount));
+		Cloud.instanceLog("INCREASE VALUE %s %s %d", username, value, amount);
 
 		PlayerData playerData = DataMaps.getPlayerData(username, false);
 

@@ -4,7 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
-import dev.vuis.cccr.cloud.util.Util;
+import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -42,7 +42,7 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		if (Util.kickIfServer(connectionHandler)) {
+		if (PacketUtil.kickIfServer(connectionHandler)) {
 			return;
 		}
 		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {

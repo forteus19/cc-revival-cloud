@@ -18,7 +18,7 @@ public final class DataMaps {
 			if (!createIfAbsent) {
 				return null;
 			}
-			Cloud.getInstance().getCloudManager().log("[DataMaps] Creating new player data for " + key);
+			Cloud.instanceLog("[DataMaps] Creating new player data for %s", key);
 			return new PlayerData(key);
 		});
 	}
@@ -28,7 +28,7 @@ public final class DataMaps {
 			if (!createIfAbsent) {
 				return null;
 			}
-			Cloud.getInstance().getCloudManager().log("[DataMaps] Creating new player inventory for " + key);
+			Cloud.instanceLog("[DataMaps] Creating new player inventory for %s", key);
 			return initializeInventory(new PlayerInventory(key));
 		});
 	}
