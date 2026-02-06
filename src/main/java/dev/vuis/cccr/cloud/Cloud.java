@@ -33,6 +33,7 @@ public final class Cloud implements ICloud {
 
 	@Getter
 	private final G_CloudManager cloudManager;
+	private final CloudAuth auth = new CloudAuth();
 
 	public Cloud(int port, String mmPassword, String mcHost) {
 		this.port = port;
@@ -93,7 +94,7 @@ public final class Cloud implements ICloud {
 		String username = connectionHandler.getConnectionUsername();
 
 		cloudManager.log("Client \"" + username + "\" established connection");
-		cloudManager.log("Login info: " + loginData);
+//		cloudManager.log("Login info: " + loginData);
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
@@ -111,6 +112,9 @@ public final class Cloud implements ICloud {
 				ServerStatus.PORT.put(connectionHandler.getConnectionUsername(), loginData.getInteger("port"));
 			}
 		}
+	}
+
+	void onConnectionAuthenticated(G_CloudTcpConnectionHandler connectionHandler) {
 	}
 
 	@Override
