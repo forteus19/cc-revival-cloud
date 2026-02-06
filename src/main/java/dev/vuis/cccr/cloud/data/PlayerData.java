@@ -26,6 +26,7 @@ public final class PlayerData {
 	public final AtomicInteger kills = new AtomicInteger(0);
 	public final AtomicInteger deaths = new AtomicInteger(0);
 	public final AtomicInteger games = new AtomicInteger(0);
+	public final AtomicInteger firstBloods = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicInteger emeralds = new AtomicInteger(0);
@@ -76,6 +77,7 @@ public final class PlayerData {
 		tag.setInteger("kills", kills.get());
 		tag.setInteger("deaths", deaths.get());
 		tag.setInteger("games", games.get());
+		tag.setInteger("statfb", firstBloods.get());
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());
 		tag.setInteger("emeralds", emeralds.get());

@@ -5,6 +5,7 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,6 +32,9 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 		if (Util.kickIfServer(connectionHandler)) {
 			return;
 		}
+		if (!ServerStatus.GAME.containsKey(connectionHandler.getConnectionUsername())) {
+			return;
+		}
 
 		Cloud.getInstance().getCloudManager().log(String.format("INCREASE VALUE %s %s %d", username, value, amount));
 
@@ -39,6 +43,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 		switch (value) {
 			case "deaths" -> playerData.deaths.addAndGet(amount);
 			case "emeralds" -> playerData.emeralds.addAndGet(amount);
+			case "firstblood" -> playerData.firstBloods.addAndGet(amount);
 			case "games" -> playerData.games.addAndGet(amount);
 			case "kills" -> playerData.kills.addAndGet(amount);
 			case "trophies" -> playerData.trophies.addAndGet(amount);
