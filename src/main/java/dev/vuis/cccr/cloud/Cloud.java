@@ -103,13 +103,13 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public boolean onConnectionReached(G_CloudTcpConnectionHandler connectionHandler) {
-		log("Client %s is attemping connection", connectionHandler.getConnectionUsername());
+		log("Client \"%s\" is attemping connection", connectionHandler.getConnectionUsername());
 		return true;
 	}
 
 	@Override
 	public boolean onConnectionAddedToThread(G_CloudTcpConnectionHandler connectionHandler) {
-		log("Client %s added to thread", connectionHandler.getConnectionUsername());
+		log("Client \"%s\" added to thread", connectionHandler.getConnectionUsername());
 		return true;
 	}
 
@@ -117,7 +117,7 @@ public final class Cloud implements ICloud {
 	public void onConnectionEstablished(G_CloudTcpConnectionHandler connectionHandler, FDSTagCompound loginData) {
 		String username = connectionHandler.getConnectionUsername();
 
-		log("Client %s sent login", username);
+		log("Client \"%s\" sent login", username);
 //		log("Login info: %s", loginData);
 
 		switch (connectionHandler.channel) {
@@ -138,7 +138,7 @@ public final class Cloud implements ICloud {
 	void onConnectionAuthenticationSuccess(G_CloudTcpConnectionHandler connectionHandler, UUID resultUuid) {
 		String username = connectionHandler.getConnectionUsername();
 
-		log("Client %s authenticated", username);
+		log("Client \"%s\" authenticated", username);
 
 		PlayerData playerData = DataMaps.getPlayerData(username, true);
 		playerData.uuid.set(resultUuid);
@@ -158,7 +158,7 @@ public final class Cloud implements ICloud {
 	void onConnectionAuthenticationFailure(G_CloudTcpConnectionHandler connectionHandler) {
 		String username = connectionHandler.getConnectionUsername();
 
-		log("Client %s failed authentication", username);
+		log("Client \"%s\" failed authentication", username);
 		connectionHandler.kickClientConnection("Authentication failed");
 	}
 
