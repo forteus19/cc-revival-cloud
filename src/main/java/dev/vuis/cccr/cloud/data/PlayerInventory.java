@@ -4,7 +4,6 @@ import com.f3rullo14.fds.tag.FDSTagCompound;
 import com.google.common.collect.Iterators;
 import com.google.common.collect.Streams;
 import dev.vuis.cccr.cloud.Cloud;
-import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemStack;

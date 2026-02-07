@@ -20,6 +20,8 @@ import java.util.concurrent.atomic.AtomicReference;
 
 public final class PlayerData {
 	// player data
+	public final AtomicReference<String> username;
+	public final AtomicReference<UUID> uuid = new AtomicReference<>(Util.NULL_UUID);
 	public final AtomicInteger trophies = new AtomicInteger(0);
 	public final AtomicInteger kills = new AtomicInteger(0);
 	public final AtomicInteger deaths = new AtomicInteger(0);
@@ -30,14 +32,14 @@ public final class PlayerData {
 	public final AtomicInteger emeralds = new AtomicInteger(0);
 	public final AtomicReference<String> mood = new AtomicReference<>("I haven't set a mood yet...");
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
-	public final AtomicReference<UUID> uuid = new AtomicReference<>(Util.NULL_UUID);
 
 	// friends
 	public final Set<String> friends = ConcurrentHashMap.newKeySet();
 	public final Set<String> friendRequests = ConcurrentHashMap.newKeySet();
 
 	public PlayerData(final String username) {
-		new Thread(() -> retrievePlayerUuid(username), "Player UUID thread").start();
+		this.username = new AtomicReference<>(username);
+//		new Thread(() -> retrievePlayerUuid(username), "Player UUID thread").start();
 	}
 
 	private void retrievePlayerUuid(final String username) {

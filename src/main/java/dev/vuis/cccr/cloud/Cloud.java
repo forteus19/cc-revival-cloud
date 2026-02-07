@@ -13,9 +13,12 @@ import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
+import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
+import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.UUID;
 import lombok.Getter;
 
 public final class Cloud implements ICloud {
@@ -132,15 +135,19 @@ public final class Cloud implements ICloud {
 		}
 	}
 
-	void onConnectionAuthenticationSuccess(G_CloudTcpConnectionHandler connectionHandler) {
+	void onConnectionAuthenticationSuccess(G_CloudTcpConnectionHandler connectionHandler, UUID resultUuid) {
 		String username = connectionHandler.getConnectionUsername();
 
 		log("Client %s authenticated", username);
 
 		PlayerData playerData = DataMaps.getPlayerData(username, true);
+		playerData.uuid.set(resultUuid);
 		playerData.online.set(true);
 
 		DataMaps.getPlayerInventory(username, true);
+
+		PacketRequestedPlayerData.sendForPlayer(connectionHandler, username);
+		PacketRequestedInventory.sendForPlayer(connectionHandler, username);
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
 		for (String user : playerData.friends) {
@@ -163,13 +170,15 @@ public final class Cloud implements ICloud {
 
 		switch (connectionHandler.channel) {
 			case CloudConstants.CHANNEL_PLAYER -> {
-				PlayerData playerData = DataMaps.getPlayerData(username, true);
-				playerData.online.set(false);
-
 				auth.onClientDisconnected(username);
 
-				for (String user : playerData.friends) {
-					sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
+				PlayerData playerData = DataMaps.getPlayerData(username, false);
+				if (playerData != null) {
+					playerData.online.set(false);
+
+					for (String user : playerData.friends) {
+						sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
+					}
 				}
 			}
 			case CloudConstants.CHANNEL_SERVER -> {
