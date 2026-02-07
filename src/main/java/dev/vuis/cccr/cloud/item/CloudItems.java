@@ -259,7 +259,7 @@ public final class CloudItems {
 		KNIFE_KAR, KNIFE_KAR_MARBLE, KNIFE_KAR_TIGER, KNIFE_KAR_STEEL, KNIFE_KAR_DOPPLAR, KNIFE_KAR_LORE, KNIFE_KAR_GAMMA, KNIFE_KAR_EAGLE
 	);
 
-	public static final CloudItemCase WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA, false).modifyContents(collection -> collection
+	public static final CloudItemCase WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case Alpha 1", CASE_KEY_ALPHA, false).modifyContents(collection -> collection
 		.add(M4A4_WAVES, 110)
 		.add(P250_IRRADIATED, 110)
 		.add(DRAGUNOV_SKY, 110)
@@ -277,7 +277,7 @@ public final class CloudItems {
 		.add(AWP_DRAGON, 1, false)
 		.add(POOL_KNIFE_TAC, 1, false)
 	);
-	public static final CloudItemCase WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA2, false).modifyContents(collection -> collection
+	public static final CloudItemCase WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case Alpha 2", CASE_KEY_ALPHA2, false).modifyContents(collection -> collection
 		.add(NOVA_OXIDEBLAZE, 100)
 		.add(TEC9_QUAKORONIC, 80)
 		.add(MAC10_RACE, 60)
@@ -291,7 +291,7 @@ public final class CloudItems {
 		.add(SCAR20_UNICORN, 2)
 		.add(POOL_KNIFE_BAY, 1, false)
 	);
-	public static final CloudItemCase WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA3, false).modifyContents(collection -> collection
+	public static final CloudItemCase WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case Alpha 3", CASE_KEY_ALPHA3, false).modifyContents(collection -> collection
 		.add(M4A4_NERFED, 100)
 		.add(G18_RACE, 90)
 		.add(VECTOR_BLOODYEQUATION, 85)
@@ -307,7 +307,7 @@ public final class CloudItems {
 		.add(M4A4_HOWL, 1, false)
 		.add(POOL_KNIFE_KAR, 1, false)
 	);
-	public static final CloudItemCase HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case", CASE_KEY_HAT, false).modifyContents(collection -> collection
+	public static final CloudItemCase HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case Hat", CASE_KEY_HAT, false).modifyContents(collection -> collection
 		.add(HAT_HARDRED, 110)
 		.add(HAT_HARDORANGE, 110)
 		.add(HAT_HARDYELLOW, 110)
@@ -318,7 +318,7 @@ public final class CloudItems {
 		.add(HAT_VIKING, 15)
 		.add(HAT_CATHAT, 6)
 	);
-	public static final CloudItemCase WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case", CASE_KEY_HALLOWEEN1, false).modifyContents(collection -> collection
+	public static final CloudItemCase WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case Halloween", CASE_KEY_HALLOWEEN1, false).modifyContents(collection -> collection
 		.add(UMP45_EDIFICE, 100)
 		.add(M1911_TUXEDO, 85)
 		.add(M249_GHOST, 80)
@@ -333,7 +333,7 @@ public final class CloudItems {
 		.add(G18_HIGHROLLER, 2)
 		.add(POOL_KNIFE_KAR, 1, false)
 	);
-	public static final CloudItemCase WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case", CASE_KEY_EXO, false).modifyContents(collection -> collection
+	public static final CloudItemCase WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case Exo", CASE_KEY_EXO, false).modifyContents(collection -> collection
 		.add(TEC9_ECO, 100)
 		.add(SAWEDOFF_MIDNIGHT, 100)
 		.add(AK47_BLOODSPORT, 90)
