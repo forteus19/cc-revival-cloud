@@ -1,0 +1,28 @@
+package dev.vuis.cccr.cloud.packet.server;
+
+import com.f3rullo14.cloud.G_ITcpConnectionHandler;
+import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
+
+@AllArgsConstructor
+@NoArgsConstructor
+public final class PacketServerNotification extends G_TcpPacketCustomPayload {
+	private String message;
+
+	@Override
+	public void writePacketToStream(DataOutputStream out) throws IOException {
+		writeString(out, message);
+	}
+
+	@Override
+	public void readPacketFromStream(DataInputStream in) throws IOException {
+	}
+
+	@Override
+	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
+	}
+}

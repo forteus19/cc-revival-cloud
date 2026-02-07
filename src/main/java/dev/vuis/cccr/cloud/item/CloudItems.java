@@ -248,83 +248,106 @@ public final class CloudItems {
 	public static final CloudItemKey CASE_KEY_HAT = new CloudItemKey(4503, CloudItemRarity.COAL, "Key Hats 1", false);
 	public static final CloudItemKey CASE_KEY_HALLOWEEN1 = new CloudItemKey(4504, CloudItemRarity.COAL, "Key Halloween 1", false);
 	public static final CloudItemKey CASE_KEY_EXO = new CloudItemKey(4505, CloudItemRarity.COAL, "Key Exo", false);
-	public static final CloudItemCase WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA, false)
-		.addContent(M4A4_WAVES, 110)
-		.addContent(P250_IRRADIATED, 110)
-		.addContent(DRAGUNOV_SKY, 110)
-		.addContent(VECTOR_CIRCUIT, 100)
-		.addContent(P90_RUST, 80)
-		.addContent(SCAR20_CYREX, 60)
-		.addContent(MAG7_ROYALFIRE, 40)
-		.addContent(DEAGLE_NIGHTRAZER, 20)
-		.addContent(AK47_PROPAGANDA, 10)
-		.addContent(M249_NEON, 10)
-		.addContent(M4A4_EVILDAIMYO, 4)
-		.addContent(SAWEDOFF_WASTELANDPRINCESS, 4)
-		.addContent(AK47_ASMO, 1)
-		.addContent(R8_FADE, 1);
-	public static final CloudItemCase WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA2, false)
-		.addContent(NOVA_OXIDEBLAZE, 100)
-		.addContent(TEC9_QUAKORONIC, 80)
-		.addContent(MAC10_RACE, 60)
-		.addContent(M4A4_CAKEY, 40)
-		.addContent(AWP_MANOWAR, 20)
-		.addContent(FAMAS_AKARI, 10)
-		.addContent(SAWEDOFF_KRAKEN, 10)
-		.addContent(AK47_NEONREVOLUTION, 4)
-		.addContent(P90_KRAKEN, 4)
-		.addContent(P250_SEEYALATER, 1)
-		.addContent(SCAR20_UNICORN, 1);
-	public static final CloudItemCase WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA3, false)
-		.addContent(M4A4_NERFED, 100)
-		.addContent(G18_RACE, 90)
-		.addContent(VECTOR_BLOODYEQUATION, 85)
-		.addContent(P250_CITY, 80)
-		.addContent(M1911_DRAGON, 60)
-		.addContent(UMP45_PRIMAL, 40)
-		.addContent(R8_GOLD, 20)
-		.addContent(DEAGLE_DEADHORIZON, 10)
-		.addContent(CZ75_PHANTOM, 10)
-		.addContent(FAMAS_WARHAWK, 4)
-		.addContent(FNFAL_VAPORWAVE, 4)
-		.addContent(M4A4_HOWL, 1)
-		.addContent(AWP_ASMO, 1);
-	public static final CloudItemCase HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case", CASE_KEY_HAT, false)
-		.addContent(HAT_HARDRED, 110)
-		.addContent(HAT_HARDORANGE, 110)
-		.addContent(HAT_HARDYELLOW, 110)
-		.addContent(HAT_FIREMAN, 80)
-		.addContent(HAT_FIREMANCHIEF, 80)
-		.addContent(HAT_TOPHAT, 30)
-		.addContent(HAT_TV, 30)
-		.addContent(HAT_VIKING, 15)
-		.addContent(HAT_CATHAT, 6);
-	public static final CloudItemCase WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case", CASE_KEY_HALLOWEEN1, false)
-		.addContent(UMP45_EDIFICE, 100)
-		.addContent(M1911_TUXEDO, 85)
-		.addContent(M249_GHOST, 80)
-		.addContent(G18_DEEP_BLUE, 60)
-		.addContent(FAMAS_SPOOKY, 40)
-		.addContent(DEAGLE_GRIN, 20)
-		.addContent(M4A4_PUMPKIN, 10)
-		.addContent(MAC10_PUMPKIN, 10)
-		.addContent(AWP_BONES, 4)
-		.addContent(MAG7_VAMPIRE, 4)
-		.addContent(AK47_HAUNTED, 1)
-		.addContent(G18_HIGHROLLER, 1);
-	public static final CloudItemCase WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case", CASE_KEY_EXO, false)
-		.addContent(TEC9_ECO, 90)
-		.addContent(SAWEDOFF_MIDNIGHT, 90)
-		.addContent(AK47_BLOODSPORT, 80)
-		.addContent(AWP_REDLINE, 70)
-		.addContent(AK47_FOX, 60)
-		.addContent(M4A4_PATRIOT, 50)
-		.addContent(DRAGUNOV_STEAMPUNK, 50)
-		.addContent(AWP_BOOM, 40)
-		.addContent(FNFAL_ASMO, 30)
-		.addContent(P250_BEAST, 20)
-		.addContent(TEC9_AQUARIUM, 10)
-		.addContent(NOVA_HYPER_BEAST, 5);
+
+	private static final List<CloudItem> POOL_KNIFE_TAC = List.of(
+		KNIFE_TAC_MARBLE, KNIFE_TAC_TIGER, KNIFE_TAC_STEEL, KNIFE_TAC_DOPPLAR, KNIFE_TAC_LORE, KNIFE_TAC_GAMMA
+	);
+	private static final List<CloudItem> POOL_KNIFE_BAY = List.of(
+		KNIFE_BAY, KNIFE_BAY_MARBLE, KNIFE_BAY_TIGER, KNIFE_BAY_STEEL, KNIFE_BAY_DOPPLAR, KNIFE_BAY_LORE, KNIFE_BAY_GAMMA, KNIFE_BAY_DRAGONLORE
+	);
+	private static final List<CloudItem> POOL_KNIFE_KAR = List.of(
+		KNIFE_KAR, KNIFE_KAR_MARBLE, KNIFE_KAR_TIGER, KNIFE_KAR_STEEL, KNIFE_KAR_DOPPLAR, KNIFE_KAR_LORE, KNIFE_KAR_GAMMA, KNIFE_KAR_EAGLE
+	);
+
+	public static final CloudItemCase WC_ALPHA = new CloudItemCase(2000, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA, false).modifyContents(collection -> collection
+		.add(M4A4_WAVES, 110)
+		.add(P250_IRRADIATED, 110)
+		.add(DRAGUNOV_SKY, 110)
+		.add(VECTOR_CIRCUIT, 100)
+		.add(P90_RUST, 80)
+		.add(SCAR20_CYREX, 60)
+		.add(MAG7_ROYALFIRE, 40)
+		.add(DEAGLE_NIGHTRAZER, 20)
+		.add(AK47_PROPAGANDA, 10)
+		.add(M249_NEON, 10)
+		.add(M4A4_EVILDAIMYO, 4)
+		.add(SAWEDOFF_WASTELANDPRINCESS, 4)
+		.add(AK47_ASMO, 2)
+		.add(R8_FADE, 2)
+		.add(AWP_DRAGON, 1, false)
+		.add(POOL_KNIFE_TAC, 1, false)
+	);
+	public static final CloudItemCase WC_ALPHA2 = new CloudItemCase(2001, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA2, false).modifyContents(collection -> collection
+		.add(NOVA_OXIDEBLAZE, 100)
+		.add(TEC9_QUAKORONIC, 80)
+		.add(MAC10_RACE, 60)
+		.add(M4A4_CAKEY, 40)
+		.add(AWP_MANOWAR, 20)
+		.add(FAMAS_AKARI, 10)
+		.add(SAWEDOFF_KRAKEN, 10)
+		.add(AK47_NEONREVOLUTION, 4)
+		.add(P90_KRAKEN, 4)
+		.add(P250_SEEYALATER, 2)
+		.add(SCAR20_UNICORN, 2)
+		.add(POOL_KNIFE_BAY, 1, false)
+	);
+	public static final CloudItemCase WC_ALPHA3 = new CloudItemCase(2002, CloudItemRarity.COAL, "Case", CASE_KEY_ALPHA3, false).modifyContents(collection -> collection
+		.add(M4A4_NERFED, 100)
+		.add(G18_RACE, 90)
+		.add(VECTOR_BLOODYEQUATION, 85)
+		.add(P250_CITY, 80)
+		.add(M1911_DRAGON, 60)
+		.add(UMP45_PRIMAL, 40)
+		.add(R8_GOLD, 20)
+		.add(DEAGLE_DEADHORIZON, 10)
+		.add(CZ75_PHANTOM, 10)
+		.add(FAMAS_WARHAWK, 4)
+		.add(FNFAL_VAPORWAVE, 4)
+		.add(AWP_ASMO, 2)
+		.add(M4A4_HOWL, 1, false)
+		.add(POOL_KNIFE_KAR, 1, false)
+	);
+	public static final CloudItemCase HC_ALPHA1 = new CloudItemCase(2003, CloudItemRarity.COAL, "Case", CASE_KEY_HAT, false).modifyContents(collection -> collection
+		.add(HAT_HARDRED, 110)
+		.add(HAT_HARDORANGE, 110)
+		.add(HAT_HARDYELLOW, 110)
+		.add(HAT_FIREMAN, 80)
+		.add(HAT_FIREMANCHIEF, 80)
+		.add(HAT_TOPHAT, 30)
+		.add(HAT_TV, 30)
+		.add(HAT_VIKING, 15)
+		.add(HAT_CATHAT, 6)
+	);
+	public static final CloudItemCase WC_HALLOWEEN1 = new CloudItemCase(2004, CloudItemRarity.COAL, "Case", CASE_KEY_HALLOWEEN1, false).modifyContents(collection -> collection
+		.add(UMP45_EDIFICE, 100)
+		.add(M1911_TUXEDO, 85)
+		.add(M249_GHOST, 80)
+		.add(G18_DEEP_BLUE, 60)
+		.add(FAMAS_SPOOKY, 40)
+		.add(DEAGLE_GRIN, 20)
+		.add(M4A4_PUMPKIN, 10)
+		.add(MAC10_PUMPKIN, 10)
+		.add(AWP_BONES, 4)
+		.add(MAG7_VAMPIRE, 4)
+		.add(AK47_HAUNTED, 2)
+		.add(G18_HIGHROLLER, 2)
+		.add(POOL_KNIFE_KAR, 1, false)
+	);
+	public static final CloudItemCase WC_EXO = new CloudItemCase(2005, CloudItemRarity.COAL, "Case", CASE_KEY_EXO, false).modifyContents(collection -> collection
+		.add(TEC9_ECO, 100)
+		.add(SAWEDOFF_MIDNIGHT, 100)
+		.add(AK47_BLOODSPORT, 90)
+		.add(AWP_REDLINE, 80)
+		.add(AK47_FOX, 70)
+		.add(M4A4_PATRIOT, 60)
+		.add(DRAGUNOV_STEAMPUNK, 50)
+		.add(AWP_BOOM, 20)
+		.add(FNFAL_ASMO, 20)
+		.add(P250_BEAST, 20)
+		.add(TEC9_AQUARIUM, 8)
+		.add(NOVA_HYPER_BEAST, 8)
+		.add(KNIFE_BUTTERFLY, 2, false)
+	);
 
 	private CloudItems() {
 	}

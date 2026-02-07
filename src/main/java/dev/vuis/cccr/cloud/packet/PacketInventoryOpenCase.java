@@ -53,8 +53,9 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 		inventory.removeItemStack(caseStack.uuid, true);
 		inventory.removeItemStack(keyStack.get().uuid, true);
 
-		List<CloudItem> rouletteItems = caseItem.getRandomContentBulk(30);
-		CloudItem result = rouletteItems.get(26);
+		CloudItem result = caseItem.contents.getRandom();
+		List<CloudItem> rouletteItems = caseItem.contents.getRandomBulk(30);
+		rouletteItems.set(26, result);
 
 		connectionHandler.sendPacket(new PacketInventoryCaseResults(rouletteItems));
 		inventory.addItemStack(new CloudItemStack(result), true);

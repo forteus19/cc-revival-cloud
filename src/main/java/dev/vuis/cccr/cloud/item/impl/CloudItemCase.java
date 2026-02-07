@@ -7,7 +7,7 @@ import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import dev.vuis.cccr.cloud.util.Util;
-import java.util.List;
+import java.util.function.Consumer;
 import lombok.Getter;
 
 public class CloudItemCase extends CloudItem {
@@ -15,7 +15,7 @@ public class CloudItemCase extends CloudItem {
 
 	@Getter
 	private final CloudItem keyItem;
-	private final RandomCollection<CloudItem> contents = new RandomCollection<>();
+	public final RandomCollection<CloudItem> contents = new RandomCollection<>();
 
 	public CloudItemCase(int id, CloudItemRarity rarity, String suffix, CloudItem keyItem, boolean isDefault) {
 		super(id, rarity, suffix, isDefault);
@@ -30,17 +30,9 @@ public class CloudItemCase extends CloudItem {
 		return Util.getRandomFromMultiset(DROP_SET);
 	}
 
-	public CloudItemCase addContent(CloudItem item, int weight) {
-		contents.add(item, weight);
+	public CloudItemCase modifyContents(Consumer<RandomCollection<CloudItem>> collectionConsumer) {
+		collectionConsumer.accept(contents);
 		return this;
-	}
-
-	public CloudItem getRandomContent() {
-		return contents.getRandom();
-	}
-
-	public List<CloudItem> getRandomContentBulk(int count) {
-		return contents.getRandomBulk(count);
 	}
 
 	@Override

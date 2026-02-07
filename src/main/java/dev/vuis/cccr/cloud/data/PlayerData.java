@@ -27,10 +27,11 @@ public final class PlayerData {
 	public final AtomicInteger deaths = new AtomicInteger(0);
 	public final AtomicInteger games = new AtomicInteger(0);
 	public final AtomicInteger firstBloods = new AtomicInteger(0);
+	public final AtomicInteger matchKarma = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicInteger emeralds = new AtomicInteger(0);
-	public final AtomicReference<String> mood = new AtomicReference<>("I haven't set a mood yet...");
+	public final AtomicReference<String> mood = new AtomicReference<>("");
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 
 	// friends
@@ -76,6 +77,7 @@ public final class PlayerData {
 		tag.setInteger("deaths", deaths.get());
 		tag.setInteger("games", games.get());
 		tag.setInteger("statfb", firstBloods.get());
+		tag.setInteger("matchKarma", matchKarma.get());
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());
 		tag.setInteger("emeralds", emeralds.get());
@@ -88,7 +90,6 @@ public final class PlayerData {
 		tag.setBoolean("enableProfileViewing", true);
 		tag.setBoolean("enableTradeRequests", true);
 		tag.setBoolean("enableFriendRequests", true);
-		tag.setString("clantag", "NONE");
 		tag.setBoolean("twoFactorEnable", false);
 		tag.setBoolean("isSupporter", false);
 		tag.setBoolean("enableCape", false);

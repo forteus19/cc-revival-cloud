@@ -16,9 +16,9 @@ import java.util.concurrent.ThreadLocalRandom;
 public final class SearchHandler {
 	// TODO configurable
 	private static final Map<String, List<String>> VALID_MAPS = Map.ofEntries(
-		Map.entry("cas", List.of("Dust", "Laputa", "Mirage", "Toxic")),
+		Map.entry("cas", List.of("Dust", "Mirage", "Toxic")),
 		Map.entry("ffa", List.of("Dust", "Laputa")),
-		Map.entry("tdm", List.of("Dome", "Dust", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
+		Map.entry("tdm", List.of("Dome", "Dust", "Laputa", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
 	);
 
 	private static final Map<String, Data> ONGOING = new ConcurrentHashMap<>();

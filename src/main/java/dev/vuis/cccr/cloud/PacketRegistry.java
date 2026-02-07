@@ -30,6 +30,7 @@ import dev.vuis.cccr.cloud.packet.server.PacketPlayerDataRandomDrop;
 import dev.vuis.cccr.cloud.packet.server.PacketServerGameStatus;
 import dev.vuis.cccr.cloud.packet.server.PacketServerMatchMaking;
 import dev.vuis.cccr.cloud.packet.server.PacketServerMatchMakingAccepted;
+import dev.vuis.cccr.cloud.packet.server.PacketServerNotification;
 
 public final class PacketRegistry {
 	private PacketRegistry() {
@@ -53,6 +54,7 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(23, PacketInventoryCaseResults.class);
 		G_TcpPacket.addPacketMapping(24, PacketFriendPoke.class);
 		G_TcpPacket.addPacketMapping(39, PacketServerMatchMaking.class);
+		G_TcpPacket.addPacketMapping(40, PacketServerNotification.class);
 		G_TcpPacket.addPacketMapping(41, PacketServerGameStatus.class);
 		G_TcpPacket.addPacketMapping(42, PacketMMSearch.class);
 		G_TcpPacket.addPacketMapping(43, PacketMMSearchCloudCanceled.class);

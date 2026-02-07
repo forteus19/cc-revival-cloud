@@ -8,6 +8,7 @@ import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
@@ -193,8 +194,24 @@ public final class Cloud implements ICloud {
 		boolean success = true;
 
 		switch (parts[0]) {
+			case "give" -> {
+				if (parts.length < 3) {
+					log("give - Missing args: <username> <id>");
+					break;
+				}
+				String username = parts[1];
+				CloudItem item = CloudItems.getById(Integer.parseInt(parts[2]));
+
+				PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+				if (inventory == null) {
+					log("randomdrop - Player %s does not have an inventory!", username);
+					break;
+				}
+
+				inventory.addItemStack(new CloudItemStack(item), true);
+			}
 			case "randomdrop" -> {
-				if (parts.length < 2) {
+				if (parts.length < 3) {
 					log("randomdrop - Missing args: <username> <count>");
 					break;
 				}

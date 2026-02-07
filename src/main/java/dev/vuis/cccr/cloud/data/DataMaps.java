@@ -38,18 +38,20 @@ public final class DataMaps {
 
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA2), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA3), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HAT), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN1), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), false);
-		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_EXO), false);
+		for (int i = 0; i < 10; i++) {
+			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA2), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA3), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HAT), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN1), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_EXO), false);
+		}
 
 		return inventory;
 	}
