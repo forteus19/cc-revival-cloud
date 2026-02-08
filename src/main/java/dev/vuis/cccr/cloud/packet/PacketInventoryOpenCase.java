@@ -7,6 +7,7 @@ import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
+import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
@@ -56,6 +57,10 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 		CloudItem result = caseItem.contents.getRandom();
 		List<CloudItem> rouletteItems = caseItem.contents.getRandomBulk(30);
 		rouletteItems.set(26, result);
+
+		if (result == CloudItems.KNIFE_TAC_DISPLAY) {
+			result = caseItem.getRandomSpecialDrop();
+		}
 
 		connectionHandler.sendPacket(new PacketInventoryCaseResults(rouletteItems));
 		inventory.addItemStack(new CloudItemStack(result), true);
