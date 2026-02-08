@@ -11,6 +11,8 @@ public final class CloudMain {
 	}
 
 	static void main(String[] args) {
+		boolean gui = args.length >= 1 && args[0].equals("gui");
+
 //		G_CloudNetworkManager.LOG_PACKETS_PROCESSED = true;
 		G_CloudNetworkManager.LOG_LOGIN_PROCESS = true;
 		PacketRegistry.registerPackets();
@@ -21,7 +23,15 @@ public final class CloudMain {
 			Util.getEnv("CCCR_MC_HOST", "localhost")
 		);
 
-		ServerGui.func_120016_a(cloud.getCloudManager());
+		if (gui) {
+			ServerGui.func_120016_a(cloud.getCloudManager());
+		}
+
+		new Thread(() -> {
+			while (!cloud.getCloudManager().isCloudStopped) {
+				cloud.handleCommand(IO.readln());
+			}
+		}).start();
 
 		while (!cloud.getCloudManager().isCloudStopped) {
 			cloud.onUpdate();
