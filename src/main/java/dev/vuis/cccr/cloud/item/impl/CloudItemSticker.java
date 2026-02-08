@@ -5,8 +5,8 @@ import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemSticker extends CloudItem {
-	public CloudItemSticker(int id, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
+	public CloudItemSticker(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
+		super(id, mcId, rarity, suffix, isDefault);
 	}
 
 	@Override

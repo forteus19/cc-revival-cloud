@@ -5,8 +5,8 @@ import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemCallingCard extends CloudItem {
-	public CloudItemCallingCard(int id, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
+	public CloudItemCallingCard(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
+		super(id, mcId, rarity, suffix, isDefault);
 	}
 
 	@Override

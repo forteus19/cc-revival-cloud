@@ -20,6 +20,8 @@ import dev.vuis.cccr.cloud.packet.PacketRequestedFriends;
 import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedItemDefault;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
+import dev.vuis.cccr.cloud.packet.market.PacketMarketStoreOrder;
+import dev.vuis.cccr.cloud.packet.market.PacketRequestedMarketStoreItems;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMJoinServer;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMSearch;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMSearchCloudCanceled;
@@ -62,6 +64,8 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(45, PacketRequestedCloudData.class);
 		G_TcpPacket.addPacketMapping(46, PacketInventoryItemDelete.class);
 		G_TcpPacket.addPacketMapping(49, PacketInventoryItemRemoved.class);
+		G_TcpPacket.addPacketMapping(50, PacketRequestedMarketStoreItems.class);
+		G_TcpPacket.addPacketMapping(51, PacketMarketStoreOrder.class);
 		G_TcpPacket.addPacketMapping(53, PacketEditMood.class);
 		G_TcpPacket.addPacketMapping(63, PacketServerMatchMakingAccepted.class);
 		G_TcpPacket.addPacketMapping(64, PacketMMJoinServer.class);

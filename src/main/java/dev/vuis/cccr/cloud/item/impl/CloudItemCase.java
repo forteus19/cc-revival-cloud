@@ -17,8 +17,8 @@ public class CloudItemCase extends CloudItem {
 	private final CloudItem keyItem;
 	public final RandomCollection<CloudItem> contents = new RandomCollection<>();
 
-	public CloudItemCase(int id, CloudItemRarity rarity, String suffix, CloudItem keyItem, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
+	public CloudItemCase(int id, int mcId, CloudItemRarity rarity, String suffix, CloudItem keyItem, boolean isDefault) {
+		super(id, mcId, rarity, suffix, isDefault);
 		this.keyItem = keyItem;
 
 		if (!isDefault) {

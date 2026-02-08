@@ -6,17 +6,12 @@ import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 import dev.vuis.cccr.cloud.util.Util;
-import lombok.Getter;
 
 public class CloudItemGun extends CloudItem {
 	private static final Multiset<CloudItemGun> DROP_SET = HashMultiset.create();
 
-	@Getter
-	private final int mcId;
-
 	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
-		this.mcId = mcId;
+		super(id, mcId, rarity, suffix, isDefault);
 
 		if (!isDefault) {
 			DROP_SET.add(this, rarity.getWeight());

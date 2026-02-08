@@ -5,8 +5,8 @@ import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemCape extends CloudItem {
-	public CloudItemCape(int id, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
+	public CloudItemCape(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
+		super(id, mcId, rarity, suffix, isDefault);
 	}
 
 	@Override

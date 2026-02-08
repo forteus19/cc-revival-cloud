@@ -194,6 +194,21 @@ public final class Cloud implements ICloud {
 		boolean success = true;
 
 		switch (parts[0]) {
+			case "emeralds" -> {
+				if (parts.length < 3) {
+					log("emeralds - Missing args: <username> <amount>");
+				}
+				String username = parts[1];
+				int amount = Integer.parseInt(parts[2]);
+
+				PlayerData playerData = DataMaps.getPlayerData(username, false);
+				if (playerData == null) {
+					log("randomdrop - Player %s does not have data!", username);
+					break;
+				}
+
+				playerData.emeralds.addAndGet(amount);
+			}
 			case "give" -> {
 				if (parts.length < 3) {
 					log("give - Missing args: <username> <id>");

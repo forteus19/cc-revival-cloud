@@ -7,8 +7,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
-import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
-import dev.vuis.cccr.cloud.item.impl.ItemDefaultGun;
+import dev.vuis.cccr.cloud.item.ItemDefault;
 import dev.vuis.cccr.cloud.item.impl.ItemDefaultSingleton;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemRemoved;
@@ -26,8 +25,7 @@ public final class PlayerInventory {
 	private static final int SPLIT_SIZE = 64;
 
 	private final Map<UUID, CloudItemStack> stackMap = new ConcurrentHashMap<>();
-	private final Map<CloudItemCategory, ItemDefaultSingleton> singletonDefaults = new ConcurrentHashMap<>();
-	private final ItemDefaultGun gunDefaults = new ItemDefaultGun();
+	private final Map<CloudItemCategory, ItemDefault> defaultsMap = new ConcurrentHashMap<>();
 
 	private final String username;
 
@@ -72,7 +70,7 @@ public final class PlayerInventory {
 		if (category == CloudItemCategory.GUN) {
 			return true;
 		} else {
-			return singletonDefaults.containsKey(category);
+			return defaultsMap.containsKey(category);
 		}
 	}
 
@@ -82,11 +80,8 @@ public final class PlayerInventory {
 			return false;
 		}
 
-		if (stack.item instanceof CloudItemGun gunItem) {
-			return gunDefaults.getStackUuid(gunItem) != null;
-		} else {
-			return singletonDefaults.containsKey(stack.item.getCategory());
-		}
+		ItemDefault itemDef = defaultsMap.get(stack.item.getCategory());
+		return itemDef != null && itemDef.getStackUuid(stack.item) != null;
 	}
 
 	public void setDefaultStack(UUID uuid) {
@@ -95,11 +90,7 @@ public final class PlayerInventory {
 			return;
 		}
 
-		if (stack.item instanceof CloudItemGun gunItem) {
-			gunDefaults.setStackUuid(uuid, gunItem);
-		} else {
-			singletonDefaults.computeIfAbsent(stack.item.getCategory(), ItemDefaultSingleton::new).setStackUuid(uuid);
-		}
+		defaultsMap.computeIfAbsent(stack.item.getCategory(), ItemDefaultSingleton::new).setStackUuid(uuid, stack.item);
 	}
 
 	public CloudItemCategory clearDefaultStack(UUID uuid) {
@@ -110,13 +101,15 @@ public final class PlayerInventory {
 
 		CloudItemCategory category = stack.item.getCategory();
 
-		if (stack.item instanceof CloudItemGun gunItem) {
-			gunDefaults.clearStackUuid(gunItem);
+		ItemDefault itemDef = defaultsMap.get(category);
+		if (itemDef != null) {
+			if (itemDef.clearStackUuid(stack.item)) {
+				defaultsMap.remove(category);
+			}
+			return category;
 		} else {
-			singletonDefaults.remove(category);
+			return null;
 		}
-
-		return category;
 	}
 
 	public List<FDSTagCompound> writeStacksTagList() {
@@ -143,14 +136,9 @@ public final class PlayerInventory {
 	}
 
 	public void writeDefaultsTag(FDSTagCompound tag, CloudItemCategory category) {
-		if (category == CloudItemCategory.GUN) {
-			gunDefaults.writeTag(tag);
-		} else {
-			ItemDefaultSingleton defaultSingleton = singletonDefaults.get(category);
-			if (defaultSingleton == null) {
-				return;
-			}
-			defaultSingleton.writeTag(tag);
+		ItemDefault itemDef = defaultsMap.get(category);
+		if (itemDef != null) {
+			itemDef.writeTag(tag);
 		}
 	}
 }

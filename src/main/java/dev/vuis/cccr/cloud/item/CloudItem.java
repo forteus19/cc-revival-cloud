@@ -2,22 +2,21 @@ package dev.vuis.cccr.cloud.item;
 
 import lombok.Getter;
 
+@Getter
 public abstract class CloudItem {
-	@Getter
 	private final int id;
-	@Getter
+	private final int mcId;
 	private final CloudItemRarity rarity;
-	@Getter
 	private final String displayName;
-	@Getter
 	private final boolean isDefault;
 
-	protected CloudItem(int id, CloudItemRarity rarity, String displayName, boolean isDefault) {
+	protected CloudItem(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault) {
 		if (CloudItems.ID_MAP.containsKey(id)) {
 			throw new IllegalStateException("Duplicate CloudItem id " + id + "!");
 		}
 
 		this.id = id;
+		this.mcId = mcId;
 		this.rarity = rarity;
 		this.displayName = displayName;
 		this.isDefault = isDefault;

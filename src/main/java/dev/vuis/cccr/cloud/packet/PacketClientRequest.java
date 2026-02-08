@@ -5,8 +5,10 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.RequestType;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.MarketStore;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
+import dev.vuis.cccr.cloud.packet.market.PacketRequestedMarketStoreItems;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -78,6 +80,11 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 			case CLOUDSTATS -> {
 				PacketRequestedCloudData packet = new PacketRequestedCloudData();
 				CloudStats.writeTag(packet.tag);
+				connectionHandler.sendPacket(packet);
+			}
+			case STOREITEMS -> {
+				PacketRequestedMarketStoreItems packet = new PacketRequestedMarketStoreItems();
+				MarketStore.writeTag(packet.tag);
 				connectionHandler.sendPacket(packet);
 			}
 		}

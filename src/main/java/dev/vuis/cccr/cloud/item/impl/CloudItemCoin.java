@@ -5,8 +5,8 @@ import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
 
 public class CloudItemCoin extends CloudItem {
-	public CloudItemCoin(int id, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		super(id, rarity, suffix, isDefault);
+	public CloudItemCoin(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
+		super(id, mcId, rarity, suffix, isDefault);
 	}
 
 	@Override
