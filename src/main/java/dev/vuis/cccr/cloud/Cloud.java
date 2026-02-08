@@ -225,6 +225,15 @@ public final class Cloud implements ICloud {
 
 				inventory.addItemStack(new CloudItemStack(item), true);
 			}
+			case "list" -> {
+				for (String channel : cloudManager.getNetwork().getChannels()) {
+					log("%s: %s", channel,
+						cloudManager.getNetwork().getNetChannel(channel).stream()
+							.map(G_CloudTcpConnectionHandler::toString2)
+							.toList()
+					);
+				}
+			}
 			case "randomdrop" -> {
 				if (parts.length < 3) {
 					log("randomdrop - Missing args: <username> <count>");
