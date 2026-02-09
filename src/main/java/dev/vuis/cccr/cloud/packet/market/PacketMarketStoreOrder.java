@@ -56,12 +56,16 @@ public final class PacketMarketStoreOrder extends G_TcpPacketCustomPayload {
 			MarketStore.Item item = category.items().get(orderTag.getInteger("package"));
 			int amount = orderTag.getInteger("amount");
 
+			if (amount > item.maxQuantity()) {
+				return;
+			}
+
 			emeralds += item.price() * amount;
 			if (emeralds > dataEmeralds) {
 				connectionHandler.sendPacket(new PacketNotificationFromCloud(
 					"You do not have enough emeralds!", CloudConstants.CC_NAME, 0
 				));
-				break;
+				return;
 			}
 
 			for (int j = 0; j < amount; j++) {

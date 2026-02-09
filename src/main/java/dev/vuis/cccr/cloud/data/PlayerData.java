@@ -84,6 +84,8 @@ public final class PlayerData {
 		tag.setString("mood", mood.get());
 		tag.setString("status", status.get());
 		tag.setString("playerUUID", Util.getUndashedUuid(uuid.get()));
+
+		tag.setString("discordUserId", "");
 		tag.setBoolean("enableNotification_FriendRequest", true);
 		tag.setBoolean("enableNotification_FriendPoke", true);
 		tag.setBoolean("enableNotification_TradeRequest", true);

@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.ItemDefault;
+import dev.vuis.cccr.cloud.item.impl.ItemDefaultGun;
 import dev.vuis.cccr.cloud.item.impl.ItemDefaultSingleton;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemRemoved;
@@ -67,11 +68,7 @@ public final class PlayerInventory {
 	}
 
 	public boolean hasDefaults(CloudItemCategory category) {
-		if (category == CloudItemCategory.GUN) {
-			return true;
-		} else {
-			return defaultsMap.containsKey(category);
-		}
+		return defaultsMap.containsKey(category);
 	}
 
 	public boolean hasDefaultStack(UUID uuid) {
@@ -90,7 +87,10 @@ public final class PlayerInventory {
 			return;
 		}
 
-		defaultsMap.computeIfAbsent(stack.item.getCategory(), ItemDefaultSingleton::new).setStackUuid(uuid, stack.item);
+		defaultsMap.computeIfAbsent(
+			stack.item.getCategory(),
+			k -> k == CloudItemCategory.GUN ? new ItemDefaultGun() : new ItemDefaultSingleton(k)
+		).setStackUuid(uuid, stack.item);
 	}
 
 	public CloudItemCategory clearDefaultStack(UUID uuid) {

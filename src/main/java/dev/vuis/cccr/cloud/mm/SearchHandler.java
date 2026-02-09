@@ -98,7 +98,7 @@ public final class SearchHandler {
 				packet.tag.setString("address", getServerAddress(entryServer));
 				packet.tag.setString("game", data.game());
 				packet.tag.setString("map", map);
-				packet.tag.setString("team", getTeam(data.game()));
+				packet.tag.setString("team", getRandomTeam(data.game()));
 
 				return packet;
 			}
@@ -118,7 +118,7 @@ public final class SearchHandler {
 		packet.tag.setString("address", getServerAddress(resultServer));
 		packet.tag.setString("game", resultStatus.gameType);
 		packet.tag.setString("map", resultStatus.mapType);
-		packet.tag.setString("team", getTeam(resultStatus.gameType));
+		packet.tag.setString("team", getExistingTeam(resultStatus.teams));
 
 		return packet;
 	}
@@ -135,15 +135,18 @@ public final class SearchHandler {
 		return String.format("%s:%d", Cloud.getInstance().mcHost, ServerStatus.PORT.get(server));
 	}
 
-	private static String getTeam(String gameType) {
+	private static String getRandomTeam(String gameType) {
 		return switch (gameType) {
-			// TODO use cbd team sizes provided in game status packet
 			case "cas", "cbd", "dom", "tdm" -> ThreadLocalRandom.current().nextInt(2) == 0 ? "Red" : "Blue";
 			case "ffa" -> "Players";
 			case "inf" -> ThreadLocalRandom.current().nextInt(2) == 0 ? "Dead" : "Living";
 			case "sg" -> "Tributes";
 			default -> throw new IllegalArgumentException();
 		};
+	}
+
+	private static String getExistingTeam(List<GameStatus.Team> teams) {
+		return teams.stream().filter(team -> !team.name().equals("Spectator")).min(Comparator.comparingInt(GameStatus.Team::players)).orElseThrow().name();
 	}
 
 	private record Data(

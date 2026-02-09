@@ -8,6 +8,8 @@ import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 	private boolean hasGame;
@@ -17,6 +19,7 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 	private int remainingSpectatorSlots;
 	private int numPlayers;
 	private boolean acceptingPlayers;
+	private final List<GameStatus.Team> teams = new ArrayList<>();
 
 	@Override
 	public void writePacketToStream(DataOutputStream out) throws IOException {
@@ -38,6 +41,11 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 		acceptingPlayers = in.readBoolean();
 		in.readInt();
 		in.readInt();
+
+		int numTeams = in.readInt();
+		for (int i = 0; i < numTeams; i++) {
+			teams.add(new GameStatus.Team(readString(in), in.readInt()));
+		}
 	}
 
 	@Override
@@ -61,5 +69,7 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 		game.remainingSpectatorSlots = remainingSpectatorSlots;
 		game.numPlayers = numPlayers;
 		game.acceptingPlayers = acceptingPlayers;
+		game.teams.clear();
+		game.teams.addAll(teams);
 	}
 }

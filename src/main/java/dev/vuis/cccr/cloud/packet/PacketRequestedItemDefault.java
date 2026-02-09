@@ -37,7 +37,7 @@ public final class PacketRequestedItemDefault extends G_TcpPacketCustomPayload {
 		}
 
 		PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
-		if (inventory == null || (sendIfEmpty && !inventory.hasDefaults(category))) {
+		if (inventory == null || (!sendIfEmpty && !inventory.hasDefaults(category))) {
 			return;
 		}
 

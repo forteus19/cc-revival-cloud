@@ -2,6 +2,8 @@ package dev.vuis.cccr.cloud.packet;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
+import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.RequestType;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
@@ -37,7 +39,8 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) {
-		if (PacketUtil.checkAuthentication(connectionHandler)) {
+		G_CloudTcpConnectionHandler cloudHandler = (G_CloudTcpConnectionHandler) connectionHandler;
+		if (cloudHandler.channel.equals(CloudConstants.CHANNEL_PLAYER) && PacketUtil.checkAuthentication(connectionHandler)) {
 			return;
 		}
 
