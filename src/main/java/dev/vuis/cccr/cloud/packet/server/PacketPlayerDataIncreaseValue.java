@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.packet.server;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
@@ -44,34 +45,36 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 
 		Cloud.instanceLog("INCREASE VALUE %s %s %d", username, value, amount);
 
-		int expGain = switch (value) {
+		int expGain = 0;
+
+		switch (value) {
 			case "deaths" -> {
 				playerData.deaths.addAndGet(amount);
-				yield Exp.DEATH * amount;
+				expGain = Exp.DEATH;
 			}
 			case "emeralds" -> {
 				playerData.emeralds.addAndGet(amount);
-				yield 0;
 			}
 			case "firstblood" -> {
 				playerData.firstBloods.addAndGet(amount);
-				yield Exp.FIRST_BLOOD * amount;
+				expGain = Exp.FIRST_BLOOD;
 			}
 			case "games" -> {
 				playerData.games.addAndGet(amount);
-				yield Exp.MATCH_PARTICIPATE * amount;
+				expGain = Exp.MATCH_PARTICIPATE;
 			}
 			case "kills" -> {
 				playerData.kills.addAndGet(amount);
-				yield Exp.KILL * amount;
+				CloudStats.incrementPlayerScore(playerData.username.get());
+				expGain = Exp.KILL;
 			}
 			case "trophies" -> {
 				playerData.trophies.addAndGet(amount);
-				yield Exp.TROPHY * amount;
+				expGain = Exp.TROPHY;
 			}
-			default -> 0;
 		};
 
+		expGain *= amount;
 		if (expGain != 0) {
 			Exp.handleExpGain(connectionHandler, playerData, expGain);
 		}
