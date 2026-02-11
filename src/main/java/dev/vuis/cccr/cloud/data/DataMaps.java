@@ -4,33 +4,48 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 public final class DataMaps {
-	private static final Map<String, PlayerData> PLAYER_DATA = new ConcurrentHashMap<>();
-	private static final Map<String, PlayerInventory> PLAYER_INVENTORY = new ConcurrentHashMap<>();
+	private static final Map<String, UUID> PLAYER_UUIDS = new ConcurrentHashMap<>();
+
+	private static final Map<UUID, PlayerData> PLAYER_DATA = new ConcurrentHashMap<>();
+	private static final Map<UUID, PlayerInventory> PLAYER_INVENTORY = new ConcurrentHashMap<>();
 
 	private DataMaps() {
 	}
 
-	public static PlayerData getPlayerData(String username, boolean createIfAbsent) {
-		return PLAYER_DATA.computeIfAbsent(username, key -> {
-			if (!createIfAbsent) {
-				return null;
-			}
-			Cloud.instanceLog("[DataMaps] Creating new player data for %s", key);
-			return new PlayerData(key);
-		});
+	public static PlayerData getPlayerData(String username) {
+		UUID uuid = PLAYER_UUIDS.get(username);
+		return uuid != null ? PLAYER_DATA.get(uuid) : null;
 	}
 
-	public static PlayerInventory getPlayerInventory(String username, boolean createIfAbsent) {
-		return PLAYER_INVENTORY.computeIfAbsent(username, key -> {
-			if (!createIfAbsent) {
-				return null;
-			}
-			Cloud.instanceLog("[DataMaps] Creating new player inventory for %s", key);
-			return initializeInventory(new PlayerInventory(key));
+	public static PlayerData populatePlayerData(String username, UUID uuid) {
+		PlayerData data = PLAYER_DATA.computeIfAbsent(uuid, k -> {
+			Cloud.instanceLog("[DataMaps] Creating new player data for %s", username);
+			return new PlayerData(k, username);
 		});
+
+		PLAYER_UUIDS.put(username, uuid);
+		data.username.set(username);
+		populatePlayerInventory(username, uuid);
+
+		return data;
+	}
+
+	public static PlayerInventory getPlayerInventory(String username) {
+		UUID uuid = PLAYER_UUIDS.get(username);
+		return uuid != null ? PLAYER_INVENTORY.get(uuid) : null;
+	}
+
+	public static PlayerInventory populatePlayerInventory(String username, UUID uuid) {
+		PlayerInventory inventory = PLAYER_INVENTORY.computeIfAbsent(uuid, _ -> {
+			Cloud.instanceLog("[DataMaps] Creating new player inventory for %s", username);
+			return initializeInventory(new PlayerInventory(username));
+		});
+		inventory.username.set(username);
+		return inventory;
 	}
 
 	private static PlayerInventory initializeInventory(PlayerInventory inventory) {

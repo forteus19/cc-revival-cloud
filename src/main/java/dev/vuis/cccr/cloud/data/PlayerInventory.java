@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +29,11 @@ public final class PlayerInventory {
 	private final Map<UUID, CloudItemStack> stackMap = new ConcurrentHashMap<>();
 	private final Map<CloudItemCategory, ItemDefault> defaultsMap = new ConcurrentHashMap<>();
 
-	private final String username;
+	final AtomicReference<String> username;
+
+	PlayerInventory(String username) {
+		this.username = new AtomicReference<>(username);
+	}
 
 	public CloudItemStack getItemStack(UUID uuid) {
 		return stackMap.get(uuid);
@@ -49,7 +54,7 @@ public final class PlayerInventory {
 			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();
 			itemStack.writeTag(packet.tag);
 
-			Cloud.getInstance().sendPacketToPlayer(username, packet);
+			Cloud.getInstance().sendPacketToPlayer(username.get(), packet);
 		}
 	}
 
@@ -63,7 +68,7 @@ public final class PlayerInventory {
 			PacketInventoryItemRemoved packet = new PacketInventoryItemRemoved();
 			previous.writeTag(packet.tag);
 
-			Cloud.getInstance().sendPacketToPlayer(username, packet);
+			Cloud.getInstance().sendPacketToPlayer(username.get(), packet);
 		}
 	}
 
@@ -71,14 +76,18 @@ public final class PlayerInventory {
 		return defaultsMap.containsKey(category);
 	}
 
-	public boolean hasDefaultStack(UUID uuid) {
+	public boolean isDefaultStack(UUID uuid) {
 		CloudItemStack stack = getEquippableItemStack(uuid);
 		if (stack == null) {
 			return false;
 		}
 
 		ItemDefault itemDef = defaultsMap.get(stack.item.getCategory());
-		return itemDef != null && itemDef.getStackUuid(stack.item) != null;
+		if (itemDef == null) {
+			return false;
+		}
+		UUID defUuid = itemDef.getStackUuid(stack.item);
+		return defUuid != null && defUuid.equals(uuid);
 	}
 
 	public void setDefaultStack(UUID uuid) {

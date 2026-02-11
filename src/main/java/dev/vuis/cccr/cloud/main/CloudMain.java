@@ -7,7 +7,7 @@ import dev.vuis.cccr.cloud.PacketRegistry;
 import dev.vuis.cccr.cloud.util.Util;
 
 public final class CloudMain {
-	private static final int TICK_MS = 50 * 1000000;
+	private static final int TICK_MS = 50;
 
 	private CloudMain() {
 	}
@@ -36,18 +36,12 @@ public final class CloudMain {
 		}).start();
 
 		while (!cloud.getCloudManager().isCloudStopped) {
-			long startMs = System.currentTimeMillis();
-
 			cloud.onUpdate();
 
-			long elapsedMs = System.currentTimeMillis() - startMs;
-
-			if (elapsedMs < TICK_MS) {
-				try {
-					Thread.sleep(TICK_MS - elapsedMs);
-				} catch (InterruptedException e) {
-					cloud.getCloudManager().initiateShutdown();
-				}
+			try {
+				Thread.sleep(TICK_MS);
+			} catch (InterruptedException e) {
+				cloud.getCloudManager().initiateShutdown();
 			}
 		}
 

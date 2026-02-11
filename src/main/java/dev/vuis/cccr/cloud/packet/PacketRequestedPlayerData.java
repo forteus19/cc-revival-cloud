@@ -5,7 +5,6 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.DataMaps;
 import dev.vuis.cccr.cloud.data.PlayerData;
-import dev.vuis.cccr.cloud.util.Util;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -29,8 +28,8 @@ public final class PacketRequestedPlayerData extends G_TcpPacketCustomPayload {
 	}
 
 	public static void sendForPlayer(G_ITcpConnectionHandler connectionHandler, String username) {
-		PlayerData data = DataMaps.getPlayerData(username, false);
-		if (data == null || data.uuid.get().equals(Util.NULL_UUID)) {
+		PlayerData data = DataMaps.getPlayerData(username);
+		if (data == null) {
 			return;
 		}
 

@@ -38,7 +38,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 			return;
 		}
 
-		PlayerData playerData = DataMaps.getPlayerData(username, false);
+		PlayerData playerData = DataMaps.getPlayerData(username);
 		if (playerData == null) {
 			return;
 		}
@@ -72,7 +72,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 				playerData.trophies.addAndGet(amount);
 				expGain = Exp.TROPHY;
 			}
-		};
+		}
 
 		expGain *= amount;
 		if (expGain != 0) {

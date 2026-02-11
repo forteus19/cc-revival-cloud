@@ -33,7 +33,7 @@ public final class PacketClientUpdateStatus extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData playerData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData playerData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
 		if (playerData == null) {
 			return;
 		}

@@ -36,11 +36,11 @@ public final class PacketMarketStoreOrder extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData data = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData data = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
 		if (data == null) {
 			return;
 		}
-		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername(), false);
+		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
 		}

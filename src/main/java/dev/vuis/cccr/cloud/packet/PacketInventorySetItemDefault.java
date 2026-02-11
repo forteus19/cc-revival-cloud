@@ -29,12 +29,12 @@ public final class PacketInventorySetItemDefault extends G_TcpPacketCustomPayloa
 			return;
 		}
 
-		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername(), false);
+		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
 		}
 
-		if (inventory.hasDefaultStack(stackUuid)) {
+		if (inventory.isDefaultStack(stackUuid)) {
 			CloudItemCategory removedCategory = inventory.clearDefaultStack(stackUuid);
 			if (removedCategory != null) {
 				PacketRequestedItemDefault.sendForPlayer(connectionHandler, connectionHandler.getConnectionUsername(), removedCategory, true);

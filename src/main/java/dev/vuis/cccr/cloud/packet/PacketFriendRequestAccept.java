@@ -32,11 +32,11 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData accepterData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData accepterData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
 		if (accepterData == null) {
 			return;
 		}
-		PlayerData requesterData = DataMaps.getPlayerData(user, false);
+		PlayerData requesterData = DataMaps.getPlayerData(user);
 		if (requesterData == null) {
 			return;
 		}

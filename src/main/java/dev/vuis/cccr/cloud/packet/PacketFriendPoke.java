@@ -31,7 +31,7 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData targetData = DataMaps.getPlayerData(user, false);
+		PlayerData targetData = DataMaps.getPlayerData(user);
 		if (targetData == null) {
 			return;
 		}

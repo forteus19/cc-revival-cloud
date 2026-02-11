@@ -71,7 +71,7 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				if (requestData.length != 1) {
 					break;
 				}
-				PlayerData playerData = DataMaps.getPlayerData(requestData[0], false);
+				PlayerData playerData = DataMaps.getPlayerData(requestData[0]);
 				if (playerData == null) {
 					break;
 				}

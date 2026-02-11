@@ -35,7 +35,7 @@ public final class PacketRequestedInventory extends G_TcpPacketCustomPayload {
 	}
 
 	public static void sendForPlayer(G_ITcpConnectionHandler connectionHandler, String username) {
-		PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+		PlayerInventory inventory = DataMaps.getPlayerInventory(username);
 		if (inventory == null) {
 			return;
 		}

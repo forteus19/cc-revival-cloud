@@ -35,7 +35,7 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername(), false);
+		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
 		}

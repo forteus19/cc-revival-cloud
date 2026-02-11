@@ -29,11 +29,11 @@ public final class PacketFriendRemove extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData selfData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername(), false);
+		PlayerData selfData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
 		if (selfData == null) {
 			return;
 		}
-		PlayerData targetData = DataMaps.getPlayerData(user, false);
+		PlayerData targetData = DataMaps.getPlayerData(user);
 		if (targetData == null) {
 			return;
 		}

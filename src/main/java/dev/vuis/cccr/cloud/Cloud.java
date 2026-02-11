@@ -141,11 +141,8 @@ public final class Cloud implements ICloud {
 
 		log("Client \"%s\" authenticated", username);
 
-		PlayerData playerData = DataMaps.getPlayerData(username, true);
-		playerData.uuid.set(resultUuid);
+		PlayerData playerData = DataMaps.populatePlayerData(username, resultUuid);
 		playerData.online.set(true);
-
-		DataMaps.getPlayerInventory(username, true);
 
 		PacketRequestedPlayerData.sendForPlayer(connectionHandler, username);
 		PacketRequestedInventory.sendForPlayer(connectionHandler, username);
@@ -173,7 +170,7 @@ public final class Cloud implements ICloud {
 			case CloudConstants.CHANNEL_PLAYER -> {
 				auth.onClientDisconnected(username);
 
-				PlayerData playerData = DataMaps.getPlayerData(username, false);
+				PlayerData playerData = DataMaps.getPlayerData(username);
 				if (playerData != null) {
 					playerData.online.set(false);
 
@@ -201,7 +198,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				int amount = Integer.parseInt(parts[2]);
 
-				PlayerData playerData = DataMaps.getPlayerData(username, false);
+				PlayerData playerData = DataMaps.getPlayerData(username);
 				if (playerData == null) {
 					log("randomdrop - Player %s does not have data!", username);
 					break;
@@ -217,7 +214,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				CloudItem item = CloudItems.getById(Integer.parseInt(parts[2]));
 
-				PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+				PlayerInventory inventory = DataMaps.getPlayerInventory(username);
 				if (inventory == null) {
 					log("randomdrop - Player %s does not have an inventory!", username);
 					break;
@@ -242,7 +239,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				int count = Integer.parseInt(parts[2]);
 
-				PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+				PlayerInventory inventory = DataMaps.getPlayerInventory(username);
 				if (inventory == null) {
 					log("randomdrop - Player %s does not have an inventory!", username);
 					break;

@@ -35,7 +35,7 @@ public final class PacketPlayerDataRandomDrop extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerInventory inventory = DataMaps.getPlayerInventory(username, false);
+		PlayerInventory inventory = DataMaps.getPlayerInventory(username);
 		if (inventory == null) {
 			return;
 		}

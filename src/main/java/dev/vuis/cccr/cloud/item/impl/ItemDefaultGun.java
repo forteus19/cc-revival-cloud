@@ -10,21 +10,21 @@ import java.util.Map;
 import java.util.UUID;
 
 public class ItemDefaultGun implements ItemDefault {
-	private final Map<CloudItem, UUID> uuidMap = new HashMap<>();
+	private final Map<Integer, UUID> mcIdMap = new HashMap<>();
 
 	@Override
 	public UUID getStackUuid(CloudItem item) {
-		return uuidMap.get(item);
+		return mcIdMap.get(item.getMcId());
 	}
 
 	@Override
 	public void setStackUuid(UUID uuid, CloudItem item) {
-		uuidMap.put(item, uuid);
+		mcIdMap.put(item.getMcId(), uuid);
 	}
 
 	@Override
 	public boolean clearStackUuid(CloudItem item) {
-		uuidMap.remove(item);
+		mcIdMap.remove(item.getMcId());
 		return false;
 	}
 
@@ -32,10 +32,10 @@ public class ItemDefaultGun implements ItemDefault {
 	public void writeTag(FDSTagCompound tag) {
 		tag.setString("cat", CloudItemCategory.GUN.getId());
 
-		ArrayList<Integer> ids = new ArrayList<>(uuidMap.size());
-		ArrayList<String> uuids = new ArrayList<>(uuidMap.size());
-		for (Map.Entry<CloudItem, UUID> entry : uuidMap.entrySet()) {
-			ids.add(entry.getKey().getMcId());
+		ArrayList<Integer> ids = new ArrayList<>(mcIdMap.size());
+		ArrayList<String> uuids = new ArrayList<>(mcIdMap.size());
+		for (Map.Entry<Integer, UUID> entry : mcIdMap.entrySet()) {
+			ids.add(entry.getKey());
 			uuids.add(entry.getValue().toString());
 		}
 		tag.setIntegerArrayList("gunids", ids);
