@@ -5,10 +5,12 @@ import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Supplier;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @NoArgsConstructor
 public class RandomCollection<T> {
+	@Getter
 	private final List<Entry<T>> entries = new ArrayList<>();
 	private final List<Entry<T>> bulkEntries = new ArrayList<>();
 	private int totalWeight = 0;
@@ -73,7 +75,7 @@ public class RandomCollection<T> {
 		return objects;
 	}
 
-	private record Entry<T>(
+	public record Entry<T>(
 		Supplier<T> objectSupplier,
 		int minThreshold,
 		int maxThreshold

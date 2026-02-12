@@ -53,19 +53,21 @@ public final class DataMaps {
 
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 
-		for (int i = 0; i < 10; i++) {
-			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA), false);
+		for (int i = 0; i < 5; i++) {
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA1), false);
 			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA2), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA2), false);
 			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA2), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.WC_ALPHA3), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA3), false);
 			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA3), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.HC_ALPHA1), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_HAT), false);
 			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HAT), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.WC_HALLOWEEN1), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN1), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.WC_EXO), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_HALLOWEEN), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_EXO), false);
 			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_EXO), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_PREALPHA), false);
+			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_PREALPHA), false);
 		}
 
 		return inventory;

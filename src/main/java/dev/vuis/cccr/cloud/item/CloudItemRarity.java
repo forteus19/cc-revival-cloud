@@ -8,13 +8,13 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CloudItemRarity {
-	DEFAULT(0, 0),
-	COAL(1, 120),
-	IRON(2, 40),
-	LAPIS(3, 15),
-	GOLD(4, 6),
-	DIAMOND(5, 2),
-	OBSIDIAN(6, 1);
+	DEFAULT(0, 0, "DEFAULT"),
+	COAL(1, 60, "TIER1"),
+	IRON(2, 40, "TIER2"),
+	LAPIS(3, 20, "TIER3"),
+	GOLD(4, 6, "TIER4"),
+	DIAMOND(5, 2, "TIER5"),
+	OBSIDIAN(6, 1, "TIER6");
 
 	private static final RandomCollection<CloudItemRarity> RANDOM_COLLECTION = new RandomCollection<>(values(), CloudItemRarity::getWeight);
 
@@ -22,6 +22,8 @@ public enum CloudItemRarity {
 	private final int index;
 	@Getter
 	private final int weight;
+	@Getter
+	private final String legacyName;
 
 	public static CloudItemRarity getRandom() {
 		return RANDOM_COLLECTION.getRandom();
