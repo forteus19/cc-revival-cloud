@@ -39,7 +39,7 @@ public final class PacketFriendRequest extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		targetData.friendRequests.add(connectionHandler.getConnectionUsername());
+		targetData.friendRequests.add(DataMaps.getPlayerUuid(connectionHandler.getConnectionUsername()));
 
 		Cloud.getInstance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
 			"Received friend request from " + connectionHandler.getConnectionUsername() + "!", CloudConstants.CC_NAME, 0

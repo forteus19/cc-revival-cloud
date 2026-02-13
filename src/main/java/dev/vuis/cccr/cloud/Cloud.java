@@ -20,6 +20,9 @@ import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.UUID;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import lombok.Getter;
 
 public final class Cloud implements ICloud {
@@ -40,6 +43,7 @@ public final class Cloud implements ICloud {
 	private final G_CloudManager cloudManager;
 	@Getter
 	private final CloudAuth auth = new CloudAuth(this);
+	private final ScheduledExecutorService minuteExecutor = Executors.newSingleThreadScheduledExecutor();
 
 	public Cloud(int port, String mmPassword, String mcHost) {
 		this.port = port;
@@ -74,13 +78,26 @@ public final class Cloud implements ICloud {
 		return log(String.format(format, args));
 	}
 
+	public void onStartup() {
+		minuteExecutor.scheduleAtFixedRate(this::onMinute, 1, 1, TimeUnit.MINUTES);
+	}
+
+	public void onShutdown() {
+		log("Shutting down...");
+		minuteExecutor.shutdown();
+	}
+
 	public void onUpdate() {
 		cloudManager.onUpdate();
 		SearchHandler.onUpdate();
 	}
 
-	public void onShutdown() {
-		log("Shutting down...");
+	private void onMinute() {
+		for (PlayerData data : DataMaps.getCachedPlayerData()) {
+			if (data.online.get()) {
+				data.minutesPlayed.incrementAndGet();
+			}
+		}
 	}
 
 	@Override
@@ -148,8 +165,13 @@ public final class Cloud implements ICloud {
 		PacketRequestedInventory.sendForPlayer(connectionHandler, username);
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
-		for (String user : playerData.friends) {
-			sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " is online!", CloudConstants.CC_NAME, 0));
+		for (UUID friend : playerData.friends) {
+			PlayerData friendData = DataMaps.getPlayerData(friend);
+			if (friendData != null && friendData.online.get()) {
+				sendPacketToPlayer(friendData.username.get(), new PacketNotificationFromCloud(
+					String.format("%s is online!", username), CloudConstants.CC_NAME, 0
+				));
+			}
 		}
 	}
 
@@ -174,9 +196,9 @@ public final class Cloud implements ICloud {
 				if (playerData != null) {
 					playerData.online.set(false);
 
-					for (String user : playerData.friends) {
-						sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " has logged out.", CloudConstants.CC_NAME, 0));
-					}
+//					for (String user : playerData.friends) {
+//						sendPacketToPlayer(user, new PacketNotificationFromCloud(username + " is offline!", CloudConstants.CC_NAME, 0));
+//					}
 				}
 			}
 			case CloudConstants.CHANNEL_SERVER -> {

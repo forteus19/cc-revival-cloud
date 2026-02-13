@@ -43,7 +43,7 @@ public final class PacketRequestedInventory extends G_TcpPacketCustomPayload {
 		List<FDSTagCompound> tags = inventory.writeStacksTagList();
 		for (int i = 0; i < tags.size(); i++) {
 			PacketRequestedInventory packet = new PacketRequestedInventory();
-			packet.username = connectionHandler.getConnectionUsername();
+			packet.username = username;
 			packet.section = i;
 			packet.hasInv = true;
 			packet.tagSplit = tags.get(i);

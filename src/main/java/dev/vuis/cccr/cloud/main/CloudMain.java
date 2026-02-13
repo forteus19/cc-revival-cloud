@@ -29,6 +29,8 @@ public final class CloudMain {
 			ServerGui.func_120016_a(cloud.getCloudManager());
 		}
 
+		cloud.onStartup();
+
 		new Thread(() -> {
 			while (!cloud.getCloudManager().isCloudStopped) {
 				cloud.handleCommand(IO.readln());

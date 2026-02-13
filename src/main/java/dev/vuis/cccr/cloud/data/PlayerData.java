@@ -3,12 +3,14 @@ package dev.vuis.cccr.cloud.data;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.util.Util;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 public final class PlayerData {
 	public final UUID uuid;
@@ -21,6 +23,7 @@ public final class PlayerData {
 	public final AtomicInteger games = new AtomicInteger(0);
 	public final AtomicInteger firstBloods = new AtomicInteger(0);
 	public final AtomicInteger matchKarma = new AtomicInteger(0);
+	public final AtomicInteger minutesPlayed = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicInteger emeralds = new AtomicInteger(0);
@@ -28,8 +31,8 @@ public final class PlayerData {
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 
 	// friends
-	public final Set<String> friends = ConcurrentHashMap.newKeySet();
-	public final Set<String> friendRequests = ConcurrentHashMap.newKeySet();
+	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
+	public final Set<UUID> friendRequests = ConcurrentHashMap.newKeySet();
 
 	PlayerData(UUID uuid, String username) {
 		this.uuid = uuid;
@@ -43,6 +46,7 @@ public final class PlayerData {
 		tag.setInteger("games", games.get());
 		tag.setInteger("statfb", firstBloods.get());
 		tag.setInteger("matchKarma", matchKarma.get());
+		tag.setInteger("time", minutesPlayed.get() * 60);
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());
 		tag.setInteger("emeralds", emeralds.get());
@@ -64,7 +68,11 @@ public final class PlayerData {
 	}
 
 	public void writeFriendsTag(FDSTagCompound tag) {
-		tag.setStringArrayList("friends", new ArrayList<>(friends));
-		tag.setStringArrayList("pending", new ArrayList<>(friendRequests));
+		tag.setStringArrayList("friends", collectUsernames(friends));
+		tag.setStringArrayList("pending", collectUsernames(friendRequests));
+	}
+
+	private static ArrayList<String> collectUsernames(Set<UUID> uuids) {
+		return uuids.stream().map(DataMaps::getPlayerUsername).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

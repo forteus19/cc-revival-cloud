@@ -41,7 +41,7 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		if (!accepterData.friendRequests.contains(user)) {
+		if (!accepterData.friendRequests.contains(requesterData.uuid)) {
 			return;
 		}
 
@@ -52,9 +52,9 @@ public final class PacketFriendRequestAccept extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		accepterData.friendRequests.remove(user);
-		accepterData.friends.add(user);
-		requesterData.friends.add(connectionHandler.getConnectionUsername());
+		accepterData.friendRequests.remove(requesterData.uuid);
+		accepterData.friends.add(requesterData.uuid);
+		requesterData.friends.add(accepterData.uuid);
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(
 			"Accepted friend request from " + user + "!", CloudConstants.CC_NAME, 0
