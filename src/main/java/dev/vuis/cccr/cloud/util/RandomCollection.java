@@ -13,6 +13,7 @@ public class RandomCollection<T> {
 	@Getter
 	private final List<Entry<T>> entries = new ArrayList<>();
 	private final List<Entry<T>> bulkEntries = new ArrayList<>();
+	@Getter
 	private int totalWeight = 0;
 	private int totalWeightBulk = 0;
 
@@ -80,5 +81,8 @@ public class RandomCollection<T> {
 		int minThreshold,
 		int maxThreshold
 	) {
+		public int getWeight() {
+			return maxThreshold - minThreshold;
+		}
 	}
 }

@@ -70,7 +70,7 @@ public final class CloudItemInjectMain {
 						sb.append(".addContent(");
 						sb.append(fields.get(entry.objectSupplier().get()).getName());
 						sb.append(", ");
-						sb.append(entry.maxThreshold() - entry.minThreshold());
+						sb.append(entry.getWeight());
 						sb.append(")");
 					}
 					sb.append(".setSuffix(\"Case\").setValue(CloudItemRarity.TIER1).disableNameable().disableShowcase().disableContracts();");
