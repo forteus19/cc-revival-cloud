@@ -6,7 +6,7 @@ import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.RequestType;
 import dev.vuis.cccr.cloud.data.CloudStats;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.MarketStore;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
@@ -71,7 +71,7 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 				if (requestData.length != 1) {
 					break;
 				}
-				PlayerData playerData = DataMaps.getPlayerData(requestData[0]);
+				PlayerData playerData = DataHandler.instance().getPlayerData(requestData[0]);
 				if (playerData == null) {
 					break;
 				}

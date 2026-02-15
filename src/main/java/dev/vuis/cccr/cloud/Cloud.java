@@ -5,7 +5,7 @@ import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
@@ -23,6 +23,7 @@ import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import javax.sql.DataSource;
 import lombok.Getter;
 
 public final class Cloud implements ICloud {
@@ -42,17 +43,21 @@ public final class Cloud implements ICloud {
 	@Getter
 	private final G_CloudManager cloudManager;
 	@Getter
+	private final DataHandler dataHandler;
+	@Getter
 	private final CloudAuth auth = new CloudAuth(this);
+
 	private final ScheduledExecutorService minuteExecutor = Executors.newSingleThreadScheduledExecutor();
 
-	public Cloud(int port, String mmPassword, String mcHost) {
+	public Cloud(int port, String mmPassword, String mcHost, DataSource dataSource) {
 		this.port = port;
 		this.mmPassword = mmPassword;
 		this.mcHost = mcHost;
 		this.cloudManager = new G_CloudManager(this);
+		this.dataHandler = new DataHandler(dataSource);
 	}
 
-	public static Cloud getInstance() {
+	public static Cloud instance() {
 		if (instance == null) {
 			throw new IllegalStateException("Not initialized yet");
 		}
@@ -60,7 +65,7 @@ public final class Cloud implements ICloud {
 	}
 
 	public static Cloud instanceLog(String message) {
-		Cloud instance = getInstance();
+		Cloud instance = instance();
 		instance.cloudManager.log(message);
 		return instance;
 	}
@@ -85,6 +90,7 @@ public final class Cloud implements ICloud {
 	public void onShutdown() {
 		log("Shutting down...");
 		minuteExecutor.shutdown();
+		dataHandler.saveCachedPlayerData();
 	}
 
 	public void onUpdate() {
@@ -93,9 +99,10 @@ public final class Cloud implements ICloud {
 	}
 
 	private void onMinute() {
-		for (PlayerData data : DataMaps.getCachedPlayerData()) {
+		for (PlayerData data : dataHandler.getCachedPlayerData()) {
 			if (data.online.get()) {
 				data.minutesPlayed.incrementAndGet();
+				data.dirty.mark();
 			}
 		}
 	}
@@ -158,7 +165,7 @@ public final class Cloud implements ICloud {
 
 		log("Client \"%s\" authenticated", username);
 
-		PlayerData playerData = DataMaps.populatePlayerData(username, resultUuid);
+		PlayerData playerData = dataHandler.populatePlayerData(username, resultUuid);
 		playerData.online.set(true);
 
 		PacketRequestedPlayerData.sendForPlayer(connectionHandler, username);
@@ -166,7 +173,7 @@ public final class Cloud implements ICloud {
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud("Cloud connection established!", CloudConstants.CC_NAME, 0));
 		for (UUID friend : playerData.friends) {
-			PlayerData friendData = DataMaps.getPlayerData(friend);
+			PlayerData friendData = dataHandler.getPlayerData(friend);
 			if (friendData != null && friendData.online.get()) {
 				sendPacketToPlayer(friendData.username.get(), new PacketNotificationFromCloud(
 					String.format("%s is online!", username), CloudConstants.CC_NAME, 0
@@ -192,7 +199,7 @@ public final class Cloud implements ICloud {
 			case CloudConstants.CHANNEL_PLAYER -> {
 				auth.onClientDisconnected(username);
 
-				PlayerData playerData = DataMaps.getPlayerData(username);
+				PlayerData playerData = dataHandler.getPlayerData(username);
 				if (playerData != null) {
 					playerData.online.set(false);
 
@@ -220,12 +227,13 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				int amount = Integer.parseInt(parts[2]);
 
-				PlayerData playerData = DataMaps.getPlayerData(username);
+				PlayerData playerData = dataHandler.getPlayerData(username);
 				if (playerData == null) {
 					log("randomdrop - Player %s does not have data!", username);
 					break;
 				}
 
+				playerData.dirty.mark();
 				playerData.emeralds.addAndGet(amount);
 			}
 			case "give" -> {
@@ -236,7 +244,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				CloudItem item = CloudItems.getById(Integer.parseInt(parts[2]));
 
-				PlayerInventory inventory = DataMaps.getPlayerInventory(username);
+				PlayerInventory inventory = dataHandler.getPlayerInventory(username);
 				if (inventory == null) {
 					log("randomdrop - Player %s does not have an inventory!", username);
 					break;
@@ -261,7 +269,7 @@ public final class Cloud implements ICloud {
 				String username = parts[1];
 				int count = Integer.parseInt(parts[2]);
 
-				PlayerInventory inventory = DataMaps.getPlayerInventory(username);
+				PlayerInventory inventory = dataHandler.getPlayerInventory(username);
 				if (inventory == null) {
 					log("randomdrop - Player %s does not have an inventory!", username);
 					break;

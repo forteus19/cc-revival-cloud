@@ -34,7 +34,7 @@ public final class PacketServerMatchMaking extends G_TcpPacketCustomPayload {
 		if (!isMatchMaking) {
 			return;
 		}
-		if (!Cloud.getInstance().checkMatchMakingPassword(matchMakingPassword)) {
+		if (!Cloud.instance().checkMatchMakingPassword(matchMakingPassword)) {
 			((G_CloudTcpConnectionHandler) connectionHandler).kickClientConnection("Invalid matchmaking password!");
 			return;
 		}

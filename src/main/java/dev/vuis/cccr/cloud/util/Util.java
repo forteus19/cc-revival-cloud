@@ -15,10 +15,19 @@ public final class Util {
 
 	public static String getEnv(String env, String def) {
 		String value = System.getenv(env);
-		if (value == null) {
-			return def;
-		} else {
+		if (value != null) {
 			return value;
+		} else {
+			return def;
+		}
+	}
+
+	public static String getEnvOrThrow(String env) {
+		String value = System.getenv(env);
+		if (value != null) {
+			return value;
+		} else {
+			throw new IllegalStateException("Missing env: " + env);
 		}
 	}
 

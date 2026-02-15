@@ -13,10 +13,13 @@ import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 
 public final class PlayerData {
-	public final UUID uuid;
-	public final AtomicReference<String> username;
+	public final DirtyHandler dirty = new DirtyHandler();
+	public final DirtyHandler friendsDirty = new DirtyHandler();
+	public final DirtyHandler friendRequestsDirty = new DirtyHandler();
 
 	// player data
+	public final UUID uuid;
+	public final AtomicReference<String> username;
 	public final AtomicInteger trophies = new AtomicInteger(0);
 	public final AtomicInteger kills = new AtomicInteger(0);
 	public final AtomicInteger deaths = new AtomicInteger(0);
@@ -27,7 +30,7 @@ public final class PlayerData {
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicInteger emeralds = new AtomicInteger(0);
-	public final AtomicReference<String> mood = new AtomicReference<>("");
+	public final AtomicReference<String> mood = new AtomicReference<>();
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 
 	// friends
@@ -50,7 +53,8 @@ public final class PlayerData {
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());
 		tag.setInteger("emeralds", emeralds.get());
-		tag.setString("mood", mood.get());
+		String moodGet = mood.get();
+		tag.setString("mood", moodGet != null ? moodGet : "");
 		tag.setString("status", status.get());
 		tag.setString("playerUUID", Util.getUndashedUuid(uuid));
 
@@ -73,6 +77,6 @@ public final class PlayerData {
 	}
 
 	private static ArrayList<String> collectUsernames(Set<UUID> uuids) {
-		return uuids.stream().map(DataMaps::getPlayerUsername).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
+		return uuids.stream().map(DataHandler.instance()::getPlayerUsername).filter(Objects::nonNull).collect(Collectors.toCollection(ArrayList::new));
 	}
 }

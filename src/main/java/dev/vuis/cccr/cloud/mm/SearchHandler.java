@@ -17,8 +17,8 @@ public final class SearchHandler {
 	// TODO configurable
 	private static final Map<String, List<String>> VALID_MAPS = Map.ofEntries(
 		Map.entry("cas", List.of("Dust", "Haunts", "Mirage", "Toxic")),
-		Map.entry("ffa", List.of("Dust", "Laputa")),
-		Map.entry("tdm", List.of("Dome", "Dust", "Laputa", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
+		Map.entry("ffa", List.of("Dust", "Haunts", "Laputa", "Mirage", "Range", "Terminal")),
+		Map.entry("tdm", List.of("Dome", "Dust", "Haunts", "Laputa", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
 	);
 
 	private static final Map<String, Data> ONGOING = new ConcurrentHashMap<>();
@@ -132,7 +132,7 @@ public final class SearchHandler {
 	}
 
 	private static String getServerAddress(String server) {
-		return String.format("%s:%d", Cloud.getInstance().mcHost, ServerStatus.PORT.get(server));
+		return String.format("%s:%d", Cloud.instance().mcHost, ServerStatus.PORT.get(server));
 	}
 
 	private static String getRandomTeam(String gameType) {

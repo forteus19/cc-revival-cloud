@@ -14,6 +14,8 @@ dependencies {
     implementation(files("libs/cclib.jar"))
     implementation("com.google.guava:guava:33.5.0-jre")
     implementation("com.google.code.gson:gson:2.13.2")
+    runtimeOnly("org.postgresql:postgresql:42.7.10")
+    implementation("com.zaxxer:HikariCP:7.0.2")
 
     compileOnly("org.projectlombok:lombok:1.18.42")
     annotationProcessor("org.projectlombok:lombok:1.18.42")

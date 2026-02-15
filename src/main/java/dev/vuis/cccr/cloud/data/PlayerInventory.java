@@ -54,7 +54,7 @@ public final class PlayerInventory {
 			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();
 			itemStack.writeTag(packet.tag);
 
-			Cloud.getInstance().sendPacketToPlayer(username.get(), packet);
+			Cloud.instance().sendPacketToPlayer(username.get(), packet);
 		}
 	}
 
@@ -68,7 +68,7 @@ public final class PlayerInventory {
 			PacketInventoryItemRemoved packet = new PacketInventoryItemRemoved();
 			previous.writeTag(packet.tag);
 
-			Cloud.getInstance().sendPacketToPlayer(username.get(), packet);
+			Cloud.instance().sendPacketToPlayer(username.get(), packet);
 		}
 	}
 

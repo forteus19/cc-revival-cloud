@@ -4,7 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.MarketStore;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
@@ -36,11 +36,11 @@ public final class PacketMarketStoreOrder extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData data = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
+		PlayerData data = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
 		if (data == null) {
 			return;
 		}
-		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername());
+		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
 		}
@@ -74,6 +74,7 @@ public final class PacketMarketStoreOrder extends G_TcpPacketCustomPayload {
 		}
 
 		inventory.addItemStacks(resultStacks.stream());
+		data.dirty.mark();
 		data.emeralds.addAndGet(-emeralds);
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(

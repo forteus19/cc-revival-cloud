@@ -10,7 +10,7 @@ public final class PacketUtil {
 	}
 
 	public static boolean checkAuthentication(G_ITcpConnectionHandler connectionHandler) {
-		return !Cloud.getInstance().getAuth().isAuthenticated(connectionHandler.getConnectionUsername());
+		return !Cloud.instance().getAuth().isAuthenticated(connectionHandler.getConnectionUsername());
 	}
 
 	public static boolean kickIfServer(G_ITcpConnectionHandler connectionHandler) {

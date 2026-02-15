@@ -26,7 +26,7 @@ public final class CloudStats {
 	}
 
 	public static void writeTag(FDSTagCompound tag) {
-		tag.setInteger("usersonline", Cloud.getInstance().getCloudManager().getNetwork().getNetChannel(CloudConstants.CHANNEL_PLAYER).size());
+		tag.setInteger("usersonline", Cloud.instance().getCloudManager().getNetwork().getNetChannel(CloudConstants.CHANNEL_PLAYER).size());
 		tag.setBoolean("compRequiresRank", compRequiresRank);
 		tag.setBoolean("compactive", compActive);
 

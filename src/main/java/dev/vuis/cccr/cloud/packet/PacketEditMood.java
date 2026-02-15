@@ -2,7 +2,7 @@ package dev.vuis.cccr.cloud.packet;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
@@ -27,10 +27,12 @@ public final class PacketEditMood extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData playerData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
+		PlayerData playerData = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
 		if (playerData == null) {
 			return;
 		}
-		playerData.mood.set(mood);
+
+		playerData.dirty.mark();
+		playerData.mood.set(mood.isEmpty() ? null : mood);
 	}
 }

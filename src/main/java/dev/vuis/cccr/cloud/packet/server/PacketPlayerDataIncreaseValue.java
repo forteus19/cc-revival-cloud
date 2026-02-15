@@ -4,7 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.data.CloudStats;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.Exp;
@@ -38,15 +38,16 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 			return;
 		}
 
-		PlayerData playerData = DataMaps.getPlayerData(username);
+		PlayerData playerData = DataHandler.instance().getPlayerData(username);
 		if (playerData == null) {
 			return;
 		}
 
 		Cloud.instanceLog("INCREASE VALUE %s %s %d", username, value, amount);
 
-		int expGain = 0;
+		playerData.dirty.mark();
 
+		int expGain = 0;
 		switch (value) {
 			case "deaths" -> {
 				playerData.deaths.addAndGet(amount);

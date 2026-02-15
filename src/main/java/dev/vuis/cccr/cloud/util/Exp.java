@@ -23,13 +23,14 @@ public final class Exp {
 		String username = playerData.username.get();
 
 		PlayerRank prevRank = PlayerRank.getRankFromExp(playerData.exp.get());
+		playerData.dirty.mark();
 		PlayerRank newRank = PlayerRank.getRankFromExp(playerData.exp.addAndGet(expGain));
 
 		if (prevRank != newRank) {
 			serverConnection.sendPacket(new PacketServerNotification(
 				String.format("%s ranked up to %s", username, newRank.getDisplayName())
 			));
-			Cloud.getInstance().sendPacketToPlayer(username, new PacketNotificationFromCloud(
+			Cloud.instance().sendPacketToPlayer(username, new PacketNotificationFromCloud(
 				String.format("You have ranked up to %s!", newRank.getDisplayName()), CloudConstants.CC_NAME, 0
 			));
 		}

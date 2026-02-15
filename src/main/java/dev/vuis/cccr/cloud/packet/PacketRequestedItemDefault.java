@@ -3,7 +3,7 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.fds.tag.FDSTagCompound;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import java.io.DataInputStream;
@@ -36,7 +36,7 @@ public final class PacketRequestedItemDefault extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerInventory inventory = DataMaps.getPlayerInventory(username);
+		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(username);
 		if (inventory == null || (!sendIfEmpty && !inventory.hasDefaults(category))) {
 			return;
 		}

@@ -3,7 +3,7 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
@@ -35,7 +35,7 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerInventory inventory = DataMaps.getPlayerInventory(connectionHandler.getConnectionUsername());
+		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
 		}

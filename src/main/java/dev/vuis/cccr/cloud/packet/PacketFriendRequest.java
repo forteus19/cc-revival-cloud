@@ -4,7 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
@@ -34,14 +34,14 @@ public final class PacketFriendRequest extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData targetData = DataMaps.getPlayerData(user);
+		PlayerData targetData = DataHandler.instance().getPlayerData(user);
 		if (targetData == null) {
 			return;
 		}
 
-		targetData.friendRequests.add(DataMaps.getPlayerUuid(connectionHandler.getConnectionUsername()));
+		targetData.friendRequests.add(DataHandler.instance().getPlayerUuid(connectionHandler.getConnectionUsername()));
 
-		Cloud.getInstance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
+		Cloud.instance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
 			"Received friend request from " + connectionHandler.getConnectionUsername() + "!", CloudConstants.CC_NAME, 0
 		));
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(

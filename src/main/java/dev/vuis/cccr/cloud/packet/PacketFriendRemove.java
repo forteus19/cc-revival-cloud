@@ -3,7 +3,7 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.CloudConstants;
-import dev.vuis.cccr.cloud.data.DataMaps;
+import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
@@ -29,17 +29,17 @@ public final class PacketFriendRemove extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		PlayerData selfData = DataMaps.getPlayerData(connectionHandler.getConnectionUsername());
+		PlayerData selfData = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
 		if (selfData == null) {
 			return;
 		}
-		PlayerData targetData = DataMaps.getPlayerData(user);
+		PlayerData targetData = DataHandler.instance().getPlayerData(user);
 		if (targetData == null) {
 			return;
 		}
 
-		selfData.friends.remove(user);
-		targetData.friends.remove(user);
+		selfData.friends.remove(targetData.uuid);
+		targetData.friends.remove(selfData.uuid);
 
 		connectionHandler.sendPacket(
 			new PacketNotificationFromCloud("Removed friend " + user + "!", CloudConstants.CC_NAME, 0)
