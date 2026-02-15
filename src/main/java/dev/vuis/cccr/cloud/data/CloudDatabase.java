@@ -42,6 +42,8 @@ public final class CloudDatabase {
 
 				ps.executeUpdate();
 			}
+
+			data.dirty.clear();
 		}
 
 		if (ignoreDirty || data.friendsDirty.isDirty()) {
@@ -66,6 +68,8 @@ public final class CloudDatabase {
 					ps.executeUpdate();
 				}
 			}
+
+			data.friendsDirty.clear();
 		}
 
 		if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
@@ -90,6 +94,8 @@ public final class CloudDatabase {
 					ps.executeUpdate();
 				}
 			}
+
+			data.friendRequestsDirty.clear();
 		}
 
 		connection.commit();
