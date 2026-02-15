@@ -8,27 +8,29 @@ import java.util.List;
 public final class MarketStore {
 	public static final List<Category> CATEGORIES = List.of(
 		new Category("Cases 1", "", List.of(
-			new Item(CloudItems.CASE_ALPHA1, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_ALPHA, 25, "", 10),
-			new Item(CloudItems.CASE_ALPHA2, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_ALPHA2, 25, "", 10),
-			new Item(CloudItems.CASE_ALPHA3, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_ALPHA3, 25, "", 10)
+			new Item(CloudItems.CASE_ALPHA1, 100, 15),
+			new Item(CloudItems.CASE_ALPHA2, 100, 15),
+			new Item(CloudItems.CASE_ALPHA3, 100, 15),
+			new Item(CloudItems.CASE_HAT, 100, 15),
+			new Item(CloudItems.CASE_HALLOWEEN, 100, 15),
+			new Item(CloudItems.CASE_EXO, 100, 15)
 		)),
 		new Category("Cases 2", "", List.of(
-			new Item(CloudItems.CASE_PREALPHA, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_PREALPHA, 25, "", 10),
-			new Item(CloudItems.CASE_HALLOWEEN, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_HALLOWEEN, 25, "", 10),
-			new Item(CloudItems.CASE_EXO, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_EXO, 25, "", 10)
+			new Item(CloudItems.CASE_PREALPHA, 100, 15)
 		)),
-		new Category("Cases 3", "", List.of(
-			new Item(CloudItems.CASE_HAT, 100, "", 10),
-			new Item(CloudItems.CASE_KEY_HAT, 25, "", 10)
+		new Category("Keys 1", "Item Case/Capsule Keys.", List.of(
+			new Item(CloudItems.CASE_KEY_ALPHA, 25, 15),
+			new Item(CloudItems.CASE_KEY_ALPHA2, 25, 15),
+			new Item(CloudItems.CASE_KEY_ALPHA3, 25, 15),
+			new Item(CloudItems.CASE_KEY_HAT, 25, 15),
+			new Item(CloudItems.CASE_KEY_HALLOWEEN, 25, 15),
+			new Item(CloudItems.CASE_KEY_EXO, 25, 15)
+		)),
+		new Category("Keys 2", "Item Case/Capsule Keys.", List.of(
+			new Item(CloudItems.CASE_KEY_PREALPHA, 25, 15)
 		)),
 		new Category("Misc", "", List.of(
-			new Item(CloudItems.NAME_TAG, 50, "", 10)
+			new Item(CloudItems.NAME_TAG, 50, 10)
 		))
 	);
 
@@ -73,6 +75,10 @@ public final class MarketStore {
 		String description,
 		int maxQuantity
 	) {
+		public Item(CloudItem item, int price, int maxQuantity) {
+			this(item, price, "", maxQuantity);
+		}
+
 		public void writeTag(FDSTagCompound tag, int index) {
 			tag.setInteger("id", index);
 			tag.setInteger("cloudid", item.getId());

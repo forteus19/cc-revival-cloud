@@ -73,12 +73,14 @@ public final class PacketMarketStoreOrder extends G_TcpPacketCustomPayload {
 			}
 		}
 
-		inventory.addItemStacks(resultStacks.stream());
+		for (CloudItemStack stack : resultStacks) {
+			inventory.addItemStack(stack, true);
+		}
 		data.dirty.mark();
 		data.emeralds.addAndGet(-emeralds);
 
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(
-			String.format("Bought %d items for %d emeralds!", resultStacks.size(), emeralds), CloudConstants.CC_NAME, 0
+			"Successfully Processed your Shopping Cart", CloudConstants.CC_NAME, 0
 		));
 		PacketRequestedInventory.sendForPlayer(connectionHandler, connectionHandler.getConnectionUsername());
 	}

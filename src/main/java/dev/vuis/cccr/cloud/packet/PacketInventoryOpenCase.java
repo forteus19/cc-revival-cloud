@@ -47,7 +47,9 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 
 		Optional<CloudItemStack> keyStack = inventory.getItemStacks(caseItem.getKeyItem()).findAny();
 		if (keyStack.isEmpty()) {
-			connectionHandler.sendPacket(new PacketNotificationFromCloud("No case key found!", CloudConstants.CC_NAME, 0));
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				String.format("You need a '%s' key to open this!", caseItem.getKeyItem().getDisplayName()), CloudConstants.CC_NAME, 0
+			));
 			return;
 		}
 
