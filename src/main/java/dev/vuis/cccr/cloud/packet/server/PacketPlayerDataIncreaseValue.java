@@ -3,6 +3,8 @@ package dev.vuis.cccr.cloud.packet.server;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.achievement.CloudAchievement;
+import dev.vuis.cccr.cloud.achievement.CloudAchievements;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
@@ -34,7 +36,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 		if (PacketUtil.kickIfServer(connectionHandler)) {
 			return;
 		}
-		if (!ServerStatus.GAME.containsKey(connectionHandler.getConnectionUsername())) {
+		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {
 			return;
 		}
 
@@ -49,8 +51,18 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 
 		int expGain = 0;
 		switch (value) {
+			case "achievement" -> {
+				CloudAchievement achievement = CloudAchievements.getById(amount);
+				if (achievement != null) {
+					achievement.handleUnlock(playerData, connectionHandler);
+				}
+				return;
+			}
 			case "deaths" -> {
-				playerData.deaths.addAndGet(amount);
+				CloudAchievement deathsAch = CloudAchievements.getDeathsAchievement(playerData.deaths.addAndGet(amount));
+				if (deathsAch != null) {
+					deathsAch.handleUnlock(playerData, connectionHandler);
+				}
 				expGain = Exp.DEATH;
 			}
 			case "emeralds" -> {
@@ -65,7 +77,10 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 				expGain = Exp.MATCH_PARTICIPATE;
 			}
 			case "kills" -> {
-				playerData.kills.addAndGet(amount);
+				CloudAchievement killsAch = CloudAchievements.getKillsAchievement(playerData.kills.addAndGet(amount));
+				if (killsAch != null) {
+					killsAch.handleUnlock(playerData, connectionHandler);
+				}
 				CloudStats.incrementPlayerScore(playerData.username.get());
 				expGain = Exp.KILL;
 			}

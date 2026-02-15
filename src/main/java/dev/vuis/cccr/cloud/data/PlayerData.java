@@ -29,9 +29,10 @@ public final class PlayerData {
 	public final AtomicInteger minutesPlayed = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicBoolean online = new AtomicBoolean(false);
-	public final AtomicInteger emeralds = new AtomicInteger(0);
+	public final AtomicInteger emeralds = new AtomicInteger(999999999); // FIXME on alpha release
 	public final AtomicReference<String> mood = new AtomicReference<>();
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
+	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
@@ -56,7 +57,10 @@ public final class PlayerData {
 		String moodGet = mood.get();
 		tag.setString("mood", moodGet != null ? moodGet : "");
 		tag.setString("status", status.get());
-		tag.setString("playerUUID", Util.getUndashedUuid(uuid));
+		tag.setString("playerUUID", uuid.toString());
+
+		tag.setInteger("achievementCount", achievements.size());
+		Util.enumerate(achievements, (achievement, i) -> tag.setInteger("achievement_" + i, achievement));
 
 		tag.setString("discordUserId", "");
 		tag.setBoolean("enableNotification_FriendRequest", true);

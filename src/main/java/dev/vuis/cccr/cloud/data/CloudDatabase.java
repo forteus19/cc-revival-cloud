@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Arrays;
 import java.util.UUID;
 import javax.sql.DataSource;
 import lombok.Cleanup;
@@ -20,12 +21,12 @@ public final class CloudDatabase {
 
 		if (ignoreDirty || data.dirty.isDirty()) {
 			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood) " +
-					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements) " +
+					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
 					"on conflict (uuid) do update set " +
 					"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
 					"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
-					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood"
+					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements"
 			)) {
 				ps.setObject(1, data.uuid);
 				ps.setString(2, data.username.get());
@@ -39,6 +40,7 @@ public final class CloudDatabase {
 				ps.setInt(10, data.exp.get());
 				ps.setInt(11, data.emeralds.get());
 				ps.setString(12, data.mood.get());
+				ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
 
 				ps.executeUpdate();
 			}
@@ -109,7 +111,7 @@ public final class CloudDatabase {
 		PlayerData data;
 
 		try (PreparedStatement ps = connection.prepareStatement(
-			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood from players where uuid = ?"
+			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements from players where uuid = ?"
 		)) {
 			ps.setObject(1, uuid);
 
@@ -130,6 +132,7 @@ public final class CloudDatabase {
 			data.exp.set(rs.getInt("exp"));
 			data.emeralds.set(rs.getInt("emeralds"));
 			data.mood.set(rs.getString("mood"));
+			data.achievements.addAll(Arrays.asList((Integer[]) rs.getArray("achievements").getArray()));
 		}
 
 		try (PreparedStatement ps = connection.prepareStatement(

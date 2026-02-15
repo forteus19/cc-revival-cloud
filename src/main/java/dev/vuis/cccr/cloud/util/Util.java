@@ -5,12 +5,20 @@ import java.net.http.HttpClient;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.function.BiConsumer;
 
 public final class Util {
 	public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 	public static final UUID NULL_UUID = new UUID(0, 0);
 
 	private Util() {
+	}
+
+	public static <T> void enumerate(Collection<T> collection, BiConsumer<T, Integer> elementConsumer) {
+		int i = 0;
+		for (T t : collection) {
+			elementConsumer.accept(t, i++);
+		}
 	}
 
 	public static String getEnv(String env, String def) {

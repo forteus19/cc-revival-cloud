@@ -31,7 +31,7 @@ public final class PacketPlayerDataRandomDrop extends G_TcpPacketCustomPayload {
 		if (PacketUtil.kickIfServer(connectionHandler)) {
 			return;
 		}
-		if (!ServerStatus.GAME.containsKey(connectionHandler.getConnectionUsername())) {
+		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {
 			return;
 		}
 

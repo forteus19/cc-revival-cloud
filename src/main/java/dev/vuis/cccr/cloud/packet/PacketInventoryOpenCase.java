@@ -3,9 +3,12 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.achievement.CloudAchievements;
 import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemRarity;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
@@ -35,6 +38,10 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 			return;
 		}
 
+		PlayerData data = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
+		if (data == null) {
+			return;
+		}
 		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(connectionHandler.getConnectionUsername());
 		if (inventory == null) {
 			return;
@@ -57,6 +64,10 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 		inventory.removeItemStack(keyStack.get().uuid, true);
 
 		CloudItem result = caseItem.contents.getRandom();
+		if (result.getRarity() == CloudItemRarity.OBSIDIAN || result == CloudItems.KNIFE_TAC_DISPLAY) {
+			CloudAchievements.ACH_USER_INV_OPEN_ULTRA_RARE.handleUnlock(data, null);
+		}
+
 		List<CloudItem> rouletteItems = caseItem.contents.getRandomBulk(30);
 		rouletteItems.set(26, result);
 
@@ -66,5 +77,7 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 
 		connectionHandler.sendPacket(new PacketInventoryCaseResults(rouletteItems));
 		inventory.addItemStack(new CloudItemStack(result), true);
+
+		CloudAchievements.ACH_USER_INV_OPEN_CASE.handleUnlock(data, null);
 	}
 }
