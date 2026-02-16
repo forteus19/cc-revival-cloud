@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud;
 import com.f3rullo14.cloud.G_TcpPacket;
 import dev.vuis.cccr.cloud.packet.PacketClientRequest;
 import dev.vuis.cccr.cloud.packet.PacketClientUpdateStatus;
+import dev.vuis.cccr.cloud.packet.PacketConsoleMessage;
 import dev.vuis.cccr.cloud.packet.PacketEditMood;
 import dev.vuis.cccr.cloud.packet.PacketFriendPoke;
 import dev.vuis.cccr.cloud.packet.PacketFriendRemove;
@@ -72,5 +73,6 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(66, PacketPlayerDataIncreaseValue.class);
 		G_TcpPacket.addPacketMapping(67, PacketPlayerDataRandomDrop.class);
 		G_TcpPacket.addPacketMapping(69, PacketClientUpdateStatus.class);
+		G_TcpPacket.addPacketMapping(75, PacketConsoleMessage.class);
 	}
 }

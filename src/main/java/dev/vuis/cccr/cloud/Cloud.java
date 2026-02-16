@@ -5,7 +5,9 @@ import com.f3rullo14.cloud.server.G_CloudManager;
 import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
@@ -216,45 +218,20 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public void handleCommand(String command) {
+		handleCommand(command, new LogSource());
+	}
+
+	public void handleCommand(String command, CommandSource source) {
 		String[] parts = command.split(" ");
 		boolean success = true;
 
 		switch (parts[0]) {
-			case "emeralds" -> {
-				if (parts.length < 3) {
-					log("emeralds - Missing args: <username> <amount>");
-				}
-				String username = parts[1];
-				int amount = Integer.parseInt(parts[2]);
-
-				PlayerData playerData = dataHandler.getPlayerData(username);
-				if (playerData == null) {
-					log("randomdrop - Player %s does not have data!", username);
-					break;
-				}
-
-				playerData.dirty.mark();
-				playerData.emeralds.addAndGet(amount);
-			}
 			case "give" -> {
-				if (parts.length < 3) {
-					log("give - Missing args: <username> <id>");
-					break;
-				}
-				String username = parts[1];
-				CloudItem item = CloudItems.getById(Integer.parseInt(parts[2]));
 
-				PlayerInventory inventory = dataHandler.getPlayerInventory(username);
-				if (inventory == null) {
-					log("randomdrop - Player %s does not have an inventory!", username);
-					break;
-				}
-
-				inventory.addItemStack(new CloudItemStack(item), true);
 			}
 			case "list" -> {
 				for (String channel : cloudManager.getNetwork().getChannels()) {
-					log("%s: %s", channel,
+					source.send("%s: %s", channel,
 						cloudManager.getNetwork().getNetChannel(channel).stream()
 							.map(G_CloudTcpConnectionHandler::toString2)
 							.toList()
@@ -263,7 +240,7 @@ public final class Cloud implements ICloud {
 			}
 			case "randomdrop" -> {
 				if (parts.length < 3) {
-					log("randomdrop - Missing args: <username> <count>");
+					source.send("randomdrop - Missing args: <username> <count>");
 					break;
 				}
 				String username = parts[1];
@@ -271,7 +248,7 @@ public final class Cloud implements ICloud {
 
 				PlayerInventory inventory = dataHandler.getPlayerInventory(username);
 				if (inventory == null) {
-					log("randomdrop - Player %s does not have an inventory!", username);
+					source.send("randomdrop - Player %s does not have an inventory!", username);
 					break;
 				}
 
@@ -284,7 +261,7 @@ public final class Cloud implements ICloud {
 			}
 			case "tell" -> {
 				if (parts.length < 3) {
-					log("tell - Missing args: <username> <message>");
+					source.send("tell - Missing args: <username> <message>");
 					break;
 				}
 				String username = parts[1];
@@ -293,13 +270,13 @@ public final class Cloud implements ICloud {
 				sendPacketToPlayer(username, new PacketNotificationFromCloud(message, "Cloud", 0));
 			}
 			default -> {
-				log("Unknown command \"%s\"", parts[0]);
+				source.send("Unknown command \"%s\"", parts[0]);
 				success = false;
 			}
 		}
 
 		if (success) {
-			log("Command: %s", command);
+			log("%s ran command: %s", source.getName(), command);
 		}
 	}
 
@@ -320,5 +297,27 @@ public final class Cloud implements ICloud {
 
 	public boolean checkMatchMakingPassword(String password) {
 		return mmPassword == null || mmPassword.equals(password);
+	}
+
+	private class LogSource implements CommandSource {
+		@Override
+		public String getName() {
+			return Cloud.this.getCloudUsername();
+		}
+
+		@Override
+		public boolean hasPermission(Permission permission) {
+			return true;
+		}
+
+		@Override
+		public void send(String message) {
+			Cloud.this.log(message);
+		}
+
+		@Override
+		public void send(String fmt, Object... args) {
+			Cloud.this.log(fmt, args);
+		}
 	}
 }

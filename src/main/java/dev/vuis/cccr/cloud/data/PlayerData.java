@@ -33,6 +33,7 @@ public final class PlayerData {
 	public final AtomicReference<String> mood = new AtomicReference<>();
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
+	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
@@ -41,6 +42,11 @@ public final class PlayerData {
 	PlayerData(UUID uuid, String username) {
 		this.uuid = uuid;
 		this.username = new AtomicReference<>(username);
+	}
+
+	public boolean hasPermission(Permission permission) {
+		Set<Permission> permissions = group.get().permissions();
+		return permissions.contains(permission) || permissions.contains(Permissions.ALL);
 	}
 
 	public void writeDataTag(FDSTagCompound tag) {
