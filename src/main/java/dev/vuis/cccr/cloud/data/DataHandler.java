@@ -23,7 +23,7 @@ public final class DataHandler {
 	private final Map<UUID, String> playerUsernames = new ConcurrentHashMap<>();
 
 	private final LoadingCache<UUID, PlayerData> playerDataCache;
-	private final Map<UUID, PlayerInventory> playerInventory = new ConcurrentHashMap<>();
+	private final LoadingCache<UUID, PlayerInventory> playerInventoryCache;
 
 	public DataHandler(DataSource dataSource) {
 		this.database = new CloudDatabase(dataSource);
@@ -49,6 +49,28 @@ public final class DataHandler {
 						data = new PlayerData(key, username);
 					}
 					return data;
+				}
+			});
+		this.playerInventoryCache = CacheBuilder.newBuilder()
+			.expireAfterAccess(5, TimeUnit.MINUTES)
+			.removalListener(notification -> {
+				try {
+					Object value = notification.getValue();
+					assert value != null;
+					database.savePlayerInventory((PlayerInventory) value);
+				} catch (SQLException e) {
+					throw new RuntimeException(e);
+				}
+			})
+			.build(new CacheLoader<>() {
+				@Override
+				public PlayerInventory load(UUID key) throws Exception {
+					String username = playerUsernames.getOrDefault(key, "Unknown");
+					PlayerInventory inventory = database.loadPlayerInventory(key, username);
+					if (inventory == null) {
+						inventory = initializeInventory(new PlayerInventory(key, username));
+					}
+					return inventory;
 				}
 			});
 	}
@@ -91,23 +113,17 @@ public final class DataHandler {
 
 		data.dirty.mark();
 		data.username.set(username);
-		populatePlayerInventory(username, uuid);
+		try {
+			playerInventoryCache.get(uuid).username.set(username);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 
 		return data;
 	}
 
-	public void saveCachedPlayerData() {
-		for (PlayerData data : playerDataCache.asMap().values()) {
-			try {
-				database.savePlayerData(data, true);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-		}
-	}
-
 	public PlayerInventory getPlayerInventory(UUID uuid) {
-		return playerInventory.get(uuid);
+		return playerInventoryCache.getIfPresent(uuid);
 	}
 
 	public PlayerInventory getPlayerInventory(String username) {
@@ -115,37 +131,26 @@ public final class DataHandler {
 		return uuid != null ? getPlayerInventory(uuid) : null;
 	}
 
-	public PlayerInventory populatePlayerInventory(String username, UUID uuid) {
-		PlayerInventory inventory = playerInventory.computeIfAbsent(uuid, _ -> {
-			Cloud.instanceLog("[DataHandler] Creating new player inventory for %s", username);
-			return initializeInventory(new PlayerInventory(username));
-		});
-		inventory.username.set(username);
+	private static PlayerInventory initializeInventory(PlayerInventory inventory) {
+		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
+		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 		return inventory;
 	}
 
-	private static PlayerInventory initializeInventory(PlayerInventory inventory) {
-		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
-
-		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
-
-		for (int i = 0; i < 10; i++) {
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA1), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA2), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA2), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_ALPHA3), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_ALPHA3), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_HAT), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HAT), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_HALLOWEEN), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_HALLOWEEN), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_EXO), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_EXO), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_PREALPHA), false);
-			inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_PREALPHA), false);
+	public void saveCachedData() {
+		for (PlayerData data : playerDataCache.asMap().values()) {
+			try {
+				database.savePlayerData(data, true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
-
-		return inventory;
+		for (PlayerInventory inventory : playerInventoryCache.asMap().values()) {
+			try {
+				database.savePlayerInventory(inventory);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 }

@@ -1,5 +1,7 @@
 package dev.vuis.cccr.cloud.data;
 
+import dev.vuis.cccr.cloud.item.CloudItemStack;
+import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.util.Util;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -20,96 +22,100 @@ public final class CloudDatabase {
 		Connection connection = dataSource.getConnection();
 		connection.setAutoCommit(false);
 
-		if (ignoreDirty || data.dirty.isDirty()) {
-			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag) " +
-					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-					"on conflict (uuid) do update set " +
-					"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
-					"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
-					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
-					"group_tag = excluded.group_tag"
-			)) {
-				ps.setObject(1, data.uuid);
-				ps.setString(2, data.username.get());
-				ps.setInt(3, data.trophies.get());
-				ps.setInt(4, data.kills.get());
-				ps.setInt(5, data.deaths.get());
-				ps.setInt(6, data.games.get());
-				ps.setInt(7, data.firstBloods.get());
-				ps.setInt(8, data.matchKarma.get());
-				ps.setInt(9, data.minutesPlayed.get());
-				ps.setInt(10, data.exp.get());
-				ps.setInt(11, data.emeralds.get());
-				ps.setString(12, data.mood.get());
-				ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
-				ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::name));
-
-				ps.executeUpdate();
-			}
-
-			data.dirty.clear();
-		}
-
-		if (ignoreDirty || data.friendsDirty.isDirty()) {
-			try (PreparedStatement ps = connection.prepareStatement(
-				"delete from player_friends where player_uuid = ?"
-			)) {
-				ps.setObject(1, data.uuid);
-
-				ps.executeUpdate();
-			}
-
-			if (!data.friends.isEmpty()) {
+		try {
+			if (ignoreDirty || data.dirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
-					"insert into player_friends (player_uuid, friend_uuid) values (?, ?)"
+					"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag) " +
+						"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+						"on conflict (uuid) do update set " +
+						"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
+						"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
+						"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
+						"group_tag = excluded.group_tag"
 				)) {
-					for (UUID friend : data.friends) {
-						ps.setObject(1, data.uuid);
-						ps.setObject(2, friend);
-						ps.addBatch();
-					}
+					ps.setObject(1, data.uuid);
+					ps.setString(2, data.username.get());
+					ps.setInt(3, data.trophies.get());
+					ps.setInt(4, data.kills.get());
+					ps.setInt(5, data.deaths.get());
+					ps.setInt(6, data.games.get());
+					ps.setInt(7, data.firstBloods.get());
+					ps.setInt(8, data.matchKarma.get());
+					ps.setInt(9, data.minutesPlayed.get());
+					ps.setInt(10, data.exp.get());
+					ps.setInt(11, data.emeralds.get());
+					ps.setString(12, data.mood.get());
+					ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
+					ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::name));
 
 					ps.executeUpdate();
 				}
+
+				data.dirty.clear();
 			}
 
-			data.friendsDirty.clear();
-		}
-
-		if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
-			try (PreparedStatement ps = connection.prepareStatement(
-				"delete from player_friend_requests where player_uuid = ?"
-			)) {
-				ps.setObject(1, data.uuid);
-
-				ps.executeUpdate();
-			}
-
-			if (!data.friendRequests.isEmpty()) {
+			if (ignoreDirty || data.friendsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
-					"insert into player_friend_requests (player_uuid, requester_uuid) values (?, ?)"
+					"delete from player_friends where player_uuid = ?"
 				)) {
-					for (UUID friend : data.friendRequests) {
-						ps.setObject(1, data.uuid);
-						ps.setObject(2, friend);
-						ps.addBatch();
-					}
+					ps.setObject(1, data.uuid);
 
 					ps.executeUpdate();
 				}
+
+				if (!data.friends.isEmpty()) {
+					try (PreparedStatement ps = connection.prepareStatement(
+						"insert into player_friends (player_uuid, friend_uuid) values (?, ?)"
+					)) {
+						for (UUID friend : data.friends) {
+							ps.setObject(1, data.uuid);
+							ps.setObject(2, friend);
+							ps.addBatch();
+						}
+
+						ps.executeBatch();
+					}
+				}
+
+				data.friendsDirty.clear();
 			}
 
-			data.friendRequestsDirty.clear();
-		}
+			if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
+				try (PreparedStatement ps = connection.prepareStatement(
+					"delete from player_friend_requests where player_uuid = ?"
+				)) {
+					ps.setObject(1, data.uuid);
 
-		connection.commit();
+					ps.executeUpdate();
+				}
+
+				if (!data.friendRequests.isEmpty()) {
+					try (PreparedStatement ps = connection.prepareStatement(
+						"insert into player_friend_requests (player_uuid, requester_uuid) values (?, ?)"
+					)) {
+						for (UUID friend : data.friendRequests) {
+							ps.setObject(1, data.uuid);
+							ps.setObject(2, friend);
+							ps.addBatch();
+						}
+
+						ps.executeBatch();
+					}
+				}
+
+				data.friendRequestsDirty.clear();
+			}
+
+			connection.commit();
+		} catch (SQLException e) {
+			connection.rollback();
+			throw e;
+		}
 	}
 
 	public PlayerData loadPlayerData(UUID uuid) throws SQLException {
 		@Cleanup
 		Connection connection = dataSource.getConnection();
-		connection.setAutoCommit(false);
 
 		PlayerData data;
 
@@ -165,8 +171,77 @@ public final class CloudDatabase {
 			}
 		}
 
-		connection.commit();
-
 		return data;
+	}
+
+	public void savePlayerInventory(PlayerInventory inventory) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+		connection.setAutoCommit(false);
+
+		UUID ownerUuid = inventory.getOwnerUuid();
+
+		try {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"delete from player_inventories where owner_uuid = ?"
+			)) {
+				ps.setObject(1, ownerUuid);
+
+				ps.executeUpdate();
+			}
+
+			try (PreparedStatement ps = connection.prepareStatement(
+				"insert into player_inventories (uuid, owner_uuid, item_id, nametag, equipped) values (?, ?, ?, ?, ?)"
+			)) {
+				for (CloudItemStack stack : inventory.getItemStacks()) {
+					ps.setObject(1, stack.uuid);
+					ps.setObject(2, ownerUuid);
+					ps.setInt(3, stack.item.getId());
+					ps.setString(4, stack.nametag);
+					ps.setBoolean(5, inventory.isDefaultStack(stack.uuid));
+
+					ps.addBatch();
+				}
+
+				ps.executeBatch();
+			}
+
+			connection.commit();
+		} catch (SQLException e) {
+			connection.rollback();
+			throw e;
+		}
+	}
+
+	public PlayerInventory loadPlayerInventory(UUID ownerUuid, String ownerUsername) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+
+		PlayerInventory inventory = null;
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select uuid, item_id, nametag, equipped from player_inventories where owner_uuid = ?"
+		)) {
+			ps.setObject(1, ownerUuid);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				if (inventory == null) {
+					inventory = new PlayerInventory(ownerUuid, ownerUsername);
+				}
+
+				CloudItemStack stack = new CloudItemStack(rs.getObject("uuid", UUID.class), CloudItems.getById(rs.getInt("item_id")));
+				stack.nametag = rs.getString("nametag");
+
+				inventory.addItemStack(stack, false);
+				if (rs.getBoolean("equipped")) {
+					inventory.setDefaultStack(stack.uuid);
+				}
+			}
+		}
+
+		return inventory;
 	}
 }

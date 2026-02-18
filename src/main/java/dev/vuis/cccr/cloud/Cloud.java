@@ -88,7 +88,7 @@ public final class Cloud implements ICloud {
 	public void onShutdown() {
 		log("Shutting down...");
 		minuteExecutor.shutdown();
-		dataHandler.saveCachedPlayerData();
+		dataHandler.saveCachedData();
 	}
 
 	public void onUpdate() {
