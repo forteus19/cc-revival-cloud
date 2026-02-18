@@ -6,13 +6,10 @@ import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.console.CommandSource;
+import dev.vuis.cccr.cloud.console.Commands;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
-import dev.vuis.cccr.cloud.data.PlayerInventory;
-import dev.vuis.cccr.cloud.item.CloudItem;
-import dev.vuis.cccr.cloud.item.CloudItemStack;
-import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -20,7 +17,6 @@ import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -218,66 +214,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public void handleCommand(String command) {
-		handleCommand(command, new LogSource());
-	}
-
-	public void handleCommand(String command, CommandSource source) {
-		String[] parts = command.split(" ");
-		boolean success = true;
-
-		switch (parts[0]) {
-			case "give" -> {
-
-			}
-			case "list" -> {
-				for (String channel : cloudManager.getNetwork().getChannels()) {
-					source.send("%s: %s", channel,
-						cloudManager.getNetwork().getNetChannel(channel).stream()
-							.map(G_CloudTcpConnectionHandler::toString2)
-							.toList()
-					);
-				}
-			}
-			case "randomdrop" -> {
-				if (parts.length < 3) {
-					source.send("randomdrop - Missing args: <username> <count>");
-					break;
-				}
-				String username = parts[1];
-				int count = Integer.parseInt(parts[2]);
-
-				PlayerInventory inventory = dataHandler.getPlayerInventory(username);
-				if (inventory == null) {
-					source.send("randomdrop - Player %s does not have an inventory!", username);
-					break;
-				}
-
-				for (int i = 0; i < count; i++) {
-					inventory.addItemStack(new CloudItemStack(CloudItems.getRandomDrop()), true);
-				}
-			}
-			case "stop" -> {
-				cloudManager.initiateShutdown();
-			}
-			case "tell" -> {
-				if (parts.length < 3) {
-					source.send("tell - Missing args: <username> <message>");
-					break;
-				}
-				String username = parts[1];
-				String message = String.join(" ", Arrays.copyOfRange(parts, 2, parts.length));
-
-				sendPacketToPlayer(username, new PacketNotificationFromCloud(message, "Cloud", 0));
-			}
-			default -> {
-				source.send("Unknown command \"%s\"", parts[0]);
-				success = false;
-			}
-		}
-
-		if (success) {
-			log("%s ran command: %s", source.getName(), command);
-		}
+		Commands.execute(command, new CloudSource());
 	}
 
 	@Override
@@ -299,7 +236,7 @@ public final class Cloud implements ICloud {
 		return mmPassword == null || mmPassword.equals(password);
 	}
 
-	private class LogSource implements CommandSource {
+	private class CloudSource implements CommandSource {
 		@Override
 		public String getName() {
 			return Cloud.this.getCloudUsername();

@@ -9,6 +9,16 @@ import dev.vuis.cccr.cloud.data.PlayerData;
 
 public class EmeraldsCommand implements Command {
 	@Override
+	public String getName() {
+		return "emeralds";
+	}
+
+	@Override
+	public String getUsage() {
+		return "<username> <amount>";
+	}
+
+	@Override
 	public Permission getPermission() {
 		return Permissions.COMMAND_EMERALDS;
 	}
@@ -16,7 +26,7 @@ public class EmeraldsCommand implements Command {
 	@Override
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 2) {
-			source.send("Args: <username> <amount>");
+			source.send(getFullUsage());
 		}
 		String username = args[0];
 		int amount = Integer.parseInt(args[1]);

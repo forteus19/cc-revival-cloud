@@ -11,6 +11,16 @@ import dev.vuis.cccr.cloud.item.CloudItems;
 
 public class GiveCommand implements Command {
 	@Override
+	public String getName() {
+		return "give";
+	}
+
+	@Override
+	public String getUsage() {
+		return "<username> <item id>";
+	}
+
+	@Override
 	public Permission getPermission() {
 		return null;
 	}
@@ -18,7 +28,7 @@ public class GiveCommand implements Command {
 	@Override
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 2) {
-			source.send("Args: <username> <id>");
+			source.send(getFullUsage());
 			return;
 		}
 		String username = args[0];

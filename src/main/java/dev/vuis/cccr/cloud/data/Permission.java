@@ -4,6 +4,12 @@ public record Permission(
 	int id,
 	String node
 ) {
+	private static int lastId = 0;
+
+	public Permission(String node) {
+		this(lastId++, node);
+	}
+
 	@Override
 	public boolean equals(Object obj) {
 		return obj instanceof Permission perm && id == perm.id;

@@ -2,6 +2,7 @@ package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import java.util.ArrayList;
+import java.util.Locale;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -12,7 +13,7 @@ public record PlayerGroup(
 	Set<Permission> permissions
 ) {
 	public PlayerGroup {
-		PlayerGroups.TAG_MAP.put(tag, this);
+		PlayerGroups.TAG_MAP.put(tag.toUpperCase(Locale.ROOT), this);
 	}
 
 	public void writeTag(FDSTagCompound tag) {

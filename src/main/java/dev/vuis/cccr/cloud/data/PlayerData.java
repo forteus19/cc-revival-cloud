@@ -45,7 +45,11 @@ public final class PlayerData {
 	}
 
 	public boolean hasPermission(Permission permission) {
-		Set<Permission> permissions = group.get().permissions();
+		PlayerGroup groupGet = group.get();
+		if (groupGet == null) {
+			return false;
+		}
+		Set<Permission> permissions = groupGet.permissions();
 		return permissions.contains(permission) || permissions.contains(Permissions.ALL);
 	}
 
@@ -67,6 +71,11 @@ public final class PlayerData {
 
 		tag.setInteger("achievementCount", achievements.size());
 		Util.enumerate(achievements, (achievement, i) -> tag.setInteger("achievement_" + i, achievement));
+
+		PlayerGroup groupGet = group.get();
+		if (groupGet != null) {
+			groupGet.writeTag(tag);
+		}
 
 		tag.setString("discordUserId", "");
 		tag.setBoolean("enableNotification_FriendRequest", true);
