@@ -27,6 +27,7 @@ public class EmeraldsCommand implements Command {
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 2) {
 			source.send(getFullUsage());
+			return;
 		}
 		String username = args[0];
 		int amount = Integer.parseInt(args[1]);

@@ -1,5 +1,6 @@
 package dev.vuis.cccr.cloud.data;
 
+import dev.vuis.cccr.cloud.util.Util;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -21,12 +22,13 @@ public final class CloudDatabase {
 
 		if (ignoreDirty || data.dirty.isDirty()) {
 			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements) " +
+				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag) " +
 					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
 					"on conflict (uuid) do update set " +
 					"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
 					"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
-					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements"
+					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
+					"group_tag = excluded.group_tag"
 			)) {
 				ps.setObject(1, data.uuid);
 				ps.setString(2, data.username.get());
@@ -41,6 +43,7 @@ public final class CloudDatabase {
 				ps.setInt(11, data.emeralds.get());
 				ps.setString(12, data.mood.get());
 				ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
+				ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::name));
 
 				ps.executeUpdate();
 			}
@@ -85,7 +88,7 @@ public final class CloudDatabase {
 
 			if (!data.friendRequests.isEmpty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
-					"insert into player_friend_requests (player_uuid, friend_uuid) values (?, ?)"
+					"insert into player_friend_requests (player_uuid, requester_uuid) values (?, ?)"
 				)) {
 					for (UUID friend : data.friendRequests) {
 						ps.setObject(1, data.uuid);
@@ -111,7 +114,7 @@ public final class CloudDatabase {
 		PlayerData data;
 
 		try (PreparedStatement ps = connection.prepareStatement(
-			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements from players where uuid = ?"
+			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag from players where uuid = ?"
 		)) {
 			ps.setObject(1, uuid);
 
@@ -133,6 +136,7 @@ public final class CloudDatabase {
 			data.emeralds.set(rs.getInt("emeralds"));
 			data.mood.set(rs.getString("mood"));
 			data.achievements.addAll(Arrays.asList((Integer[]) rs.getArray("achievements").getArray()));
+			data.group.set(PlayerGroups.getByTag(rs.getString("group_tag")));
 		}
 
 		try (PreparedStatement ps = connection.prepareStatement(

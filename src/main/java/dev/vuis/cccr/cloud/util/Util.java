@@ -6,12 +6,17 @@ import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.BiConsumer;
+import java.util.function.Function;
 
 public final class Util {
 	public static final HttpClient HTTP_CLIENT = HttpClient.newHttpClient();
 	public static final UUID NULL_UUID = new UUID(0, 0);
 
 	private Util() {
+	}
+
+	public static <T, R> R ifNonNull(T t, Function<T, R> func) {
+		return t != null ? func.apply(t) : null;
 	}
 
 	public static <T> void enumerate(Collection<T> collection, BiConsumer<T, Integer> elementConsumer) {
