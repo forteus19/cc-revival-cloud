@@ -57,6 +57,11 @@ public final class PlayerInventory {
 	}
 
 	public void addItemStack(CloudItemStack itemStack, boolean sendPacket) {
+		// safeguard to prevent inventory from breaking
+		if (itemStack.item == null) {
+			return;
+		}
+
 		stackMap.put(itemStack.uuid, itemStack);
 		if (sendPacket) {
 			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();

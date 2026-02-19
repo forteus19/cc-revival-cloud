@@ -21,12 +21,12 @@ public class CloudItemCase extends CloudItem {
 
 	public final RandomCollection<CloudItem> contents = new RandomCollection<>();
 
-	public CloudItemCase(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault, CloudItem keyItem, List<CloudItem> specialItemPool) {
+	public CloudItemCase(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault, CloudItem keyItem, List<CloudItem> specialItemPool, boolean drop) {
 		super(id, mcId, rarity, suffix, isDefault);
 		this.keyItem = keyItem;
 		this.specialItemPool = specialItemPool;
 
-		if (!isDefault) {
+		if (drop) {
 			DROP_SET.add(this, rarity.getWeight());
 		}
 	}

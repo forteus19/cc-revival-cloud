@@ -52,6 +52,8 @@ public final class PacketCheckPrestige extends G_TcpPacketCustomPayload {
 		if (newPrestige == 1) {
 			inventory.addItemStack(new CloudItemStack(CloudItems.COIN_PRESTIGE), true);
 		}
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_PRESTIGE), true);
+		inventory.addItemStack(new CloudItemStack(CloudItems.CASE_KEY_PRESTIGE), true);
 //		inventory.addItemStack(new CloudItemStack(CloudItems.BOOSTER_EXP_2), true);
 //		inventory.addItemStack(new CloudItemStack(CloudItems.BOOSTER_EXP_2), true);
 
