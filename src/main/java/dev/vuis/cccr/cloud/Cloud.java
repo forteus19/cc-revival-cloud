@@ -10,13 +10,16 @@ import dev.vuis.cccr.cloud.console.Commands;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -87,8 +90,19 @@ public final class Cloud implements ICloud {
 
 	public void onShutdown() {
 		log("Shutting down...");
-		minuteExecutor.shutdown();
-		dataHandler.saveCachedData();
+		try {
+			minuteExecutor.shutdown();
+			if (!minuteExecutor.awaitTermination(30, TimeUnit.SECONDS)) {
+				log("Minute executor shutdown timed out!");
+			}
+		} catch (InterruptedException e) {
+			log("Minute executor shutdown interrupted");
+		}
+
+		long saveStart = System.nanoTime();
+		dataHandler.fullSaveCachedData();
+		long saveEnd = System.nanoTime();
+		log("Saved all cached data in %.2f ms", (saveEnd - saveStart) / 1000000f);
 	}
 
 	public void onUpdate() {
@@ -97,12 +111,33 @@ public final class Cloud implements ICloud {
 	}
 
 	private void onMinute() {
-		for (PlayerData data : dataHandler.getCachedPlayerData()) {
+		long dataStart = System.nanoTime();
+		Collection<PlayerData> cachedPlayerData = dataHandler.getCachedPlayerData();
+		for (PlayerData data : cachedPlayerData) {
 			if (data.online.get()) {
 				data.minutesPlayed.incrementAndGet();
 				data.dirty.mark();
 			}
+			try {
+				dataHandler.getDatabase().savePlayerData(data, false);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
 		}
+		long dataEnd = System.nanoTime();
+		log("Saved %d cached player data entries in %.2f ms", cachedPlayerData.size(), (dataEnd - dataStart) / 1000000f);
+
+		long invStart = System.nanoTime();
+		Collection<PlayerInventory> cachedPlayerInventories = dataHandler.getCachedPlayerInventories();
+		for (PlayerInventory inventory : cachedPlayerInventories) {
+			try {
+				dataHandler.getDatabase().savePlayerInventory(inventory);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		long invEnd = System.nanoTime();
+		log("Saved %d cached player inventory entries in %.2f ms", cachedPlayerInventories.size(), (invEnd - invStart) / 1000000f);
 	}
 
 	@Override
