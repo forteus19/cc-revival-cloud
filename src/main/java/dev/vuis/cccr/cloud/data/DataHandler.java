@@ -44,12 +44,13 @@ public final class DataHandler {
 			.build(new CacheLoader<>() {
 				@Override
 				public PlayerData load(UUID key) throws Exception {
+					String username = playerUsernames.getOrDefault(key, "Unknown");
 					PlayerData data = database.loadPlayerData(key);
 					if (data == null) {
-						String username = playerUsernames.getOrDefault(key, "Unknown");
 						Cloud.instanceLog("[DataHandler] Creating new player data for %s", username);
 						data = new PlayerData(key, username);
 					}
+					playerUsernames.put(key, username);
 					return data;
 				}
 			});
@@ -70,6 +71,7 @@ public final class DataHandler {
 					String username = playerUsernames.getOrDefault(key, "Unknown");
 					PlayerInventory inventory = database.loadPlayerInventory(key, username);
 					if (inventory == null) {
+						Cloud.instanceLog("[DataHandler] Creating new player inventory for %s", username);
 						inventory = initializeInventory(new PlayerInventory(key, username));
 					}
 					return inventory;
@@ -82,7 +84,15 @@ public final class DataHandler {
 	}
 
 	public UUID getPlayerUuid(String username) {
-		return playerUuids.get(username);
+		UUID uuid = playerUuids.get(username);
+		if (uuid == null) {
+			try {
+				uuid = database.loadPlayerUuid(username);
+			} catch (SQLException e) {
+				throw new RuntimeException(e);
+			}
+		}
+		return uuid;
 	}
 
 	public String getPlayerUsername(UUID uuid) {
@@ -90,7 +100,11 @@ public final class DataHandler {
 	}
 
 	public PlayerData getPlayerData(UUID uuid) {
-		return playerDataCache.getIfPresent(uuid);
+		try {
+			return playerDataCache.get(uuid);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public PlayerData getPlayerData(String username) {

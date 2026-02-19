@@ -228,6 +228,25 @@ public final class CloudDatabase {
 		return data;
 	}
 
+	public UUID loadPlayerUuid(String username) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select uuid from players where username = ?"
+		)) {
+			ps.setString(1, username);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next()) {
+				return null;
+			}
+
+			return rs.getObject("uuid", UUID.class);
+		}
+	}
+
 	public void savePlayerInventory(PlayerInventory inventory) throws SQLException {
 		@Cleanup
 		Connection connection = dataSource.getConnection();
