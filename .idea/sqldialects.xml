@@ -4,6 +4,7 @@
     <file url="file://$PROJECT_DIR$/migrations/V1_initial.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/V2_achievements.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/V3_group_tag.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/V4_prestige.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/dev/vuis/cccr/cloud/data/CloudDatabase.java" dialect="PostgreSQL" />
   </component>
 </project>

@@ -67,7 +67,8 @@ public final class CloudItemInjectMain {
 					sb.append(caseItem.getKeyItem().getId());
 					sb.append(")");
 					for (RandomCollection.Entry<CloudItem> entry : caseItem.contents.getEntries()) {
-						sb.append(".addContent(");
+						sb.append(System.lineSeparator());
+						sb.append("\t.addContent(");
 						sb.append(fields.get(entry.objectSupplier().get()).getName());
 						sb.append(", ");
 						sb.append(entry.getWeight());

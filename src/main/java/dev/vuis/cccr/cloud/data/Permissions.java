@@ -7,6 +7,7 @@ public final class Permissions {
 	public static final Permission CHAT_SPAM_BYPASS = new Permission("chat.spam.bypass");
 
 	public static final Permission COMMAND_EMERALDS = new Permission("command.emeralds");
+	public static final Permission COMMAND_EXP = new Permission("command.exp");
 	public static final Permission COMMAND_GIVE = new Permission("command.give");
 	public static final Permission COMMAND_LIST = new Permission("command.list");
 	public static final Permission COMMAND_RANDOMDROP = new Permission("command.randomdrop");

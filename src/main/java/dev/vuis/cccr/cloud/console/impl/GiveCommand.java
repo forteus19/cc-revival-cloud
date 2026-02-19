@@ -4,6 +4,7 @@ import dev.vuis.cccr.cloud.console.Command;
 import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
+import dev.vuis.cccr.cloud.data.Permissions;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
@@ -22,7 +23,7 @@ public class GiveCommand implements Command {
 
 	@Override
 	public Permission getPermission() {
-		return null;
+		return Permissions.COMMAND_GIVE;
 	}
 
 	@Override

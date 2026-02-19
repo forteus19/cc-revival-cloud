@@ -2,6 +2,7 @@ package dev.vuis.cccr.cloud.console;
 
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.console.impl.EmeraldsCommand;
+import dev.vuis.cccr.cloud.console.impl.ExpCommand;
 import dev.vuis.cccr.cloud.console.impl.GiveCommand;
 import dev.vuis.cccr.cloud.console.impl.HelpCommand;
 import dev.vuis.cccr.cloud.console.impl.ListCommand;
@@ -19,6 +20,7 @@ public final class Commands {
 
 	static {
 		register(new EmeraldsCommand());
+		register(new ExpCommand());
 		register(new GiveCommand());
 		register(new HelpCommand());
 		register(new ListCommand());

@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud;
 
 import com.f3rullo14.cloud.G_TcpPacket;
+import dev.vuis.cccr.cloud.packet.PacketCheckPrestige;
 import dev.vuis.cccr.cloud.packet.PacketClientRequest;
 import dev.vuis.cccr.cloud.packet.PacketClientUpdateStatus;
 import dev.vuis.cccr.cloud.packet.PacketConsoleCommand;
@@ -76,5 +77,6 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(69, PacketClientUpdateStatus.class);
 		G_TcpPacket.addPacketMapping(74, PacketConsoleCommand.class);
 		G_TcpPacket.addPacketMapping(75, PacketConsoleMessage.class);
+		G_TcpPacket.addPacketMapping(96, PacketCheckPrestige.class);
 	}
 }

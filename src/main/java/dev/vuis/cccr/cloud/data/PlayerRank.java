@@ -32,6 +32,8 @@ public enum PlayerRank {
 	private final int requiredExp;
 
 	private static final int[] CUMULATIVE_EXP_VALUES;
+	public static final int PRESTIGE_EXP;
+
 	static {
 		PlayerRank[] ranks = values();
 		CUMULATIVE_EXP_VALUES = new int[ranks.length];
@@ -40,6 +42,7 @@ public enum PlayerRank {
 		for (int i = 0; i < ranks.length; i++) {
 			CUMULATIVE_EXP_VALUES[i] = (cumulative += ranks[i].requiredExp);
 		}
+		PRESTIGE_EXP = cumulative;
 	}
 
 	public static PlayerRank getRankFromExp(int exp) {
