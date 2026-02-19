@@ -9,12 +9,11 @@ import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.server.PacketServerNotification;
 
 public final class Exp {
-	public static final int MATCH_PARTICIPATE = 3700;
-	public static final int TROPHY = 300;
-	public static final int KILL = 50;
-	public static final int FIRST_BLOOD = 60;
+	public static final int MATCH_PARTICIPATE = 1500;
+	public static final int TROPHY = 450;
+	public static final int KILL = 60;
+	public static final int FIRST_BLOOD = 80;
 	public static final int DEATH = 10;
-	public static final int DEFUSE = 100;
 
 	private Exp() {
 	}
