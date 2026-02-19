@@ -9,8 +9,8 @@ import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.Punishment;
 import dev.vuis.cccr.cloud.data.PunishmentType;
 import dev.vuis.cccr.cloud.packet.PacketBanned;
+import dev.vuis.cccr.cloud.util.Util;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.Arrays;
 import java.util.UUID;
 
@@ -51,7 +51,7 @@ public class PunishCommand implements Command {
 			return;
 		}
 
-		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+		LocalDateTime now = Util.utcNow();
 		playerData.punishmentsDirty.mark();
 		playerData.punishments.add(new Punishment(UUID.randomUUID(), source.getName(), type, reason, now, now.plusMinutes(minutes)));
 		if (type.isSendBannedPacket()) {

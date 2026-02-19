@@ -3,7 +3,6 @@ package dev.vuis.cccr.cloud.data;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.util.Util;
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -62,7 +61,7 @@ public final class PlayerData {
 
 	public boolean hasActivePunishment(PunishmentType... types) {
 		Set<PunishmentType> typesSet = Set.of(types);
-		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+		LocalDateTime now = Util.utcNow();
 		return punishments.stream().anyMatch(pun -> typesSet.contains(pun.type()) && pun.end().isAfter(now));
 	}
 
@@ -94,7 +93,7 @@ public final class PlayerData {
 		if (writePunishments) {
 			tag.setInteger("punishSize", punishments.size());
 
-			LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+			LocalDateTime now = Util.utcNow();
 			for (int i = 0; i < punishments.size(); i++) {
 				Punishment punishment = punishments.get(i);
 				if (now.isAfter(punishment.end())) {
@@ -102,7 +101,7 @@ public final class PlayerData {
 				}
 
 				FDSTagCompound punishmentTag = new FDSTagCompound("pun" + i);
-				punishment.writeTag(punishmentTag);
+				punishment.writeTag(punishmentTag, now);
 				tag.setTagCompound(punishmentTag.getTag(), punishmentTag);
 			}
 		}

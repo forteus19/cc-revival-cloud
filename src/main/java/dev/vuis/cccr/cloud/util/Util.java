@@ -2,6 +2,8 @@ package dev.vuis.cccr.cloud.util;
 
 import com.google.common.collect.Multiset;
 import java.net.http.HttpClient;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Collection;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -100,5 +102,9 @@ public final class Util {
 
 	public static boolean isHttpSuccess(int statusCode) {
 		return statusCode >= 200 && statusCode < 300;
+	}
+
+	public static LocalDateTime utcNow() {
+		return LocalDateTime.now(ZoneOffset.UTC);
 	}
 }
