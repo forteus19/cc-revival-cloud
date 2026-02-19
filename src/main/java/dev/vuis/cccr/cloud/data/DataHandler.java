@@ -15,8 +15,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
+import lombok.Getter;
 
 public final class DataHandler {
+	@Getter
 	private final CloudDatabase database;
 
 	private final Map<String, UUID> playerUuids = new ConcurrentHashMap<>();
@@ -131,13 +133,17 @@ public final class DataHandler {
 		return uuid != null ? getPlayerInventory(uuid) : null;
 	}
 
+	public Collection<PlayerInventory> getCachedPlayerInventories() {
+		return Collections.unmodifiableCollection(playerInventoryCache.asMap().values());
+	}
+
 	private static PlayerInventory initializeInventory(PlayerInventory inventory) {
 		inventory.addItemStacks(CloudItems.defaults().stream().map(CloudItemStack::new));
 		inventory.addItemStack(new CloudItemStack(CloudItems.COIN_ALPHA), true);
 		return inventory;
 	}
 
-	public void saveCachedData() {
+	public void fullSaveCachedData() {
 		for (PlayerData data : playerDataCache.asMap().values()) {
 			try {
 				database.savePlayerData(data, true);
