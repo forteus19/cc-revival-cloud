@@ -32,10 +32,11 @@ public final class PacketRequestedPlayerData extends G_TcpPacketCustomPayload {
 		if (data == null) {
 			return;
 		}
+		String dataUsername = data.username.get();
 
 		PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
-		packet.username = data.username.get();
-		data.writeDataTag(packet.tag);
+		packet.username = dataUsername;
+		data.writeDataTag(packet.tag, connectionHandler.getConnectionUsername().equals(dataUsername));
 
 		connectionHandler.sendPacket(packet);
 	}

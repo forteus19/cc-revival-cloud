@@ -27,7 +27,7 @@ public class TellCommand implements Command {
 	@Override
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 3) {
-			source.send(getFullUsage());
+			source.sendMessage(getFullUsage());
 			return;
 		}
 		String username = args[0];

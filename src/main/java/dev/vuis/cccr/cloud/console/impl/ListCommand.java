@@ -29,7 +29,7 @@ public class ListCommand implements Command {
 	public void run(String[] args, CommandSource source) {
 		G_CloudNetworkManager network = Cloud.instance().getCloudManager().getNetwork();
 		for (String channel : network.getChannels()) {
-			source.send("%s: %s", channel, network.getNetChannel(channel).stream()
+			source.sendMessage("%s: %s", channel, network.getNetChannel(channel).stream()
 				.map(G_CloudTcpConnectionHandler::getConnectionUsername)
 				.collect(Collectors.joining(", "))
 			);

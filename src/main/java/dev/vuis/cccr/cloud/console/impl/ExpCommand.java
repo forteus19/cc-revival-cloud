@@ -26,7 +26,7 @@ public class ExpCommand implements Command {
 	@Override
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 2) {
-			source.send(getFullUsage());
+			source.sendMessage(getFullUsage());
 			return;
 		}
 		String username = args[0];
@@ -34,7 +34,7 @@ public class ExpCommand implements Command {
 
 		PlayerData playerData = DataHandler.instance().getPlayerData(username);
 		if (playerData == null) {
-			source.send("Player %s does not have data!", username);
+			source.sendMessage("Player %s does not have data!", username);
 			return;
 		}
 

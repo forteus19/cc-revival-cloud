@@ -7,7 +7,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 import javax.sql.DataSource;
 import lombok.Cleanup;
@@ -51,9 +54,38 @@ public final class CloudDatabase {
 
 					ps.executeUpdate();
 				}
-
-				data.dirty.clear();
 			}
+			data.dirty.clear();
+
+			if (ignoreDirty || data.punishmentsDirty.isDirty()) {
+				try (PreparedStatement ps = connection.prepareStatement(
+					"delete from punishment_records where player_uuid = ?"
+				)) {
+					ps.setObject(1, data.uuid);
+
+					ps.executeUpdate();
+				}
+
+				if (!data.punishments.isEmpty()) {
+					try (PreparedStatement ps = connection.prepareStatement(
+						"insert into punishment_records (uuid, player_uuid, issuer, type_ordinal, reason, start_time, end_time) values (?, ?, ?, ?, ?, ?, ?)"
+					)) {
+						for (Punishment punishment : data.punishments) {
+							ps.setObject(1, punishment.uuid());
+							ps.setObject(2, data.uuid);
+							ps.setString(3, punishment.issuer());
+							ps.setInt(4, punishment.type().ordinal());
+							ps.setString(5, punishment.reason());
+							ps.setTimestamp(6, Timestamp.valueOf(punishment.start()));
+							ps.setTimestamp(7, Timestamp.valueOf(punishment.end()));
+							ps.addBatch();
+						}
+
+						ps.executeBatch();
+					}
+				}
+			}
+			data.punishmentsDirty.clear();
 
 			if (ignoreDirty || data.friendsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
@@ -77,9 +109,8 @@ public final class CloudDatabase {
 						ps.executeBatch();
 					}
 				}
-
-				data.friendsDirty.clear();
 			}
+			data.friendsDirty.clear();
 
 			if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
@@ -103,9 +134,8 @@ public final class CloudDatabase {
 						ps.executeBatch();
 					}
 				}
-
-				data.friendRequestsDirty.clear();
 			}
+			data.friendRequestsDirty.clear();
 
 			connection.commit();
 		} catch (SQLException e) {
@@ -145,6 +175,28 @@ public final class CloudDatabase {
 			data.achievements.addAll(Arrays.asList((Integer[]) rs.getArray("achievements").getArray()));
 			data.group.set(PlayerGroups.getByTag(rs.getString("group_tag")));
 			data.prestige.set(rs.getInt("prestige"));
+		}
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select uuid, issuer, type_ordinal, reason, start_time, end_time from punishment_records where player_uuid = ?"
+		)) {
+			ps.setObject(1, uuid);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+
+			List<Punishment> punishments = new ArrayList<>();
+			while (rs.next()) {
+				punishments.add(new Punishment(
+					rs.getObject("uuid", UUID.class),
+					rs.getString("issuer"),
+					PunishmentType.values()[rs.getInt("type_ordinal")],
+					rs.getString("reason"),
+					rs.getTimestamp("start_time").toLocalDateTime(),
+					rs.getTimestamp("end_time").toLocalDateTime()
+				));
+			}
+			data.punishments.addAll(punishments);
 		}
 
 		try (PreparedStatement ps = connection.prepareStatement(

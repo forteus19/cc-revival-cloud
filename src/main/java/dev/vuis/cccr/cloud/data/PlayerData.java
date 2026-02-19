@@ -2,11 +2,15 @@ package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.util.Util;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
@@ -14,6 +18,7 @@ import java.util.stream.Collectors;
 
 public final class PlayerData {
 	public final DirtyHandler dirty = new DirtyHandler();
+	public final DirtyHandler punishmentsDirty = new DirtyHandler();
 	public final DirtyHandler friendsDirty = new DirtyHandler();
 	public final DirtyHandler friendRequestsDirty = new DirtyHandler();
 
@@ -35,6 +40,7 @@ public final class PlayerData {
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
+	public final List<Punishment> punishments = new CopyOnWriteArrayList<>();
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
@@ -54,7 +60,13 @@ public final class PlayerData {
 		return permissions.contains(permission) || permissions.contains(Permissions.ALL);
 	}
 
-	public void writeDataTag(FDSTagCompound tag) {
+	public boolean hasActivePunishment(PunishmentType... types) {
+		Set<PunishmentType> typesSet = Set.of(types);
+		LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+		return punishments.stream().anyMatch(pun -> typesSet.contains(pun.type()) && pun.end().isAfter(now));
+	}
+
+	public void writeDataTag(FDSTagCompound tag, boolean writePunishments) {
 		tag.setInteger("trophies", trophies.get());
 		tag.setInteger("kills", kills.get());
 		tag.setInteger("deaths", deaths.get());
@@ -77,6 +89,22 @@ public final class PlayerData {
 		PlayerGroup groupGet = group.get();
 		if (groupGet != null) {
 			groupGet.writeTag(tag);
+		}
+
+		if (writePunishments) {
+			tag.setInteger("punishSize", punishments.size());
+
+			LocalDateTime now = LocalDateTime.now(ZoneOffset.UTC);
+			for (int i = 0; i < punishments.size(); i++) {
+				Punishment punishment = punishments.get(i);
+				if (now.isAfter(punishment.end())) {
+					continue;
+				}
+
+				FDSTagCompound punishmentTag = new FDSTagCompound("pun" + i);
+				punishment.writeTag(punishmentTag);
+				tag.setTagCompound(punishmentTag.getTag(), punishmentTag);
+			}
 		}
 
 		tag.setString("discordUserId", "");

@@ -10,6 +10,7 @@ public final class Permissions {
 	public static final Permission COMMAND_EXP = new Permission("command.exp");
 	public static final Permission COMMAND_GIVE = new Permission("command.give");
 	public static final Permission COMMAND_LIST = new Permission("command.list");
+	public static final Permission COMMAND_PUNISH = new Permission("command.punish");
 	public static final Permission COMMAND_RANDOMDROP = new Permission("command.randomdrop");
 	public static final Permission COMMAND_STOP = new Permission("command.stop");
 	public static final Permission COMMAND_TELL = new Permission("command.tell");

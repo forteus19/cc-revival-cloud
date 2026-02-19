@@ -29,7 +29,7 @@ public class GiveCommand implements Command {
 	@Override
 	public void run(String[] args, CommandSource source) {
 		if (args.length < 2) {
-			source.send(getFullUsage());
+			source.sendMessage(getFullUsage());
 			return;
 		}
 		String username = args[0];
@@ -37,7 +37,7 @@ public class GiveCommand implements Command {
 
 		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(username);
 		if (inventory == null) {
-			source.send("Player %s does not have an inventory!", username);
+			source.sendMessage("Player %s does not have an inventory!", username);
 			return;
 		}
 

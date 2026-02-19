@@ -2,7 +2,12 @@ package dev.vuis.cccr.cloud.packet.mm;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PunishmentType;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
+import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -33,6 +38,18 @@ public final class PacketMMSearch extends G_TcpPacketCustomPayload {
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
 		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
+		PlayerData data = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
+		if (data == null) {
+			return;
+		}
+		if (data.hasActivePunishment(PunishmentType.BAN_MM, PunishmentType.BAN_CLOUD)) {
+			connectionHandler.sendPacket(new PacketMMSearchCloudCanceled());
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				"Unable to search due to matchmaking ban.", CloudConstants.CC_NAME, 1
+			));
 			return;
 		}
 

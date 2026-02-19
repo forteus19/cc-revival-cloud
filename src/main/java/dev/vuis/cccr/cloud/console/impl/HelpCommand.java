@@ -28,7 +28,7 @@ public class HelpCommand implements Command {
 			.filter(command -> command.hasPermission(source))
 			.sorted(Comparator.comparing(Command::getName))
 			.forEachOrdered(command -> {
-				source.send(command.getFullUsage());
+				source.sendMessage(command.getFullUsage());
 			});
 	}
 }

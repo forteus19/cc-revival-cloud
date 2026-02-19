@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.console;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
+import com.f3rullo14.cloud.G_TcpPacket;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
@@ -30,7 +31,12 @@ public class PlayerSource implements CommandSource {
 	}
 
 	@Override
-	public void send(String message) {
+	public void sendMessage(String message) {
 		connectionHandler.sendPacket(new PacketConsoleMessage(message));
+	}
+
+	@Override
+	public void sendPacket(G_TcpPacket packet) {
+		connectionHandler.sendPacket(packet);
 	}
 }

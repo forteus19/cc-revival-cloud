@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.console.impl.ExpCommand;
 import dev.vuis.cccr.cloud.console.impl.GiveCommand;
 import dev.vuis.cccr.cloud.console.impl.HelpCommand;
 import dev.vuis.cccr.cloud.console.impl.ListCommand;
+import dev.vuis.cccr.cloud.console.impl.PunishCommand;
 import dev.vuis.cccr.cloud.console.impl.RandomDropCommand;
 import dev.vuis.cccr.cloud.console.impl.StopCommand;
 import dev.vuis.cccr.cloud.console.impl.TellCommand;
@@ -24,6 +25,7 @@ public final class Commands {
 		register(new GiveCommand());
 		register(new HelpCommand());
 		register(new ListCommand());
+		register(new PunishCommand());
 		register(new RandomDropCommand());
 		register(new StopCommand());
 		register(new TellCommand());
@@ -48,11 +50,11 @@ public final class Commands {
 
 		Command command = REGISTRY.get(parts[0]);
 		if (command == null) {
-			source.send("Unknown command: %s", parts[0]);
+			source.sendMessage("Unknown command: %s", parts[0]);
 			return;
 		}
 		if (!command.hasPermission(source)) {
-			source.send("You are not allowed to run this command!");
+			source.sendMessage("You are not allowed to run this command!");
 			return;
 		}
 
@@ -60,7 +62,7 @@ public final class Commands {
 			command.run(Arrays.copyOfRange(parts, 1, parts.length), source);
 		} catch (Exception e) {
 			e.printStackTrace();
-			source.send("An error occured while executing the command");
+			source.sendMessage("An error occured while executing the command");
 		}
 
 		Cloud.instanceLog("%s ran command: %s", source.getName(), commandStr);

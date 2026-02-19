@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PunishmentType;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -34,8 +35,25 @@ public final class PacketFriendRequest extends G_TcpPacketCustomPayload {
 			return;
 		}
 
+		PlayerData selfData = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
+		if (selfData == null) {
+			return;
+		}
+		if (selfData.hasActivePunishment(PunishmentType.BAN_CLOUD)) {
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				"Disabled due to cloud ban.", CloudConstants.CC_NAME, 1
+			));
+			return;
+		}
+
 		PlayerData targetData = DataHandler.instance().getPlayerData(user);
 		if (targetData == null) {
+			return;
+		}
+		if (targetData.hasActivePunishment(PunishmentType.BAN_CLOUD)) {
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				"You cannot send a friend request to a banned player!", CloudConstants.CC_NAME, 0
+			));
 			return;
 		}
 

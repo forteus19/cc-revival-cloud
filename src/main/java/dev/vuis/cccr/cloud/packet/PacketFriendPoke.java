@@ -6,6 +6,7 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PunishmentType;
 import dev.vuis.cccr.cloud.util.PacketUtil;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
@@ -31,6 +32,17 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 			return;
 		}
 
+		PlayerData selfData = DataHandler.instance().getPlayerData(connectionHandler.getConnectionUsername());
+		if (selfData == null) {
+			return;
+		}
+		if (selfData.hasActivePunishment(PunishmentType.MUTE)) {
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				"You cannot poke someone while muted!", CloudConstants.CC_NAME, 1
+			));
+			return;
+		}
+
 		PlayerData targetData = DataHandler.instance().getPlayerData(user);
 		if (targetData == null) {
 			return;
@@ -41,10 +53,10 @@ public final class PacketFriendPoke extends G_TcpPacketCustomPayload {
 		}
 
 		Cloud.instance().sendPacketToPlayer(user, new PacketNotificationFromCloud(
-			"Poke from " + connectionHandler.getConnectionUsername() + ": " + message, CloudConstants.CC_NAME, 0
+			String.format("Poke from %s: %s", connectionHandler.getConnectionUsername(), message), CloudConstants.CC_NAME, 0
 		));
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(
-			"Sent poke to " + user + "!", CloudConstants.CC_NAME, 0
+			String.format("Sent poke to %s!", user), CloudConstants.CC_NAME, 0
 		));
 	}
 }
