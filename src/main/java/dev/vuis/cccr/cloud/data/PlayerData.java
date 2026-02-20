@@ -66,7 +66,7 @@ public final class PlayerData {
 		return punishments.stream().anyMatch(pun -> typesSet.contains(pun.type()) && pun.end().isAfter(now));
 	}
 
-	public void writeDataTag(FDSTagCompound tag, boolean writePunishments) {
+	public void writeDataTag(FDSTagCompound tag, int coinId, boolean writePunishments) {
 		tag.setInteger("trophies", trophies.get());
 		tag.setInteger("kills", kills.get());
 		tag.setInteger("deaths", deaths.get());
@@ -80,12 +80,13 @@ public final class PlayerData {
 		String moodGet = mood.get();
 		tag.setString("mood", moodGet != null ? moodGet : "");
 		tag.setString("status", status.get());
-		tag.setString("playerUUID", uuid.toString());
+		tag.setInteger("coinDisplayed", coinId);
 		int compExpGet = compExp.get();
 		CompetitiveRank compRank = CompetitiveRank.getRankFromExp(compExpGet);
 		tag.setInteger("compRank", compRank.ordinal());
 		tag.setInteger("compRankXP", compRank.getExpProgress(compExpGet));
 		tag.setInteger("compRankRequiredXP", compRank.getNextRequiredExp());
+		tag.setString("playerUUID", uuid.toString());
 		tag.setInteger("prestigeLevel", prestige.get());
 
 		tag.setInteger("achievementCount", achievements.size());

@@ -137,7 +137,11 @@ public final class DataHandler {
 	}
 
 	public PlayerInventory getPlayerInventory(UUID uuid) {
-		return playerInventoryCache.getIfPresent(uuid);
+		try {
+			return playerInventoryCache.get(uuid);
+		} catch (ExecutionException e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	public PlayerInventory getPlayerInventory(String username) {

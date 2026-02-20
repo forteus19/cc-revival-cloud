@@ -89,6 +89,18 @@ public final class PlayerInventory {
 		return defaultsMap.containsKey(category);
 	}
 
+	public CloudItemStack getDefaultStack(CloudItemCategory category, CloudItem item) {
+		ItemDefault itemDef = defaultsMap.get(category);
+		if (itemDef == null) {
+			return null;
+		}
+		UUID defUuid = itemDef.getStackUuid(item);
+		if (defUuid == null) {
+			return null;
+		}
+		return getItemStack(defUuid);
+	}
+
 	public boolean isDefaultStack(UUID uuid) {
 		CloudItemStack stack = getEquippableItemStack(uuid);
 		if (stack == null) {

@@ -5,6 +5,9 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItemCategory;
+import dev.vuis.cccr.cloud.item.CloudItemStack;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
@@ -32,11 +35,21 @@ public final class PacketRequestedPlayerData extends G_TcpPacketCustomPayload {
 		if (data == null) {
 			return;
 		}
+
+		int coinId = 0;
+		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(username);
+		if (inventory != null) {
+			CloudItemStack coinStack = inventory.getDefaultStack(CloudItemCategory.COIN, null);
+			if (coinStack != null) {
+				coinId = coinStack.item.getId();
+			}
+		}
+
 		String dataUsername = data.username.get();
 
 		PacketRequestedPlayerData packet = new PacketRequestedPlayerData();
 		packet.username = dataUsername;
-		data.writeDataTag(packet.tag, connectionHandler.getConnectionUsername().equals(dataUsername));
+		data.writeDataTag(packet.tag, coinId, connectionHandler.getConnectionUsername().equals(dataUsername));
 
 		connectionHandler.sendPacket(packet);
 	}
