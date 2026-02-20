@@ -3,8 +3,10 @@ package dev.vuis.cccr.cloud.packet.mm;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.data.PlayerRank;
 import dev.vuis.cccr.cloud.data.PunishmentType;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -51,6 +53,21 @@ public final class PacketMMSearch extends G_TcpPacketCustomPayload {
 				"Unable to search due to matchmaking ban.", CloudConstants.CC_NAME, 1
 			));
 			return;
+		}
+
+		if (game.equals("cbd")) {
+			if (!CloudStats.compActive) {
+				connectionHandler.sendPacket(new PacketNotificationFromCloud(
+					"Competitive is currently disabled!", CloudConstants.CC_NAME, 0
+				));
+				return;
+			}
+			if (CloudStats.compRequiresRank && PlayerRank.getRankFromExp(data.exp.get()).ordinal() < PlayerRank.OCELOT.ordinal()) {
+				connectionHandler.sendPacket(new PacketNotificationFromCloud(
+					"You must be at least Ocelot to join competitive!", CloudConstants.CC_NAME, 0
+				));
+				return;
+			}
 		}
 
 		SearchHandler.addSearch(connectionHandler.getConnectionUsername(), game, region, maps);

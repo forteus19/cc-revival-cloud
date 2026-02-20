@@ -5,7 +5,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@Getter
 public enum PlayerRank {
 	CHICKEN("Chicken", 0),
 	PIG("Pig", 1000),
@@ -28,7 +27,9 @@ public enum PlayerRank {
 	WITHER("Wither", 30000),
 	DRAGON("Dragon", 40000);
 
+	@Getter
 	private final String displayName;
+	@Getter
 	private final int requiredExp;
 
 	private static final int[] CUMULATIVE_EXP_VALUES;

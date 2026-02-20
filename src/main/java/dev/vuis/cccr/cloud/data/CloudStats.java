@@ -15,8 +15,8 @@ public final class CloudStats {
 
 	private static final Multiset<String> PLAYER_SCOREBOARD = HashMultiset.create();
 
-	public static boolean compRequiresRank = false;
-	public static boolean compActive = false;
+	public static boolean compRequiresRank = true;
+	public static boolean compActive = true;
 
 	private CloudStats() {
 	}

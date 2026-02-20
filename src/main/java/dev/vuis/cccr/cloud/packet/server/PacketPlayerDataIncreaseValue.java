@@ -40,59 +40,65 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 			return;
 		}
 
-		PlayerData playerData = DataHandler.instance().getPlayerData(username);
-		if (playerData == null) {
+		PlayerData data = DataHandler.instance().getPlayerData(username);
+		if (data == null) {
 			return;
 		}
 
 		Cloud.instanceLog("INCREASE VALUE %s %s %d", username, value, amount);
 
-		playerData.dirty.mark();
+		data.dirty.mark();
 
 		int expGain = 0;
 		switch (value) {
 			case "achievement" -> {
 				CloudAchievement achievement = CloudAchievements.getById(amount);
 				if (achievement != null) {
-					achievement.handleUnlock(playerData, connectionHandler);
+					achievement.handleUnlock(data, connectionHandler);
 				}
 				return;
 			}
+			case "compRankAddXP" -> {
+				data.compExp.addAndGet(amount);
+			}
+			case "compRankSubtractXP" -> {
+				data.compExp.addAndGet(-amount);
+			}
 			case "deaths" -> {
-				CloudAchievement deathsAch = CloudAchievements.getDeathsAchievement(playerData.deaths.addAndGet(amount));
+				CloudAchievement deathsAch = CloudAchievements.getDeathsAchievement(data.deaths.addAndGet(amount));
 				if (deathsAch != null) {
-					deathsAch.handleUnlock(playerData, connectionHandler);
+					deathsAch.handleUnlock(data, connectionHandler);
 				}
 				expGain = Exp.DEATH;
 			}
 			case "emeralds" -> {
-				playerData.emeralds.addAndGet(amount);
+				data.emeralds.addAndGet(amount);
 			}
 			case "firstblood" -> {
-				playerData.firstBloods.addAndGet(amount);
+				data.firstBloods.addAndGet(amount);
 				expGain = Exp.FIRST_BLOOD;
 			}
 			case "games" -> {
-				playerData.games.addAndGet(amount);
+				data.games.addAndGet(amount);
 				expGain = Exp.MATCH_PARTICIPATE;
 			}
 			case "kills" -> {
-				CloudAchievement killsAch = CloudAchievements.getKillsAchievement(playerData.kills.addAndGet(amount));
+				CloudAchievement killsAch = CloudAchievements.getKillsAchievement(data.kills.addAndGet(amount));
 				if (killsAch != null) {
-					killsAch.handleUnlock(playerData, connectionHandler);
+					killsAch.handleUnlock(data, connectionHandler);
 				}
-				CloudStats.incrementPlayerScore(playerData.username.get());
+				CloudStats.incrementPlayerScore(data.username.get());
 				expGain = Exp.KILL;
 			}
 			case "trophies" -> {
-				playerData.trophies.addAndGet(amount);
+				data.trophies.addAndGet(amount);
 				expGain = Exp.TROPHY;
 			}
 		}
 
 		expGain *= amount;
 		if (expGain != 0) {
-			Exp.handleExpGain(connectionHandler, playerData, expGain);
+			Exp.handleExpGain(connectionHandler, data, expGain);
 		}
 	}
 }

@@ -36,6 +36,7 @@ public final class PlayerData {
 	public final AtomicInteger emeralds = new AtomicInteger(999999999); // FIXME on alpha release
 	public final AtomicReference<String> mood = new AtomicReference<>();
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
+	public final AtomicInteger compExp = new AtomicInteger(0);
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
@@ -80,6 +81,11 @@ public final class PlayerData {
 		tag.setString("mood", moodGet != null ? moodGet : "");
 		tag.setString("status", status.get());
 		tag.setString("playerUUID", uuid.toString());
+		int compExpGet = compExp.get();
+		CompetitiveRank compRank = CompetitiveRank.getRankFromExp(compExpGet);
+		tag.setInteger("compRank", compRank.ordinal());
+		tag.setInteger("compRankXP", compRank.getExpProgress(compExpGet));
+		tag.setInteger("compRankRequiredXP", compRank.getNextRequiredExp());
 		tag.setInteger("prestigeLevel", prestige.get());
 
 		tag.setInteger("achievementCount", achievements.size());

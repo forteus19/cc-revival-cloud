@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.mm;
 
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMJoinServer;
@@ -17,6 +18,7 @@ public final class SearchHandler {
 	// TODO configurable
 	private static final Map<String, List<String>> VALID_MAPS = Map.ofEntries(
 		Map.entry("cas", List.of("Dust", "Haunts", "Mirage", "Toxic")),
+		Map.entry("cbd", List.of("Dust", "Mirage", "Toxic")),
 		Map.entry("ffa", List.of("Dust", "Haunts", "Laputa", "Mirage", "Range", "Terminal")),
 		Map.entry("tdm", List.of("Dome", "Dust", "Haunts", "Laputa", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
 	);
@@ -35,6 +37,10 @@ public final class SearchHandler {
 	}
 
 	public static void addSearch(String username, String game, String region, ArrayList<String> maps) {
+		if (game.equals("cbd") && !CloudStats.compActive) {
+			return;
+		}
+
 		Cloud.instanceLog("Adding %s to search handler", username);
 		ONGOING.put(username, new Data(game, region, new ArrayList<>(maps)));
 	}

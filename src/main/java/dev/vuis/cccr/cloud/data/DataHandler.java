@@ -84,15 +84,13 @@ public final class DataHandler {
 	}
 
 	public UUID getPlayerUuid(String username) {
-		UUID uuid = playerUuids.get(username);
-		if (uuid == null) {
+		return playerUuids.computeIfAbsent(username, key -> {
 			try {
-				uuid = database.loadPlayerUuid(username);
+				return database.loadPlayerUuid(key);
 			} catch (SQLException e) {
 				throw new RuntimeException(e);
 			}
-		}
-		return uuid;
+		});
 	}
 
 	public String getPlayerUsername(UUID uuid) {
