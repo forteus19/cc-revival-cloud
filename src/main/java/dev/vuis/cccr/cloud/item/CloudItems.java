@@ -133,6 +133,7 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_TAC_DOPPLAR = new CloudItemKnife(1505, 4461, CloudItemRarity.DIAMOND, "Tac Knife Doppler", false);
 	public static final CloudItemKnife KNIFE_TAC_LORE = new CloudItemKnife(1506, 4462, CloudItemRarity.DIAMOND, "Tac Knife Lore", false);
 	public static final CloudItemKnife KNIFE_TAC_GAMMA = new CloudItemKnife(1507, 4463, CloudItemRarity.DIAMOND, "Tac Knife Gamma", false);
+	public static final CloudItemKnife KNIFE_TAC_PRESTIGE = new CloudItemKnife(1508, 4464, CloudItemRarity.OBSIDIAN, "Tac Knife Prestige", false);
 
 	public static final CloudItemKnife KNIFE_BAY = new CloudItemKnife(1510, 4466, CloudItemRarity.DIAMOND, "Bayonet", false);
 	public static final CloudItemKnife KNIFE_BAY_MARBLE = new CloudItemKnife(1511, 4467, CloudItemRarity.DIAMOND, "Bayonet Marble", false);
@@ -142,6 +143,7 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_BAY_LORE = new CloudItemKnife(1515, 4471, CloudItemRarity.DIAMOND, "Bayonet Lore", false);
 	public static final CloudItemKnife KNIFE_BAY_GAMMA = new CloudItemKnife(1516, 4472, CloudItemRarity.DIAMOND, "Bayonet Gamma", false);
 	public static final CloudItemKnife KNIFE_BAY_DRAGONLORE = new CloudItemKnife(1517, 4473, CloudItemRarity.DIAMOND, "Bayonet Dragonlore", false);
+	public static final CloudItemKnife KNIFE_BAY_PRESTIGE = new CloudItemKnife(1518, 4474, CloudItemRarity.OBSIDIAN, "Bayonet Prestige", false);
 
 	public static final CloudItemKnife KNIFE_KAR = new CloudItemKnife(1520, 4476, CloudItemRarity.DIAMOND, "Karambit", false);
 	public static final CloudItemKnife KNIFE_KAR_MARBLE = new CloudItemKnife(1521, 4477, CloudItemRarity.DIAMOND, "Karambit Marble", false);
@@ -151,8 +153,10 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_KAR_LORE = new CloudItemKnife(1525, 4481, CloudItemRarity.DIAMOND, "Karambit Lore", false);
 	public static final CloudItemKnife KNIFE_KAR_GAMMA = new CloudItemKnife(1526, 4482, CloudItemRarity.DIAMOND, "Karambit Gamma", false);
 	public static final CloudItemKnife KNIFE_KAR_EAGLE = new CloudItemKnife(1527, 4483, CloudItemRarity.DIAMOND, "Karambit Eagle", false);
+	public static final CloudItemKnife KNIFE_KAR_PRESTIGE = new CloudItemKnife(1528, 4483, CloudItemRarity.OBSIDIAN, "Karambit Prestige", false);
 
-	public static final CloudItemKnife KNIFE_BUTTERFLY = new CloudItemKnife(1530, 4486, CloudItemRarity.DIAMOND, "Butterfly", false);
+	public static final CloudItemKnife KNIFE_BFL = new CloudItemKnife(1530, 4486, CloudItemRarity.DIAMOND, "Butterfly", false);
+	public static final CloudItemKnife KNIFE_BFL_PRESTIGE = new CloudItemKnife(1531, 4487, CloudItemRarity.OBSIDIAN, "Butterfly Prestige", false);
 
 	public static final CloudItemGun NOVA = new CloudItemGun(1600, 4296, CloudItemRarity.DEFAULT, "Nova", true);
 	public static final CloudItemGun NOVA_OXIDEBLAZE = new CloudItemGun(1601, 4296, CloudItemRarity.IRON, "Nova Oxide Blaze", false);
@@ -302,12 +306,6 @@ public final class CloudItems {
 	public static final CloudItemKey CASE_KEY_PREALPHA = new CloudItemKey(4506, 5762, CloudItemRarity.COAL, "Key Prealpha", false);
 	public static final CloudItemKey CASE_KEY_PRESTIGE = new CloudItemKey(4507, 5763, CloudItemRarity.COAL, "Key Prestige", false);
 
-	private static final List<CloudItem> POOL_KNIFE_ALL = List.of(
-		KNIFE_TAC_MARBLE, KNIFE_TAC_TIGER, KNIFE_TAC_STEEL, KNIFE_TAC_DOPPLAR, KNIFE_TAC_LORE, KNIFE_TAC_GAMMA,
-		KNIFE_BAY, KNIFE_BAY_MARBLE, KNIFE_BAY_TIGER, KNIFE_BAY_STEEL, KNIFE_BAY_DOPPLAR, KNIFE_BAY_LORE, KNIFE_BAY_GAMMA,
-		KNIFE_KAR, KNIFE_KAR_MARBLE, KNIFE_KAR_TIGER, KNIFE_KAR_STEEL, KNIFE_KAR_DOPPLAR, KNIFE_KAR_LORE, KNIFE_KAR_GAMMA,
-		KNIFE_BUTTERFLY
-	);
 	private static final List<CloudItem> POOL_KNIFE_TAC = List.of(
 		KNIFE_TAC_MARBLE, KNIFE_TAC_TIGER, KNIFE_TAC_STEEL, KNIFE_TAC_DOPPLAR, KNIFE_TAC_LORE, KNIFE_TAC_GAMMA
 	);
@@ -317,8 +315,11 @@ public final class CloudItems {
 	private static final List<CloudItem> POOL_KNIFE_KAR = List.of(
 		KNIFE_KAR, KNIFE_KAR_MARBLE, KNIFE_KAR_TIGER, KNIFE_KAR_STEEL, KNIFE_KAR_DOPPLAR, KNIFE_KAR_LORE, KNIFE_KAR_GAMMA
 	);
-	private static final List<CloudItem> POOL_KNIFE_BUTTERFLY = List.of(
-		KNIFE_BUTTERFLY
+	private static final List<CloudItem> POOL_KNIFE_BFL = List.of(
+		KNIFE_BFL
+	);
+	private static final List<CloudItem> POOL_KNIFE_PRESTIGE = List.of(
+		KNIFE_TAC_PRESTIGE, KNIFE_BAY_PRESTIGE, KNIFE_KAR_PRESTIGE, KNIFE_BFL_PRESTIGE
 	);
 
 	public static final CloudItemCase CASE_ALPHA1 = new CloudItemCase(2000, 4356, CloudItemRarity.COAL, "Alpha 1 Case", false, CASE_KEY_ALPHA, POOL_KNIFE_TAC, true)
@@ -400,7 +401,7 @@ public final class CloudItems {
 			.add(G18_HIGHROLLER, 4)
 			.add(KNIFE_TAC_DISPLAY, 3, false)
 		);
-	public static final CloudItemCase CASE_EXO = new CloudItemCase(2005, 4361, CloudItemRarity.COAL, "Exo Case", false, CASE_KEY_EXO, POOL_KNIFE_BUTTERFLY, true)
+	public static final CloudItemCase CASE_EXO = new CloudItemCase(2005, 4361, CloudItemRarity.COAL, "Exo Case", false, CASE_KEY_EXO, POOL_KNIFE_BFL, true)
 		.modifyContents(collection -> collection
 			.add(AK47_BLOODSPORT, 150)
 			.add(TEC9_ECO, 150)
@@ -434,7 +435,7 @@ public final class CloudItems {
 			.add(AWP_LIGHTNING, 4)
 			.add(KNIFE_TAC_DISPLAY, 3, false)
 		);
-	public static final CloudItemCase CASE_PRESTIGE = new CloudItemCase(2007, 4363, CloudItemRarity.OBSIDIAN, "Prestige Case", false, CASE_KEY_PRESTIGE, POOL_KNIFE_ALL, false)
+	public static final CloudItemCase CASE_PRESTIGE = new CloudItemCase(2007, 4363, CloudItemRarity.OBSIDIAN, "Prestige Case", false, CASE_KEY_PRESTIGE, POOL_KNIFE_PRESTIGE, false)
 		.modifyContents(collection -> collection
 			.add(M4A4_PATRIOT, 30)
 			.add(M4A4_CYREX, 30)
@@ -455,37 +456,37 @@ public final class CloudItems {
 			.add(M249_NEON, 30)
 			.add(R8_GOLD, 30)
 			.add(UMP45_PRIMAL, 30)
-			.add(M4A4_EVILDAIMYO, 10)
-			.add(M4A4_PUMPKIN, 10)
-			.add(AK47_PROPAGANDA, 10)
-			.add(AK47_NEONREVOLUTION, 10)
-			.add(FNFAL_VAPORWAVE, 10)
-			.add(FNFAL_ASMO, 10)
-			.add(G18_FADE, 10)
-			.add(DEAGLE_DEADHORIZON, 10)
-			.add(P250_BEAST, 10)
-			.add(P90_KRAKEN, 10)
-			.add(VECTOR_ARCTIC, 10)
-			.add(AWP_BONES, 10)
-			.add(AWP_BOOM, 10)
-			.add(SAWEDOFF_WASTELANDPRINCESS, 10)
-			.add(MAG7_VAMPIRE, 10)
-			.add(CZ75_PHANTOM, 10)
-			.add(AK47_ASMO, 5)
-			.add(AK47_HAUNTED, 5)
-			.add(AK47_VULCAN, 5)
-			.add(FAMAS_WARHAWK, 5)
-			.add(G18_HIGHROLLER, 5)
-			.add(TEC9_AQUARIUM, 5)
-			.add(P250_SEEYALATER, 5)
-			.add(AWP_ASMO, 5)
-			.add(AWP_LIGHTNING, 5)
-			.add(SCAR20_UNICORN, 5)
-			.add(NOVA_HYPER_BEAST, 5)
-			.add(R8_FADE, 5)
+			.add(M4A4_EVILDAIMYO, 25)
+			.add(M4A4_PUMPKIN, 25)
+			.add(AK47_PROPAGANDA, 25)
+			.add(AK47_NEONREVOLUTION, 25)
+			.add(FNFAL_VAPORWAVE, 25)
+			.add(FNFAL_ASMO, 25)
+			.add(G18_FADE, 25)
+			.add(DEAGLE_DEADHORIZON, 25)
+			.add(P250_BEAST, 25)
+			.add(P90_KRAKEN, 25)
+			.add(VECTOR_ARCTIC, 25)
+			.add(AWP_BONES, 25)
+			.add(AWP_BOOM, 25)
+			.add(SAWEDOFF_WASTELANDPRINCESS, 25)
+			.add(MAG7_VAMPIRE, 25)
+			.add(CZ75_PHANTOM, 25)
+			.add(AK47_ASMO, 14)
+			.add(AK47_HAUNTED, 14)
+			.add(AK47_VULCAN, 14)
+			.add(FAMAS_WARHAWK, 14)
+			.add(G18_HIGHROLLER, 14)
+			.add(TEC9_AQUARIUM, 14)
+			.add(P250_SEEYALATER, 14)
+			.add(AWP_ASMO, 14)
+			.add(AWP_LIGHTNING, 14)
+			.add(SCAR20_UNICORN, 14)
+			.add(NOVA_HYPER_BEAST, 14)
+			.add(R8_FADE, 14)
 			.add(M4A4_HOWL, 10, false)
 			.add(AWP_DRAGON, 10, false)
-			.add(KNIFE_TAC_DISPLAY, 15, false)
+			.add(KNIFE_TAC_DISPLAY, 10, false)
 		);
 
 	private CloudItems() {
