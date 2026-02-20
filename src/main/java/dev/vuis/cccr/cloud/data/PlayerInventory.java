@@ -17,6 +17,7 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
@@ -32,7 +33,7 @@ public final class PlayerInventory {
 
 	@Getter
 	private final UUID ownerUuid;
-	final AtomicReference<String> username;
+	public final AtomicReference<String> username;
 
 	PlayerInventory(UUID ownerUuid, String username) {
 		this.ownerUuid = ownerUuid;
@@ -77,7 +78,16 @@ public final class PlayerInventory {
 
 	public void removeItemStack(UUID uuid, boolean sendPacket) {
 		CloudItemStack previous = stackMap.remove(uuid);
-		if (sendPacket && previous != null) {
+		if (previous == null) {
+			return;
+		}
+
+		ItemDefault def = defaultsMap.get(previous.item.getCategory());
+		if (def != null && Objects.equals(def.getStackUuid(previous.item), uuid)) {
+			def.clearStackUuid(previous.item);
+		}
+
+		if (sendPacket) {
 			PacketInventoryItemRemoved packet = new PacketInventoryItemRemoved();
 			previous.writeTag(packet.tag);
 

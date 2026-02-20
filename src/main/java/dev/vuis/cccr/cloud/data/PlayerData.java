@@ -40,11 +40,13 @@ public final class PlayerData {
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
-	public final List<Punishment> punishments = new CopyOnWriteArrayList<>();
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
 	public final Set<UUID> friendRequests = ConcurrentHashMap.newKeySet();
+
+	// punishments
+	public final List<Punishment> punishments = new CopyOnWriteArrayList<>();
 
 	PlayerData(UUID uuid, String username) {
 		this.uuid = uuid;
@@ -113,6 +115,7 @@ public final class PlayerData {
 			}
 		}
 
+		tag.setInteger("maxInv", 1000);
 		tag.setString("discordUserId", "");
 		tag.setBoolean("enableNotification_FriendRequest", true);
 		tag.setBoolean("enableNotification_FriendPoke", true);

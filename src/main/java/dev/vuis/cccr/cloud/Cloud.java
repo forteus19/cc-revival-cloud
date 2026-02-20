@@ -11,6 +11,7 @@ import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.data.Trade;
 import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -20,6 +21,8 @@ import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
@@ -138,6 +141,18 @@ public final class Cloud implements ICloud {
 		}
 		long invEnd = System.nanoTime();
 		log("Saved %d cached player inventory entries in %.2f ms", cachedPlayerInventories.size(), (invEnd - invStart) / 1000000f);
+
+		long tradeStart = System.nanoTime();
+		Set<Map.Entry<UUID, Trade>> cachedTrades = dataHandler.getCachedTrades();
+		for (Map.Entry<UUID, Trade> trade : cachedTrades) {
+			try {
+				dataHandler.getDatabase().saveTrade(trade.getKey(), trade.getValue());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		long tradeEnd = System.nanoTime();
+		log("Saved %d cached trade entries in %.2f ms", cachedTrades.size(), (tradeEnd - tradeStart) / 1000000f);
 	}
 
 	@Override

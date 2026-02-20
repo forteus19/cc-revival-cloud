@@ -2,10 +2,12 @@ package dev.vuis.cccr.cloud.item;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public final class CloudItemStack {
+	@Getter
 	public final UUID uuid;
 	public final CloudItem item;
 	public String nametag = null;

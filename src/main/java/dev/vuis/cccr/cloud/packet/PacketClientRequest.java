@@ -67,6 +67,12 @@ public final class PacketClientRequest extends G_TcpPacketCustomPayload {
 					PacketRequestedItemDefault.sendForPlayer(connectionHandler, username, category, false);
 				}
 			}
+			case PLAYER_TRADES -> {
+				if (requestData.length != 1) {
+					break;
+				}
+				PacketRequestedTrading.sendForPlayer(connectionHandler, requestData[0]);
+			}
 			case PLAYER_FRIENDS -> {
 				if (requestData.length != 1) {
 					break;

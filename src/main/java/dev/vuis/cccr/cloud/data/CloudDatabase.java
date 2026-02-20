@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.data;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.util.Util;
+import java.sql.Array;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -10,7 +11,9 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 import javax.sql.DataSource;
 import lombok.Cleanup;
@@ -174,7 +177,10 @@ public final class CloudDatabase {
 			data.emeralds.set(rs.getInt("emeralds"));
 			data.mood.set(rs.getString("mood"));
 			data.achievements.addAll(Arrays.asList((Integer[]) rs.getArray("achievements").getArray()));
-			data.group.set(PlayerGroups.getByTag(rs.getString("group_tag")));
+			String groupTag = rs.getString("group_tag");
+			if (groupTag != null) {
+				data.group.set(PlayerGroups.getByTag(groupTag));
+			}
 			data.prestige.set(rs.getInt("prestige"));
 			data.compExp.set(rs.getInt("comp_exp"));
 		}
@@ -266,7 +272,10 @@ public final class CloudDatabase {
 			}
 
 			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into player_inventories (uuid, owner_uuid, item_id, nametag, equipped) values (?, ?, ?, ?, ?)"
+				"insert into player_inventories (uuid, owner_uuid, item_id, nametag, equipped) " +
+					"values (?, ?, ?, ?, ?) " +
+					"on conflict (uuid) do update set " +
+					"owner_uuid = excluded.owner_uuid, item_id = excluded.item_id, nametag = excluded.nametag, equipped = excluded.equipped"
 			)) {
 				for (CloudItemStack stack : inventory.getItemStacks()) {
 					ps.setObject(1, stack.uuid);
@@ -318,5 +327,130 @@ public final class CloudDatabase {
 		}
 
 		return inventory;
+	}
+
+	public void saveTrade(UUID uuid, Trade trade) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+		connection.setAutoCommit(false);
+
+		try {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"insert into trades (uuid, offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks) " +
+					"values (?, ?, ?, ?, ?, ?, ?, ?) " +
+					"on conflict (uuid) do update set " +
+					"offerer_uuid = excluded.offerer_uuid, returner_uuid = excluded.returner_uuid, start_time = excluded.start_time, end_time = excluded.end_time, " +
+					"result_ordinal = excluded.result_ordinal, offer_stacks = excluded.offer_stacks, return_stacks = excluded.return_stacks"
+			)) {
+				ps.setObject(1, uuid);
+				ps.setObject(2, trade.offererUuid);
+				ps.setObject(3, trade.returnerUuid);
+				ps.setTimestamp(4, Timestamp.valueOf(trade.start));
+				ps.setTimestamp(5, Util.ifNonNull(trade.end, Timestamp::valueOf));
+				ps.setInt(6, trade.result.ordinal());
+				ps.setArray(7, connection.createArrayOf("uuid", trade.offerStacks.stream().map(CloudItemStack::getUuid).toArray()));
+				ps.setArray(8, connection.createArrayOf("uuid", trade.returnStacks.stream().map(CloudItemStack::getUuid).toArray()));
+
+				ps.executeUpdate();
+			}
+
+			connection.commit();
+		} catch (SQLException e) {
+			connection.rollback();
+			throw e;
+		}
+	}
+
+	private Trade processTradeQuery(UUID offererUuid, UUID returnerUuid, Timestamp startTime, Timestamp endTime, int resultOrdinal, Array offerUuids, Array returnUuids) throws SQLException {
+		Trade.Result result = Trade.Result.values()[resultOrdinal];
+
+		PlayerInventory offererInventory = DataHandler.instance().getPlayerInventory(offererUuid);
+		PlayerInventory returnerInventory = DataHandler.instance().getPlayerInventory(returnerUuid);
+
+		List<CloudItemStack> offerStacks = new ArrayList<>();
+		for (UUID offerUuid : (UUID[]) offerUuids.getArray()) {
+			CloudItemStack stack = (result == Trade.Result.ACCEPTED ? returnerInventory : offererInventory).getItemStack(offerUuid);
+			if (stack != null) {
+				offerStacks.add(stack);
+			}
+		}
+
+		List<CloudItemStack> returnStacks = new ArrayList<>();
+		for (UUID returnUuid : (UUID[]) returnUuids.getArray()) {
+			CloudItemStack stack = (result == Trade.Result.ACCEPTED ? offererInventory : returnerInventory).getItemStack(returnUuid);
+			if (stack != null) {
+				returnStacks.add(stack);
+			}
+		}
+
+		Trade trade = new Trade(
+			startTime.toLocalDateTime(),
+			offererUuid, returnerUuid,
+			offerStacks, returnStacks
+		);
+		trade.result = result;
+		if (endTime != null) {
+			trade.end = endTime.toLocalDateTime();
+		}
+
+		return trade;
+	}
+
+	public Trade loadTrade(UUID uuid) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks from trades where uuid = ?"
+		)) {
+			ps.setObject(1, uuid);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+			if (!rs.next()) {
+				return null;
+			}
+
+			return processTradeQuery(
+				rs.getObject("offerer_uuid", UUID.class),
+				rs.getObject("returner_uuid", UUID.class),
+				rs.getTimestamp("start_time"),
+				rs.getTimestamp("end_time"),
+				rs.getInt("result_ordinal"),
+				rs.getArray("offer_stacks"),
+				rs.getArray("return_stacks")
+			);
+		}
+	}
+
+	public Map<UUID, Trade> loadPlayerTrades(UUID playerUuid) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+
+		Map<UUID, Trade> result = new HashMap<>();
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select uuid, offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks from trades where offerer_uuid = ? or returner_uuid = ?"
+		)) {
+			ps.setObject(1, playerUuid);
+			ps.setObject(2, playerUuid);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				result.put(rs.getObject("uuid", UUID.class), processTradeQuery(
+					rs.getObject("offerer_uuid", UUID.class),
+					rs.getObject("returner_uuid", UUID.class),
+					rs.getTimestamp("start_time"),
+					rs.getTimestamp("end_time"),
+					rs.getInt("result_ordinal"),
+					rs.getArray("offer_stacks"),
+					rs.getArray("return_stacks")
+				));
+			}
+		}
+
+		return result;
 	}
 }

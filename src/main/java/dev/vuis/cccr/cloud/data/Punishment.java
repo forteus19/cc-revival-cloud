@@ -1,8 +1,8 @@
 package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.CloudConstants;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.UUID;
 
 public record Punishment(
@@ -13,13 +13,11 @@ public record Punishment(
 	LocalDateTime start,
 	LocalDateTime end
 ) {
-	private static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm:ss");
-
 	public void writeTag(FDSTagCompound tag, LocalDateTime now) {
 		tag.setString("id", uuid.toString());
 		tag.setString("reason", reason);
-		tag.setString("datecurrent", DATE_FORMAT.format(now));
-		tag.setString("dateend", DATE_FORMAT.format(end));
+		tag.setString("datecurrent", CloudConstants.DATE_FORMAT.format(now));
+		tag.setString("dateend", CloudConstants.DATE_FORMAT.format(end));
 		tag.setBoolean("closed", false);
 		tag.setString("type", type.toString());
 	}
