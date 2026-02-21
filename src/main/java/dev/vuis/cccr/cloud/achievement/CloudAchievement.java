@@ -29,7 +29,7 @@ public record CloudAchievement(
 		if (!playerData.achievements.add(id)) {
 			return;
 		}
-		Cloud.instance().sendPacketToPlayer(playerData.username.get(), new PacketNotificationFromCloud(
+		Cloud.instance().sendPacketToPlayer(playerData.uuid, new PacketNotificationFromCloud(
 			String.format("You've unlocked a new Achievement! (%s)", name), CloudConstants.CC_NAME, 0
 		));
 		if (serverConnection != null) {

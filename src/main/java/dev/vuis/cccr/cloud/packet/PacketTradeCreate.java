@@ -78,6 +78,9 @@ public final class PacketTradeCreate extends G_TcpPacketCustomPayload {
 				));
 				return;
 			}
+			if (!stack.item.isTradable()) {
+				return;
+			}
 			offerStacks.add(stack);
 		}
 
@@ -88,6 +91,9 @@ public final class PacketTradeCreate extends G_TcpPacketCustomPayload {
 				connectionHandler.sendPacket(new PacketNotificationFromCloud(
 					"A return item could not be found!", CloudConstants.CC_NAME, 0
 				));
+				return;
+			}
+			if (!stack.item.isTradable()) {
 				return;
 			}
 			returnStacks.add(stack);

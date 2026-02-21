@@ -1,0 +1,112 @@
+package dev.vuis.cccr.cloud.packet;
+
+import com.f3rullo14.cloud.G_ITcpConnectionHandler;
+import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
+import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerInventory;
+import dev.vuis.cccr.cloud.item.CloudItem;
+import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.item.CloudItemStack;
+import dev.vuis.cccr.cloud.item.CloudItems;
+import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
+import dev.vuis.cccr.cloud.util.PacketUtil;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+
+public final class PacketInventoryContract extends G_TcpPacketCustomPayload {
+	private static final List<CloudItemRarity> GUN_RARITIES = List.of(
+		CloudItemRarity.COAL, CloudItemRarity.IRON, CloudItemRarity.LAPIS, CloudItemRarity.GOLD
+	);
+	private static final Map<CloudItemRarity, List<CloudItem>> RARITY_POOL;
+
+	static {
+		ImmutableMap.Builder<CloudItemRarity, List<CloudItem>> poolBuilder = ImmutableMap.builder();
+
+		CloudItemRarity[] rarities = CloudItemRarity.values();
+		for (CloudItemRarity gunRarity : GUN_RARITIES) {
+			poolBuilder.put(gunRarity, ImmutableList.copyOf(CloudItemGun.getByRarity(rarities[gunRarity.ordinal() + 1])));
+		}
+		poolBuilder.put(CloudItemRarity.DIAMOND, CloudItems.POOL_KNIFE_REGULAR);
+
+		RARITY_POOL = poolBuilder.buildOrThrow();
+	}
+
+	private final List<UUID> stackUuids = new ArrayList<>();
+
+	@Override
+	public void writePacketToStream(DataOutputStream out) throws IOException {
+	}
+
+	@Override
+	public void readPacketFromStream(DataInputStream in) throws IOException {
+		int numStacks = in.readInt();
+		in.readInt();
+
+		for (int i = 0; i < numStacks; i++) {
+			stackUuids.add(UUID.fromString(readString(in)));
+		}
+	}
+
+	@Override
+	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
+		if (PacketUtil.checkAuthentication(connectionHandler)) {
+			return;
+		}
+
+		PlayerInventory inventory = DataHandler.instance().getPlayerInventory(connectionHandler.getConnectionUsername());
+		if (inventory == null) {
+			return;
+		}
+
+		if (stackUuids.size() != 10) {
+			connectionHandler.sendPacket(invalidNotification());
+			return;
+		}
+
+		CloudItemRarity rarity = null;
+		for (UUID stackUuid : stackUuids) {
+			CloudItemStack stack = inventory.getItemStack(stackUuid);
+			if (stack == null) {
+				connectionHandler.sendPacket(invalidNotification());
+				return;
+			}
+			if (!(stack.item instanceof CloudItemGun)) {
+				connectionHandler.sendPacket(invalidNotification());
+				return;
+			}
+
+			if (rarity == null) {
+				rarity = stack.item.getRarity();
+			} else if (stack.item.getRarity() != rarity) {
+				connectionHandler.sendPacket(invalidNotification());
+				return;
+			}
+		}
+
+		List<CloudItem> pool = RARITY_POOL.get(rarity);
+		if (pool == null) {
+			connectionHandler.sendPacket(invalidNotification());
+			return;
+		}
+
+		for (UUID stackUuid : stackUuids) {
+			inventory.removeItemStack(stackUuid, true);
+		}
+		inventory.addItemStack(new CloudItemStack(pool.get(ThreadLocalRandom.current().nextInt(pool.size()))), true);
+	}
+
+	private static PacketNotificationFromCloud invalidNotification() {
+		return new PacketNotificationFromCloud(
+			"Invalid trade up!", CloudConstants.CC_NAME, 0
+		);
+	}
+}

@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.packet;
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.CloudConstants;
+import dev.vuis.cccr.cloud.achievement.CloudAchievements;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
@@ -60,5 +61,8 @@ public final class PacketCheckPrestige extends G_TcpPacketCustomPayload {
 		connectionHandler.sendPacket(new PacketNotificationFromCloud(
 			String.format("You have prestiged to level %d!", newPrestige), CloudConstants.CC_NAME, 0
 		));
+		if (newPrestige == 1) {
+			CloudAchievements.ACH_USER_PRESTIGE_1.handleUnlock(data, null);
+		}
 	}
 }
