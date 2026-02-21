@@ -1,5 +1,6 @@
 package dev.vuis.cccr.cloud.data;
 
+import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.util.Util;
@@ -297,7 +298,17 @@ public final class CloudDatabase {
 		}
 	}
 
-	public PlayerInventory loadPlayerInventory(UUID ownerUuid, String ownerUsername) throws SQLException {
+	private static CloudItemStack processItemStackQuery(UUID uuid, int itemId, String nametag) {
+		CloudItem item = CloudItems.getById(itemId);
+		if (item == null) {
+			return null;
+		}
+		CloudItemStack stack = new CloudItemStack(uuid, item);
+		stack.nametag = nametag;
+		return stack;
+	}
+
+	public PlayerInventory loadPlayerInventory(UUID ownerUuid) throws SQLException {
 		@Cleanup
 		Connection connection = dataSource.getConnection();
 
@@ -313,11 +324,17 @@ public final class CloudDatabase {
 
 			while (rs.next()) {
 				if (inventory == null) {
-					inventory = new PlayerInventory(ownerUuid, ownerUsername);
+					inventory = new PlayerInventory(ownerUuid);
 				}
 
-				CloudItemStack stack = new CloudItemStack(rs.getObject("uuid", UUID.class), CloudItems.getById(rs.getInt("item_id")));
-				stack.nametag = rs.getString("nametag");
+				CloudItemStack stack = processItemStackQuery(
+					rs.getObject("uuid", UUID.class),
+					rs.getInt("item_id"),
+					rs.getString("nametag")
+				);
+				if (stack == null) {
+					continue;
+				}
 
 				inventory.addItemStack(stack, false);
 				if (rs.getBoolean("equipped")) {
@@ -361,27 +378,36 @@ public final class CloudDatabase {
 		}
 	}
 
-	private Trade processTradeQuery(UUID offererUuid, UUID returnerUuid, Timestamp startTime, Timestamp endTime, int resultOrdinal, Array offerUuids, Array returnUuids) throws SQLException {
+	private static List<CloudItemStack> loadItemStacks(Connection connection, Array uuids) throws SQLException {
+		List<CloudItemStack> result = new ArrayList<>();
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select uuid, item_id, nametag from player_inventories where uuid = any (?::uuid[])"
+		)) {
+			ps.setArray(1, uuids);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+			while (rs.next()) {
+				CloudItemStack stack = processItemStackQuery(
+					rs.getObject("uuid", UUID.class),
+					rs.getInt("item_id"),
+					rs.getString("nametag")
+				);
+				if (stack != null) {
+					result.add(stack);
+				}
+			}
+		}
+
+		return result;
+	}
+
+	private static Trade processTradeQuery(Connection connection, UUID offererUuid, UUID returnerUuid, Timestamp startTime, Timestamp endTime, int resultOrdinal, Array offerUuids, Array returnUuids) throws SQLException {
 		Trade.Result result = Trade.Result.values()[resultOrdinal];
 
-		PlayerInventory offererInventory = DataHandler.instance().getPlayerInventory(offererUuid);
-		PlayerInventory returnerInventory = DataHandler.instance().getPlayerInventory(returnerUuid);
-
-		List<CloudItemStack> offerStacks = new ArrayList<>();
-		for (UUID offerUuid : (UUID[]) offerUuids.getArray()) {
-			CloudItemStack stack = (result == Trade.Result.ACCEPTED ? returnerInventory : offererInventory).getItemStack(offerUuid);
-			if (stack != null) {
-				offerStacks.add(stack);
-			}
-		}
-
-		List<CloudItemStack> returnStacks = new ArrayList<>();
-		for (UUID returnUuid : (UUID[]) returnUuids.getArray()) {
-			CloudItemStack stack = (result == Trade.Result.ACCEPTED ? offererInventory : returnerInventory).getItemStack(returnUuid);
-			if (stack != null) {
-				returnStacks.add(stack);
-			}
-		}
+		List<CloudItemStack> offerStacks = loadItemStacks(connection, offerUuids);
+		List<CloudItemStack> returnStacks = loadItemStacks(connection, returnUuids);
 
 		Trade trade = new Trade(
 			startTime.toLocalDateTime(),
@@ -412,6 +438,7 @@ public final class CloudDatabase {
 			}
 
 			return processTradeQuery(
+				connection,
 				rs.getObject("offerer_uuid", UUID.class),
 				rs.getObject("returner_uuid", UUID.class),
 				rs.getTimestamp("start_time"),
@@ -440,6 +467,7 @@ public final class CloudDatabase {
 
 			while (rs.next()) {
 				result.put(rs.getObject("uuid", UUID.class), processTradeQuery(
+					connection,
 					rs.getObject("offerer_uuid", UUID.class),
 					rs.getObject("returner_uuid", UUID.class),
 					rs.getTimestamp("start_time"),

@@ -5,6 +5,7 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.data.PlayerInventory;
 import dev.vuis.cccr.cloud.data.Trade;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
@@ -40,6 +41,16 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 			return;
 		}
 
+		PlayerData offererData = DataHandler.instance().getPlayerData(trade.offererUuid);
+		if (offererData == null) {
+			trade.finalize(Trade.Result.ERROR);
+			return;
+		}
+		PlayerData returnerData = DataHandler.instance().getPlayerData(trade.returnerUuid);
+		if (returnerData == null) {
+			trade.finalize(Trade.Result.ERROR);
+			return;
+		}
 		PlayerInventory offererInventory = DataHandler.instance().getPlayerInventory(trade.offererUuid);
 		if (offererInventory == null) {
 			trade.finalize(Trade.Result.ERROR);
@@ -51,7 +62,7 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerInventory.username.get())) {
+		if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerData.username.get())) {
 			return;
 		}
 
@@ -70,7 +81,7 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 				connectionHandler.sendPacket(new PacketNotificationFromCloud(
 					"Trade request accepted!", CloudConstants.CC_NAME, 0
 				));
-				Cloud.instance().sendPacketToPlayer(offererInventory.username.get(), new PacketNotificationFromCloud(
+				Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
 					String.format("%s accepted your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
 				));
 			}
@@ -79,7 +90,7 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 				connectionHandler.sendPacket(new PacketNotificationFromCloud(
 					"Trade request denied!", CloudConstants.CC_NAME, 0
 				));
-				Cloud.instance().sendPacketToPlayer(offererInventory.username.get(), new PacketNotificationFromCloud(
+				Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
 					String.format("%s denied your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
 				));
 			}

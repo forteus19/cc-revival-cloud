@@ -20,11 +20,12 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicReference;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public final class PlayerInventory {
 	private static final int SPLIT_SIZE = 64;
 
@@ -33,12 +34,6 @@ public final class PlayerInventory {
 
 	@Getter
 	private final UUID ownerUuid;
-	public final AtomicReference<String> username;
-
-	PlayerInventory(UUID ownerUuid, String username) {
-		this.ownerUuid = ownerUuid;
-		this.username = new AtomicReference<>(username);
-	}
 
 	public CloudItemStack getItemStack(UUID uuid) {
 		return stackMap.get(uuid);
@@ -68,7 +63,7 @@ public final class PlayerInventory {
 			PacketInventoryItemAdded packet = new PacketInventoryItemAdded();
 			itemStack.writeTag(packet.tag);
 
-			Cloud.instance().sendPacketToPlayer(username.get(), packet);
+			Cloud.instance().sendPacketToPlayer(ownerUuid, packet);
 		}
 	}
 
@@ -91,7 +86,7 @@ public final class PlayerInventory {
 			PacketInventoryItemRemoved packet = new PacketInventoryItemRemoved();
 			previous.writeTag(packet.tag);
 
-			Cloud.instance().sendPacketToPlayer(username.get(), packet);
+			Cloud.instance().sendPacketToPlayer(ownerUuid, packet);
 		}
 	}
 

@@ -2,8 +2,6 @@ package dev.vuis.cccr.cloud.data;
 
 import com.google.common.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.CacheLoader;
-import com.google.common.cache.LoadingCache;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
@@ -15,7 +13,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import javax.sql.DataSource;
 import lombok.Getter;
@@ -28,8 +25,8 @@ public final class DataHandler {
 	private final Map<UUID, String> playerUsernames = new ConcurrentHashMap<>();
 	private final Map<UUID, Set<UUID>> playerTradeUuids = new ConcurrentHashMap<>();
 
-	private final LoadingCache<UUID, PlayerData> playerDataCache;
-	private final LoadingCache<UUID, PlayerInventory> playerInventoryCache;
+	private final Cache<UUID, PlayerData> playerDataCache;
+	private final Cache<UUID, PlayerInventory> playerInventoryCache;
 	private final Cache<UUID, Trade> tradeCache;
 
 	public DataHandler(DataSource dataSource) {
@@ -46,19 +43,7 @@ public final class DataHandler {
 					throw new RuntimeException(e);
 				}
 			})
-			.build(new CacheLoader<>() {
-				@Override
-				public PlayerData load(UUID key) throws Exception {
-					String username = playerUsernames.getOrDefault(key, "Unknown");
-					PlayerData data = database.loadPlayerData(key);
-					if (data == null) {
-						Cloud.instanceLog("[DataHandler] Creating new player data for %s", username);
-						data = new PlayerData(key, username);
-					}
-					playerUsernames.put(key, username);
-					return data;
-				}
-			});
+			.build();
 		this.playerInventoryCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener(notification -> {
@@ -70,18 +55,7 @@ public final class DataHandler {
 					throw new RuntimeException(e);
 				}
 			})
-			.build(new CacheLoader<>() {
-				@Override
-				public PlayerInventory load(UUID key) throws Exception {
-					String username = playerUsernames.getOrDefault(key, "Unknown");
-					PlayerInventory inventory = database.loadPlayerInventory(key, username);
-					if (inventory == null) {
-						Cloud.instanceLog("[DataHandler] Creating new player inventory for %s", username);
-						inventory = initializeInventory(new PlayerInventory(key, username));
-					}
-					return inventory;
-				}
-			});
+			.build();
 		this.tradeCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener(notification -> {
@@ -117,11 +91,20 @@ public final class DataHandler {
 	}
 
 	public PlayerData getPlayerData(UUID uuid) {
+		PlayerData data = playerDataCache.getIfPresent(uuid);
+		if (data != null) {
+			return data;
+		}
+
 		try {
-			return playerDataCache.get(uuid);
-		} catch (ExecutionException e) {
+			data = database.loadPlayerData(uuid);
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		if (data != null) {
+			playerDataCache.put(uuid, data);
+		}
+		return data;
 	}
 
 	public PlayerData getPlayerData(String username) {
@@ -137,30 +120,36 @@ public final class DataHandler {
 		playerUuids.put(username, uuid);
 		playerUsernames.put(uuid, username);
 
-		PlayerData data;
-		try {
-			data = playerDataCache.get(uuid);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
+		PlayerData data = getPlayerData(uuid);
+		if (data == null) {
+			Cloud.instanceLog("[DataHandler] Creating new player data for %s", username);
+			data = new PlayerData(uuid, username);
+			playerDataCache.put(uuid, data);
+		} else {
+			data.dirty.mark();
+			data.username.set(username);
 		}
 
-		data.dirty.mark();
-		data.username.set(username);
-		try {
-			playerInventoryCache.get(uuid).username.set(username);
-		} catch (ExecutionException e) {
-			throw new RuntimeException(e);
-		}
+		populatePlayerInventory(username, uuid);
 
 		return data;
 	}
 
 	public PlayerInventory getPlayerInventory(UUID uuid) {
+		PlayerInventory inventory = playerInventoryCache.getIfPresent(uuid);
+		if (inventory != null) {
+			return inventory;
+		}
+
 		try {
-			return playerInventoryCache.get(uuid);
-		} catch (ExecutionException e) {
+			inventory = database.loadPlayerInventory(uuid);
+		} catch (SQLException e) {
 			throw new RuntimeException(e);
 		}
+		if (inventory != null) {
+			playerInventoryCache.put(uuid, inventory);
+		}
+		return inventory;
 	}
 
 	public PlayerInventory getPlayerInventory(String username) {
@@ -170,6 +159,16 @@ public final class DataHandler {
 
 	public Collection<PlayerInventory> getCachedPlayerInventories() {
 		return Collections.unmodifiableCollection(playerInventoryCache.asMap().values());
+	}
+
+	public PlayerInventory populatePlayerInventory(String username, UUID uuid) {
+		PlayerInventory inventory = getPlayerInventory(uuid);
+		if (inventory == null) {
+			Cloud.instanceLog("[DataHandler] Creating new player inventory for %s", username);
+			inventory = initializeInventory(new PlayerInventory(uuid));
+		}
+
+		return inventory;
 	}
 
 	private static PlayerInventory initializeInventory(PlayerInventory inventory) {

@@ -24,6 +24,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +52,7 @@ public final class Cloud implements ICloud {
 	@Getter
 	private final CloudAuth auth = new CloudAuth(this);
 
+	private final Map<UUID, G_CloudTcpConnectionHandler> playerConnections = new ConcurrentHashMap<>();
 	private final ScheduledExecutorService minuteExecutor = Executors.newSingleThreadScheduledExecutor();
 
 	public Cloud(int port, String mmPassword, String mcHost, DataSource dataSource) {
@@ -210,6 +212,7 @@ public final class Cloud implements ICloud {
 
 	void onConnectionAuthenticationSuccess(G_CloudTcpConnectionHandler connectionHandler, UUID resultUuid) {
 		String username = connectionHandler.getConnectionUsername();
+		playerConnections.put(resultUuid, connectionHandler);
 
 		log("Client \"%s\" authenticated", username);
 
@@ -240,6 +243,7 @@ public final class Cloud implements ICloud {
 	@Override
 	public void onConnectionDisconnected(G_CloudTcpConnectionHandler connectionHandler) {
 		String username = connectionHandler.getConnectionUsername();
+		playerConnections.values().remove(connectionHandler);
 
 		log("Client \"%s\" disconnected (reason: %s)", username, ReflectUtil.getTerminationReason(connectionHandler.tcpConnection));
 
@@ -275,6 +279,14 @@ public final class Cloud implements ICloud {
 
 	public G_CloudTcpConnectionHandler getPlayerConnection(String username) {
 		return cloudManager.getNetwork().getClientConnectionHandler(CloudConstants.CHANNEL_PLAYER, username);
+	}
+
+	public Cloud sendPacketToPlayer(UUID uuid, G_TcpPacket packet) {
+		G_CloudTcpConnectionHandler connectionHandler = playerConnections.get(uuid);
+		if (connectionHandler != null) {
+			connectionHandler.sendPacket(packet);
+		}
+		return this;
 	}
 
 	public Cloud sendPacketToPlayer(String username, G_TcpPacket packet) {
