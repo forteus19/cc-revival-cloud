@@ -1,5 +1,6 @@
 package dev.vuis.cccr.cloud.console.impl;
 
+import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.console.Command;
 import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.data.DataHandler;
@@ -55,7 +56,7 @@ public class PunishCommand implements Command {
 		playerData.punishmentsDirty.mark();
 		playerData.punishments.add(new Punishment(UUID.randomUUID(), source.getName(), type, reason, now, now.plusMinutes(minutes)));
 		if (type.isSendBannedPacket()) {
-			source.sendPacket(new PacketBanned());
+			Cloud.instance().sendPacketToPlayer(username, new PacketBanned());
 		}
 	}
 }

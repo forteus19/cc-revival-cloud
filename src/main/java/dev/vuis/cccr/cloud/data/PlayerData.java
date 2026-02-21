@@ -100,19 +100,20 @@ public final class PlayerData {
 		}
 
 		if (writePunishments) {
-			tag.setInteger("punishSize", punishments.size());
+			int numPunishments = 0;
 
 			LocalDateTime now = Util.utcNow();
-			for (int i = 0; i < punishments.size(); i++) {
-				Punishment punishment = punishments.get(i);
+			for (Punishment punishment : punishments) {
 				if (now.isAfter(punishment.end())) {
 					continue;
 				}
 
-				FDSTagCompound punishmentTag = new FDSTagCompound("pun" + i);
+				FDSTagCompound punishmentTag = new FDSTagCompound("pun" + numPunishments++);
 				punishment.writeTag(punishmentTag, now);
 				tag.setTagCompound(punishmentTag.getTag(), punishmentTag);
 			}
+
+			tag.setInteger("punishSize", numPunishments);
 		}
 
 		tag.setInteger("maxInv", 1000);

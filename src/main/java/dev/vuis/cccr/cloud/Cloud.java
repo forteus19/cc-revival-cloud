@@ -306,10 +306,5 @@ public final class Cloud implements ICloud {
 		public void sendMessage(String fmt, Object... args) {
 			Cloud.this.log(fmt, args);
 		}
-
-		@Override
-		public void sendPacket(G_TcpPacket packet) {
-			Cloud.this.log("Received packet id %d from command.", packet.getPacketId());
-		}
 	}
 }
