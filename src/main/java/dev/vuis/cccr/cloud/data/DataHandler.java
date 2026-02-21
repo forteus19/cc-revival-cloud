@@ -166,6 +166,7 @@ public final class DataHandler {
 		if (inventory == null) {
 			Cloud.instanceLog("[DataHandler] Creating new player inventory for %s", username);
 			inventory = initializeInventory(new PlayerInventory(uuid));
+			playerInventoryCache.put(uuid, inventory);
 		}
 
 		return inventory;
