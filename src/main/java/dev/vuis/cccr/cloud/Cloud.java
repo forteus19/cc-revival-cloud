@@ -179,6 +179,10 @@ public final class Cloud implements ICloud {
 	@Override
 	public boolean onConnectionReached(G_CloudTcpConnectionHandler connectionHandler) {
 		log("Client \"%s\" is attemping connection", connectionHandler.getConnectionUsername());
+		if (!connectionHandler.getConnectionVersion().equals(CloudConstants.VERSION)) {
+			log("Rejecting \"%s\" due to outdated client (%s)", connectionHandler.getConnectionUsername(), connectionHandler.getConnectionVersion());
+			return false;
+		}
 		return true;
 	}
 
