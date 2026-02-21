@@ -78,8 +78,8 @@ public final class PlayerInventory {
 		}
 
 		ItemDefault def = defaultsMap.get(previous.item.getCategory());
-		if (def != null && Objects.equals(def.getStackUuid(previous.item), uuid)) {
-			def.clearStackUuid(previous.item);
+		if (def != null && Objects.equals(def.getStackUuid(previous.item), uuid) && def.clearStackUuid(previous.item)) {
+			defaultsMap.remove(previous.item.getCategory());
 		}
 
 		if (sendPacket) {
