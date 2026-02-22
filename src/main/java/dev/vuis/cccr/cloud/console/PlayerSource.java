@@ -5,9 +5,11 @@ import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.packet.PacketConsoleMessage;
+import lombok.Getter;
 
 public class PlayerSource implements CommandSource {
 	private final G_ITcpConnectionHandler connectionHandler;
+	@Getter
 	private final PlayerData playerData;
 
 	public PlayerSource(G_ITcpConnectionHandler connectionHandler) {

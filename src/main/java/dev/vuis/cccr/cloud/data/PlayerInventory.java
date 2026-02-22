@@ -1,13 +1,16 @@
 package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import com.google.common.collect.ConcurrentHashMultiset;
 import com.google.common.collect.Iterators;
+import com.google.common.collect.Multiset;
 import com.google.common.collect.Streams;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.ItemDefault;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
 import dev.vuis.cccr.cloud.item.impl.ItemDefaultGun;
 import dev.vuis.cccr.cloud.item.impl.ItemDefaultSingleton;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
@@ -31,6 +34,7 @@ public final class PlayerInventory {
 
 	private final Map<UUID, CloudItemStack> stackMap = new ConcurrentHashMap<>();
 	private final Map<CloudItemCategory, ItemDefault> defaultsMap = new ConcurrentHashMap<>();
+	public final Map<CloudItemCase, Multiset<CloudItem>> caseStats = new ConcurrentHashMap<>();
 
 	@Getter
 	private final UUID ownerUuid;
@@ -179,5 +183,13 @@ public final class PlayerInventory {
 		if (itemDef != null) {
 			itemDef.writeTag(tag);
 		}
+	}
+
+	public Multiset<CloudItem> getCaseResultSet(CloudItemCase caseItem) {
+		return caseStats.computeIfAbsent(caseItem, _ -> ConcurrentHashMultiset.create());
+	}
+
+	public void incrementCaseResult(CloudItemCase caseItem, CloudItem resultItem) {
+		getCaseResultSet(caseItem).add(resultItem);
 	}
 }

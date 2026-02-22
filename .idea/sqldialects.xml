@@ -8,6 +8,7 @@
     <file url="file://$PROJECT_DIR$/migrations/V5_punishments.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/V6_comp.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/migrations/V7_trades.sql" dialect="PostgreSQL" />
+    <file url="file://$PROJECT_DIR$/migrations/V8_case_stats.sql" dialect="PostgreSQL" />
     <file url="file://$PROJECT_DIR$/src/main/java/dev/vuis/cccr/cloud/data/CloudDatabase.java" dialect="PostgreSQL" />
     <file url="PROJECT" dialect="PostgreSQL" />
   </component>

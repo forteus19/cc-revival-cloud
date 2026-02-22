@@ -1,8 +1,11 @@
 package dev.vuis.cccr.cloud.data;
 
+import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
+import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
+import dev.vuis.cccr.cloud.util.Pair;
 import dev.vuis.cccr.cloud.util.Util;
 import java.sql.Array;
 import java.sql.Connection;
@@ -291,6 +294,28 @@ public final class CloudDatabase {
 				ps.executeBatch();
 			}
 
+			try (PreparedStatement ps = connection.prepareStatement(
+				"insert into player_case_stats (player_uuid, case_item_id, result_item_id, count) " +
+					"values (?, ?, ?, ?) " +
+					"on conflict (player_uuid, case_item_id, result_item_id) do update set " +
+					"count = excluded.count"
+			)) {
+				for (Map.Entry<CloudItemCase, Multiset<CloudItem>> caseEntry : inventory.caseStats.entrySet()) {
+					int caseItemId = caseEntry.getKey().getId();
+
+					for (Multiset.Entry<CloudItem> resultItem : caseEntry.getValue().entrySet()) {
+						ps.setObject(1, ownerUuid);
+						ps.setInt(2, caseItemId);
+						ps.setInt(3, resultItem.getElement().getId());
+						ps.setInt(4, resultItem.getCount());
+
+						ps.addBatch();
+					}
+				}
+
+				ps.executeBatch();
+			}
+
 			connection.commit();
 		} catch (SQLException e) {
 			connection.rollback();
@@ -314,6 +339,8 @@ public final class CloudDatabase {
 
 		PlayerInventory inventory = null;
 
+		List<Pair<CloudItemStack, Boolean>> loadedStacks = new ArrayList<>();
+
 		try (PreparedStatement ps = connection.prepareStatement(
 			"select uuid, item_id, nametag, equipped from player_inventories where owner_uuid = ?"
 		)) {
@@ -336,10 +363,39 @@ public final class CloudDatabase {
 					continue;
 				}
 
-				inventory.addItemStack(stack, false);
-				if (rs.getBoolean("equipped")) {
-					inventory.setDefaultStack(stack.uuid);
+				loadedStacks.add(new Pair<>(stack, rs.getBoolean("equipped")));
+			}
+		}
+
+		if (inventory == null) {
+			return null;
+		}
+
+		inventory.addItemStacks(loadedStacks.stream().map(Pair::left));
+		for (Pair<CloudItemStack, Boolean> loadedStack : loadedStacks) {
+			if (loadedStack.right()) {
+				inventory.setDefaultStack(loadedStack.left().uuid);
+			}
+		}
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"select case_item_id, result_item_id, count from player_case_stats where player_uuid = ?"
+		)) {
+			ps.setObject(1, ownerUuid);
+
+			@Cleanup
+			ResultSet rs = ps.executeQuery();
+
+			while (rs.next()) {
+				CloudItem baseItem = CloudItems.getById(rs.getInt("case_item_id"));
+				if (!(baseItem instanceof CloudItemCase caseItem)) {
+					continue;
 				}
+				CloudItem resultItem = CloudItems.getById(rs.getInt("result_item_id"));
+				if (resultItem == null) {
+					continue;
+				}
+				inventory.getCaseResultSet(caseItem).setCount(resultItem, rs.getInt("count"));
 			}
 		}
 

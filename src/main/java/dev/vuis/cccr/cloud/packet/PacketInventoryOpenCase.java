@@ -79,5 +79,6 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 		inventory.addItemStack(new CloudItemStack(result), true);
 
 		CloudAchievements.ACH_USER_INV_OPEN_CASE.handleUnlock(data, null);
+		inventory.incrementCaseResult(caseItem, result);
 	}
 }

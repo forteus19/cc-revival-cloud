@@ -22,8 +22,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ThreadLocalRandom;
 
-import static dev.vuis.cccr.cloud.item.CloudItemCollection.*;
-import static dev.vuis.cccr.cloud.item.CloudItemRarity.*;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.ALPHA_1;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.ALPHA_2;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.ALPHA_3;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.EXO;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.HALLOWEEN;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.PREALPHA;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.COAL;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.DEFAULT;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.DIAMOND;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.GOLD;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.IRON;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.LAPIS;
+import static dev.vuis.cccr.cloud.item.CloudItemRarity.OBSIDIAN;
 
 @SuppressWarnings("unused")
 public final class CloudItems {

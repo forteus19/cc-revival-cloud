@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.console;
 
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.console.impl.CaseStatsCommand;
 import dev.vuis.cccr.cloud.console.impl.EmeraldsCommand;
 import dev.vuis.cccr.cloud.console.impl.ExpCommand;
 import dev.vuis.cccr.cloud.console.impl.GiveCommand;
@@ -9,7 +10,6 @@ import dev.vuis.cccr.cloud.console.impl.HelpCommand;
 import dev.vuis.cccr.cloud.console.impl.ListCommand;
 import dev.vuis.cccr.cloud.console.impl.PunishCommand;
 import dev.vuis.cccr.cloud.console.impl.RandomDropCommand;
-import dev.vuis.cccr.cloud.console.impl.StopCommand;
 import dev.vuis.cccr.cloud.console.impl.TellCommand;
 import dev.vuis.cccr.cloud.console.impl.VoidCommand;
 import java.util.Arrays;
@@ -22,6 +22,7 @@ public final class Commands {
 	private static final Map<String, Command> REGISTRY = new HashMap<>();
 
 	static {
+		register(new CaseStatsCommand());
 		register(new EmeraldsCommand());
 		register(new ExpCommand());
 		register(new GiveCommand());
@@ -30,7 +31,6 @@ public final class Commands {
 		register(new ListCommand());
 		register(new PunishCommand());
 		register(new RandomDropCommand());
-		register(new StopCommand());
 		register(new TellCommand());
 		register(new VoidCommand());
 	}
