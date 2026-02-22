@@ -16,6 +16,10 @@ public record PlayerGroup(
 		PlayerGroups.TAG_MAP.put(tag.toUpperCase(Locale.ROOT), this);
 	}
 
+	public String displayTag() {
+		return color + tag;
+	}
+
 	public void writeTag(FDSTagCompound tag) {
 		tag.setString("groupName", name);
 		tag.setString("groupNameTag", this.tag);

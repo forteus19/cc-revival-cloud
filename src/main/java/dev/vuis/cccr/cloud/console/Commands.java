@@ -4,12 +4,14 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.console.impl.EmeraldsCommand;
 import dev.vuis.cccr.cloud.console.impl.ExpCommand;
 import dev.vuis.cccr.cloud.console.impl.GiveCommand;
+import dev.vuis.cccr.cloud.console.impl.GroupCommand;
 import dev.vuis.cccr.cloud.console.impl.HelpCommand;
 import dev.vuis.cccr.cloud.console.impl.ListCommand;
 import dev.vuis.cccr.cloud.console.impl.PunishCommand;
 import dev.vuis.cccr.cloud.console.impl.RandomDropCommand;
 import dev.vuis.cccr.cloud.console.impl.StopCommand;
 import dev.vuis.cccr.cloud.console.impl.TellCommand;
+import dev.vuis.cccr.cloud.console.impl.VoidCommand;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,12 +25,14 @@ public final class Commands {
 		register(new EmeraldsCommand());
 		register(new ExpCommand());
 		register(new GiveCommand());
+		register(new GroupCommand());
 		register(new HelpCommand());
 		register(new ListCommand());
 		register(new PunishCommand());
 		register(new RandomDropCommand());
 		register(new StopCommand());
 		register(new TellCommand());
+		register(new VoidCommand());
 	}
 
 	private Commands() {

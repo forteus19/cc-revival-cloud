@@ -8,6 +8,7 @@ public record Permission(
 
 	public Permission(String node) {
 		this(lastId++, node);
+		Permissions.INSTANCES.add(this);
 	}
 
 	@Override

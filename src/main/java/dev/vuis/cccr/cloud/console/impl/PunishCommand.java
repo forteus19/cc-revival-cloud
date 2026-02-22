@@ -54,9 +54,12 @@ public class PunishCommand implements Command {
 
 		LocalDateTime now = Util.utcNow();
 		playerData.punishmentsDirty.mark();
-		playerData.punishments.add(new Punishment(UUID.randomUUID(), source.getName(), type, reason, now, now.plusMinutes(minutes)));
+		UUID uuid = UUID.randomUUID();
+		playerData.punishments.add(new Punishment(uuid, source.getName(), type, reason, now, now.plusMinutes(minutes)));
 		if (type.isSendBannedPacket()) {
 			Cloud.instance().sendPacketToPlayer(username, new PacketBanned());
 		}
+
+		source.sendMessage("Punishment id: %s", uuid.toString());
 	}
 }

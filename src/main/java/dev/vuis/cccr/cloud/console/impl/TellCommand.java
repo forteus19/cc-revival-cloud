@@ -1,6 +1,8 @@
 package dev.vuis.cccr.cloud.console.impl;
 
+import com.f3rullo14.cloud.server.G_CloudTcpConnectionHandler;
 import dev.vuis.cccr.cloud.Cloud;
+import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.console.Command;
 import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.data.Permission;
@@ -34,6 +36,12 @@ public class TellCommand implements Command {
 		String title = args[1];
 		String message = String.join(" ", Arrays.copyOfRange(args, 2, args.length));
 
-		Cloud.instance().sendPacketToPlayer(username, new PacketNotificationFromCloud(message, title, 0));
+		if (username.equals("@a")) {
+			for (G_CloudTcpConnectionHandler connectionHandler : Cloud.instance().getCloudManager().getNetwork().getNetChannel(CloudConstants.CHANNEL_PLAYER)) {
+				connectionHandler.sendPacket(new PacketNotificationFromCloud(message, title, 0));
+			}
+		} else {
+			Cloud.instance().sendPacketToPlayer(username, new PacketNotificationFromCloud(message, title, 0));
+		}
 	}
 }
