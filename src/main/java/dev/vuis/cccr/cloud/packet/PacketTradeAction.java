@@ -40,6 +40,9 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 		if (trade == null) {
 			return;
 		}
+		if (trade.result != Trade.Result.PENDING) {
+			return;
+		}
 
 		PlayerData offererData = DataHandler.instance().getPlayerData(trade.offererUuid);
 		if (offererData == null) {
@@ -68,6 +71,25 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 
 		switch (action) {
 			case 1 -> {
+				for (CloudItemStack offerStack : trade.offerStacks) {
+					if (offererInventory.getItemStack(offerStack.uuid) == null) {
+						connectionHandler.sendPacket(new PacketNotificationFromCloud(
+							"Offering items are missing!", CloudConstants.CC_NAME, 0
+						));
+						trade.finalize(Trade.Result.ERROR);
+						return;
+					}
+				}
+				for (CloudItemStack returnStack : trade.returnStacks) {
+					if (returnerInventory.getItemStack(returnStack.uuid) == null) {
+						connectionHandler.sendPacket(new PacketNotificationFromCloud(
+							"Returning items are missing!", CloudConstants.CC_NAME, 0
+						));
+						trade.finalize(Trade.Result.ERROR);
+						return;
+					}
+				}
+
 				for (CloudItemStack offerStack : trade.offerStacks) {
 					offererInventory.removeItemStack(offerStack.uuid, true);
 					returnerInventory.addItemStack(offerStack, true);
