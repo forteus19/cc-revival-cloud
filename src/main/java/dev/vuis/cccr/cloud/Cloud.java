@@ -7,6 +7,7 @@ import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.console.Commands;
+import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
 import dev.vuis.cccr.cloud.data.PlayerData;
@@ -19,6 +20,9 @@ import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
 import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.Month;
+import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
@@ -28,6 +32,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicReference;
 import javax.sql.DataSource;
 import lombok.Getter;
 
@@ -54,6 +59,8 @@ public final class Cloud implements ICloud {
 
 	private final Map<UUID, G_CloudTcpConnectionHandler> playerConnections = new ConcurrentHashMap<>();
 	private final ScheduledExecutorService minuteExecutor = Executors.newSingleThreadScheduledExecutor();
+
+	private final AtomicReference<Month> prevMonth = new AtomicReference<>(LocalDate.now(ZoneOffset.UTC).getMonth());
 
 	public Cloud(int port, String mmPassword, String mcHost, DataSource dataSource) {
 		this.port = port;
@@ -97,7 +104,7 @@ public final class Cloud implements ICloud {
 		log("Shutting down...");
 		try {
 			minuteExecutor.shutdown();
-			if (!minuteExecutor.awaitTermination(30, TimeUnit.SECONDS)) {
+			if (!minuteExecutor.awaitTermination(50, TimeUnit.SECONDS)) {
 				log("Minute executor shutdown timed out!");
 			}
 		} catch (InterruptedException e) {
@@ -116,8 +123,23 @@ public final class Cloud implements ICloud {
 	}
 
 	private void onMinute() {
-		long dataStart = System.nanoTime();
 		Collection<PlayerData> cachedPlayerData = dataHandler.getCachedPlayerData();
+
+		Month newMonth = LocalDate.now(ZoneOffset.UTC).getMonth();
+		if (prevMonth.getAndSet(newMonth) != newMonth) {
+			log("Resetting player scoreboard");
+			CloudStats.SCOREBOARD_RESET_TIME.set(CloudStats.computeScoreboardResetTime());
+			for (PlayerData data : cachedPlayerData) {
+				data.score.set(0);
+			}
+			try {
+				dataHandler.getDatabase().resetPlayerScores();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+
+		long dataStart = System.nanoTime();
 		for (PlayerData data : cachedPlayerData) {
 			if (data.online.get()) {
 				data.minutesPlayed.incrementAndGet();
@@ -155,6 +177,13 @@ public final class Cloud implements ICloud {
 		}
 		long tradeEnd = System.nanoTime();
 		log("Saved %d cached trade entries in %.2f ms", cachedTrades.size(), (tradeEnd - tradeStart) / 1000000f);
+
+		try {
+			CloudStats.PLAYER_SCOREBOARD.set(dataHandler.getDatabase().loadPlayerScores(CloudStats.SCOREBOARD_LIMIT));
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		log("Refreshed player scoreboard");
 	}
 
 	@Override

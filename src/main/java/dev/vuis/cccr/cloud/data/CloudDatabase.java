@@ -1,5 +1,6 @@
 package dev.vuis.cccr.cloud.data;
 
+import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
@@ -12,6 +13,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,13 +37,13 @@ public final class CloudDatabase {
 		try {
 			if (ignoreDirty || data.dirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
-					"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp) " +
-						"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+					"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score) " +
+						"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
 						"on conflict (uuid) do update set " +
 						"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
 						"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
 						"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
-						"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp"
+						"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp, score = excluded.score"
 				)) {
 					ps.setObject(1, data.uuid);
 					ps.setString(2, data.username.get());
@@ -59,6 +61,7 @@ public final class CloudDatabase {
 					ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::tag));
 					ps.setInt(15, data.prestige.get());
 					ps.setInt(16, data.compExp.get());
+					ps.setInt(17, data.score.get());
 
 					ps.executeUpdate();
 				}
@@ -159,7 +162,7 @@ public final class CloudDatabase {
 		PlayerData data;
 
 		try (PreparedStatement ps = connection.prepareStatement(
-			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp from players where uuid = ?"
+			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score from players where uuid = ?"
 		)) {
 			ps.setObject(1, uuid);
 
@@ -187,6 +190,7 @@ public final class CloudDatabase {
 			}
 			data.prestige.set(rs.getInt("prestige"));
 			data.compExp.set(rs.getInt("comp_exp"));
+			data.score.set(rs.getInt("score"));
 		}
 
 		try (PreparedStatement ps = connection.prepareStatement(
@@ -256,6 +260,43 @@ public final class CloudDatabase {
 			}
 
 			return rs.getObject("uuid", UUID.class);
+		}
+	}
+
+	public List<Pair<String, Integer>> loadPlayerScores(int limit) throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+
+		ImmutableList.Builder<Pair<String, Integer>> result = ImmutableList.builder();
+
+		try (Statement st = connection.createStatement()) {
+			@Cleanup
+			ResultSet rs = st.executeQuery(
+				"select username, score from players where score <> 0 order by score desc limit " + limit
+			);
+
+			while (rs.next()) {
+				result.add(new Pair<>(rs.getString("username"), rs.getInt("score")));
+			}
+		}
+
+		return result.build();
+	}
+
+	public void resetPlayerScores() throws SQLException {
+		@Cleanup
+		Connection connection = dataSource.getConnection();
+		connection.setAutoCommit(false);
+
+		try {
+			try (Statement st = connection.createStatement()) {
+				st.executeUpdate("update players set score = 0 where score <> 0");
+			}
+
+			connection.commit();
+		} catch (SQLException e) {
+			connection.rollback();
+			throw e;
 		}
 	}
 

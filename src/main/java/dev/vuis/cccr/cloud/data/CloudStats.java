@@ -7,22 +7,23 @@ import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.CloudConstants;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
-import java.util.Comparator;
+import dev.vuis.cccr.cloud.util.Pair;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.time.temporal.TemporalAdjusters;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
 public final class CloudStats {
-	private static final int SCOREBOARD_TAG_LIMIT = 30;
-
-	private static final Multiset<String> PLAYER_SCOREBOARD = HashMultiset.create();
+	public static final int SCOREBOARD_LIMIT = 30;
+	public static final AtomicReference<List<Pair<String, Integer>>> PLAYER_SCOREBOARD = new AtomicReference<>(List.of());
+	public static final AtomicReference<LocalDateTime> SCOREBOARD_RESET_TIME = new AtomicReference<>(computeScoreboardResetTime());
 
 	public static boolean compRequiresRank = true;
 	public static boolean compActive = true;
 
 	private CloudStats() {
-	}
-
-	public static void incrementPlayerScore(String name) {
-		PLAYER_SCOREBOARD.add(name);
 	}
 
 	public static void writeTag(FDSTagCompound tag) {
@@ -38,17 +39,21 @@ public final class CloudStats {
 			tag.setInteger(entry.getElement() + "count", entry.getCount());
 		}
 
-		int numPlayerScores = Math.min(SCOREBOARD_TAG_LIMIT, PLAYER_SCOREBOARD.size());
-		tag.setInteger("playerScoreCount", numPlayerScores);
+		tag.setString("scoreboardResetTime", Long.toString(SCOREBOARD_RESET_TIME.get().toInstant(ZoneOffset.UTC).toEpochMilli()));
 
-		List<Multiset.Entry<String>> sbEntries = PLAYER_SCOREBOARD.entrySet().stream()
-			.sorted(Comparator.comparingInt((Multiset.Entry<String> e) -> e.getCount()).reversed())
-			.limit(SCOREBOARD_TAG_LIMIT)
-			.toList();
-		for (int i = 0; i < sbEntries.size(); i++) {
-			Multiset.Entry<String> entry = sbEntries.get(i);
-			tag.setString("player_" + i, entry.getElement());
-			tag.setInteger("player_score_" + i, entry.getCount());
+		List<Pair<String, Integer>> playerSbGet = PLAYER_SCOREBOARD.get();
+
+		tag.setInteger("playerScoreCount", playerSbGet.size());
+		for (int i = 0; i < playerSbGet.size(); i++) {
+			Pair<String, Integer> entry = playerSbGet.get(i);
+			tag.setString("player_" + i, entry.left());
+			tag.setInteger("player_score_" + i, entry.right());
 		}
+	}
+
+	public static LocalDateTime computeScoreboardResetTime() {
+		return LocalDate.now(ZoneOffset.UTC)
+			.with(TemporalAdjusters.firstDayOfNextMonth())
+			.atStartOfDay();
 	}
 }

@@ -40,6 +40,7 @@ public final class PlayerData {
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
+	public final AtomicInteger score = new AtomicInteger(0);
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();

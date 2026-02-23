@@ -26,7 +26,9 @@ public record CloudAchievement(
 	}
 
 	public void handleUnlock(PlayerData playerData, G_ITcpConnectionHandler serverConnection) {
-		if (!playerData.achievements.add(id)) {
+		if (playerData.achievements.add(id)) {
+			playerData.dirty.mark();
+		} else {
 			return;
 		}
 		Cloud.instance().sendPacketToPlayer(playerData.uuid, new PacketNotificationFromCloud(

@@ -5,7 +5,6 @@ import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.achievement.CloudAchievement;
 import dev.vuis.cccr.cloud.achievement.CloudAchievements;
-import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
@@ -87,7 +86,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 				if (killsAch != null) {
 					killsAch.handleUnlock(data, connectionHandler);
 				}
-				CloudStats.incrementPlayerScore(data.username.get());
+				data.score.incrementAndGet();
 				expGain = Exp.KILL;
 			}
 			case "trophies" -> {
