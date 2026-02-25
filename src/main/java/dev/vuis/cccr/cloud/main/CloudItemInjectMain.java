@@ -28,12 +28,16 @@ public final class CloudItemInjectMain {
 		Map<CloudItem, Field> fields = new HashMap<>();
 
 		for (Field itemField : CloudItems.class.getFields()) {
-			CloudItem item = (CloudItem) itemField.get(null);
+			if (!(itemField.get(null) instanceof CloudItem item)) {
+				continue;
+			}
 			fields.put(item, itemField);
 
 			if (item.isDefault()) {
 				continue;
 			}
+
+			int expectedMcId = item.getMcId() - 256;
 
 			StringBuilder sb = new StringBuilder();
 			sb.append("public static final CloudItem ");
@@ -47,14 +51,21 @@ public final class CloudItemInjectMain {
 					sb.append("CloudItemGun(");
 					sb.append(gunItem.getId());
 					sb.append(", ");
-					sb.append(gunItem.getMcId() - 256);
+					sb.append(expectedMcId);
 					sb.append(", \"");
 					sb.append(prefix);
 					sb.append("\").setSuffix(\"");
 					sb.append(gunItem.getDisplayName().replaceFirst("^" + prefix, "").trim());
 					sb.append("\").setValue(CloudItemRarity.");
 					sb.append(gunItem.getRarity().getLegacyName());
-					sb.append(").setCollection(\"Prealpha\");");
+					sb.append(")");
+					String collection = gunItem.getCollection().getName();
+					if (collection != null) {
+						sb.append(".setCollection(\"");
+						sb.append(collection);
+						sb.append("\")");
+					}
+					sb.append(";");
 
 					System.out.println(sb);
 				}
@@ -62,17 +73,15 @@ public final class CloudItemInjectMain {
 					sb.append("CloudItemCase(");
 					sb.append(caseItem.getId());
 					sb.append(", ");
-					sb.append(caseItem.getMcId() - 256);
+					sb.append(expectedMcId);
 					sb.append(", \"\", ");
 					sb.append(caseItem.getKeyItem().getId());
 					sb.append(")");
-					for (RandomCollection.Entry<CloudItem> entry : caseItem.contents.getEntries()) {
+					for (RandomCollection.Entry<CloudItem> entry : caseItem.contents.getEntries().reversed()) {
 						sb.append(System.lineSeparator());
 						sb.append("\t.addContent(");
 						sb.append(fields.get(entry.objectSupplier().get()).getName());
-						sb.append(", ");
-						sb.append(entry.getWeight());
-						sb.append(")");
+						sb.append(", 0)");
 					}
 					sb.append(".setSuffix(\"Case\").setValue(CloudItemRarity.TIER1).disableNameable().disableShowcase().disableContracts();");
 

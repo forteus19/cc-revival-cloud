@@ -50,6 +50,9 @@ public final class CloudMain {
 		Thread consoleThread = new Thread(() -> {
 			while (!cloud.getCloudManager().isCloudStopped) {
 				String command = IO.readln();
+				if (command == null) {
+					break;
+				}
 				try {
 					cloud.handleCommand(command);
 				} catch (Exception e) {

@@ -301,7 +301,11 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public void handleCommand(String command) {
-		Commands.execute(command, new CloudSource());
+		if (command.equals("stop")) {
+			cloudManager.initiateShutdown();
+		} else {
+			Commands.execute(command, new CloudSource());
+		}
 	}
 
 	@Override
