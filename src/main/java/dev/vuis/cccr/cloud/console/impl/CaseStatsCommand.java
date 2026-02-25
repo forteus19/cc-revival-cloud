@@ -22,7 +22,8 @@ public class CaseStatsCommand implements Command {
 		Map.entry("hat", CloudItems.CASE_HAT),
 		Map.entry("halloween", CloudItems.CASE_HALLOWEEN),
 		Map.entry("exo", CloudItems.CASE_EXO),
-		Map.entry("prealpha", CloudItems.CASE_PREALPHA)
+		Map.entry("prealpha", CloudItems.CASE_PREALPHA),
+		Map.entry("blaze", CloudItems.CASE_BLAZE)
 	);
 
 	@Override
