@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public final class Trade {
+	public final DirtyHandler dirty = new DirtyHandler();
+
 	public final LocalDateTime start;
 	public final UUID offererUuid;
 	public final UUID returnerUuid;

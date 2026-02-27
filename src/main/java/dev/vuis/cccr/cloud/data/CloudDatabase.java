@@ -64,9 +64,9 @@ public final class CloudDatabase {
 					ps.setInt(17, data.score.get());
 
 					ps.executeUpdate();
+					data.dirty.clear();
 				}
 			}
-			data.dirty.clear();
 
 			if (ignoreDirty || data.punishmentsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
@@ -93,10 +93,10 @@ public final class CloudDatabase {
 						}
 
 						ps.executeBatch();
+						data.punishmentsDirty.clear();
 					}
 				}
 			}
-			data.punishmentsDirty.clear();
 
 			if (ignoreDirty || data.friendsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
@@ -118,10 +118,10 @@ public final class CloudDatabase {
 						}
 
 						ps.executeBatch();
+						data.friendsDirty.clear();
 					}
 				}
 			}
-			data.friendsDirty.clear();
 
 			if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
 				try (PreparedStatement ps = connection.prepareStatement(
@@ -143,10 +143,10 @@ public final class CloudDatabase {
 						}
 
 						ps.executeBatch();
+						data.friendRequestsDirty.clear();
 					}
 				}
 			}
-			data.friendRequestsDirty.clear();
 
 			connection.commit();
 		} catch (SQLException e) {
@@ -444,6 +444,10 @@ public final class CloudDatabase {
 	}
 
 	public void saveTrade(UUID uuid, Trade trade) throws SQLException {
+		if (!trade.dirty.isDirty()) {
+			return;
+		}
+
 		@Cleanup
 		Connection connection = dataSource.getConnection();
 		connection.setAutoCommit(false);
@@ -466,6 +470,7 @@ public final class CloudDatabase {
 				ps.setArray(8, connection.createArrayOf("uuid", trade.returnStacks.stream().map(CloudItemStack::getUuid).toArray()));
 
 				ps.executeUpdate();
+				trade.dirty.clear();
 			}
 
 			connection.commit();
