@@ -45,7 +45,7 @@ public final class PacketPlayerDataRandomDrop extends G_TcpPacketCustomPayload {
 		CloudItem drop = CloudItems.getRandomDrop();
 		inventory.addItemStack(new CloudItemStack(drop), true);
 		connectionHandler.sendPacket(new PacketServerNotification(
-			String.format("%s obtained %s", username, drop.getDisplayName())
+			String.format("%s obtained %s%s", username, drop.getRarity(), drop.getDisplayName())
 		));
 	}
 }

@@ -36,7 +36,7 @@ public record CloudAchievement(
 		));
 		if (serverConnection != null) {
 			serverConnection.sendPacket(new PacketServerNotification(
-				String.format("%s unlocked achievement %s", playerData.username.get(), name)
+				String.format("%s has earned the achievement §f%s", playerData.username.get(), name)
 			));
 		}
 	}
