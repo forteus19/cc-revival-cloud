@@ -18,10 +18,12 @@ public final class PlayerGroups {
 	public static final PlayerGroup MODERATOR = new PlayerGroup("Moderator", "MOD", "§e", Set.of(
 		Permissions.CHAT_SPAM_BYPASS,
 		Permissions.COMMAND_LIST,
+		Permissions.COMMAND_LISTGAMES,
 		Permissions.COMMAND_PUNISH,
 		Permissions.COMMAND_VOID
 	));
 	public static final PlayerGroup HELPER = new PlayerGroup("Helper", "HLPR", "§6", Set.of(
+		Permissions.CHAT_SPAM_BYPASS,
 		Permissions.COMMAND_PUNISH
 	));
 

@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.console.impl.GiveCommand;
 import dev.vuis.cccr.cloud.console.impl.GroupCommand;
 import dev.vuis.cccr.cloud.console.impl.HelpCommand;
 import dev.vuis.cccr.cloud.console.impl.ListCommand;
+import dev.vuis.cccr.cloud.console.impl.ListGamesCommand;
 import dev.vuis.cccr.cloud.console.impl.PunishCommand;
 import dev.vuis.cccr.cloud.console.impl.RandomDropCommand;
 import dev.vuis.cccr.cloud.console.impl.TellCommand;
@@ -29,6 +30,7 @@ public final class Commands {
 		register(new GroupCommand());
 		register(new HelpCommand());
 		register(new ListCommand());
+		register(new ListGamesCommand());
 		register(new PunishCommand());
 		register(new RandomDropCommand());
 		register(new TellCommand());
