@@ -8,6 +8,6 @@ public abstract class SuffixedCloudItem extends CloudItem {
 
 	protected SuffixedCloudItem(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, CloudItem defaultItem) {
 		super(id, mcId, rarity, displayName, isDefault);
-		suffix = displayName.replaceFirst("^" + defaultItem.getDisplayName(), "").trim();
+		suffix = defaultItem != null ? displayName.replaceFirst("^" + defaultItem.getDisplayName(), "").trim() : null;
 	}
 }

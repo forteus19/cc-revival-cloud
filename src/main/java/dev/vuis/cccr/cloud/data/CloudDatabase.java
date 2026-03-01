@@ -6,6 +6,8 @@ import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
+import dev.vuis.cccr.cloud.util.ConnectionConsumer;
+import dev.vuis.cccr.cloud.util.ConnectionFunction;
 import dev.vuis.cccr.cloud.util.Pair;
 import dev.vuis.cccr.cloud.util.Util;
 import java.sql.Array;
@@ -29,136 +31,153 @@ import lombok.RequiredArgsConstructor;
 public final class CloudDatabase {
 	private final DataSource dataSource;
 
-	public void savePlayerData(PlayerData data, boolean ignoreDirty) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-		connection.setAutoCommit(false);
-
-		try {
-			if (ignoreDirty || data.dirty.isDirty()) {
-				try (PreparedStatement ps = connection.prepareStatement(
-					"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score) " +
-						"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
-						"on conflict (uuid) do update set " +
-						"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
-						"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
-						"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
-						"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp, score = excluded.score"
-				)) {
-					ps.setObject(1, data.uuid);
-					ps.setString(2, data.username.get());
-					ps.setInt(3, data.trophies.get());
-					ps.setInt(4, data.kills.get());
-					ps.setInt(5, data.deaths.get());
-					ps.setInt(6, data.games.get());
-					ps.setInt(7, data.firstBloods.get());
-					ps.setInt(8, data.matchKarma.get());
-					ps.setInt(9, data.minutesPlayed.get());
-					ps.setInt(10, data.exp.get());
-					ps.setInt(11, data.emeralds.get());
-					ps.setString(12, data.mood.get());
-					ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
-					ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::tag));
-					ps.setInt(15, data.prestige.get());
-					ps.setInt(16, data.compExp.get());
-					ps.setInt(17, data.score.get());
-
-					ps.executeUpdate();
-					data.dirty.clear();
-				}
+	public void acceptConnetion(ConnectionConsumer consumer) {
+		try (Connection connection = dataSource.getConnection()) {
+			connection.setAutoCommit(false);
+			try {
+				consumer.accept(connection);
+				connection.commit();
+			} catch (SQLException e) {
+				connection.rollback();
+				throw e;
 			}
-
-			if (ignoreDirty || data.punishmentsDirty.isDirty()) {
-				try (PreparedStatement ps = connection.prepareStatement(
-					"delete from punishment_records where player_uuid = ?"
-				)) {
-					ps.setObject(1, data.uuid);
-
-					ps.executeUpdate();
-				}
-
-				if (!data.punishments.isEmpty()) {
-					try (PreparedStatement ps = connection.prepareStatement(
-						"insert into punishment_records (uuid, player_uuid, issuer, type_ordinal, reason, start_time, end_time) values (?, ?, ?, ?, ?, ?, ?)"
-					)) {
-						for (Punishment punishment : data.punishments) {
-							ps.setObject(1, punishment.uuid());
-							ps.setObject(2, data.uuid);
-							ps.setString(3, punishment.issuer());
-							ps.setInt(4, punishment.type().ordinal());
-							ps.setString(5, punishment.reason());
-							ps.setTimestamp(6, Timestamp.valueOf(punishment.start()));
-							ps.setTimestamp(7, Timestamp.valueOf(punishment.end()));
-							ps.addBatch();
-						}
-
-						ps.executeBatch();
-						data.punishmentsDirty.clear();
-					}
-				}
-			}
-
-			if (ignoreDirty || data.friendsDirty.isDirty()) {
-				try (PreparedStatement ps = connection.prepareStatement(
-					"delete from player_friends where player_uuid = ?"
-				)) {
-					ps.setObject(1, data.uuid);
-
-					ps.executeUpdate();
-				}
-
-				if (!data.friends.isEmpty()) {
-					try (PreparedStatement ps = connection.prepareStatement(
-						"insert into player_friends (player_uuid, friend_uuid) values (?, ?)"
-					)) {
-						for (UUID friend : data.friends) {
-							ps.setObject(1, data.uuid);
-							ps.setObject(2, friend);
-							ps.addBatch();
-						}
-
-						ps.executeBatch();
-						data.friendsDirty.clear();
-					}
-				}
-			}
-
-			if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
-				try (PreparedStatement ps = connection.prepareStatement(
-					"delete from player_friend_requests where player_uuid = ?"
-				)) {
-					ps.setObject(1, data.uuid);
-
-					ps.executeUpdate();
-				}
-
-				if (!data.friendRequests.isEmpty()) {
-					try (PreparedStatement ps = connection.prepareStatement(
-						"insert into player_friend_requests (player_uuid, requester_uuid) values (?, ?)"
-					)) {
-						for (UUID friend : data.friendRequests) {
-							ps.setObject(1, data.uuid);
-							ps.setObject(2, friend);
-							ps.addBatch();
-						}
-
-						ps.executeBatch();
-						data.friendRequestsDirty.clear();
-					}
-				}
-			}
-
-			connection.commit();
 		} catch (SQLException e) {
-			connection.rollback();
-			throw e;
+			throw new RuntimeException(e);
 		}
 	}
 
-	public PlayerData loadPlayerData(UUID uuid) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
+	public <R> R applyConnection(ConnectionFunction<R> function) {
+		try (Connection connection = dataSource.getConnection()) {
+			connection.setAutoCommit(false);
+			try {
+				R result = function.apply(connection);
+				connection.commit();
+				return result;
+			} catch (SQLException e) {
+				connection.rollback();
+				throw e;
+			}
+		} catch (SQLException e) {
+			throw new RuntimeException(e);
+		}
+	}
 
+	public void savePlayerData(Connection connection, PlayerData data, boolean ignoreDirty) throws SQLException {
+		if (ignoreDirty || data.dirty.isDirty()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score) " +
+					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+					"on conflict (uuid) do update set " +
+					"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
+					"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
+					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
+					"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp, score = excluded.score"
+			)) {
+				ps.setObject(1, data.uuid);
+				ps.setString(2, data.username.get());
+				ps.setInt(3, data.trophies.get());
+				ps.setInt(4, data.kills.get());
+				ps.setInt(5, data.deaths.get());
+				ps.setInt(6, data.games.get());
+				ps.setInt(7, data.firstBloods.get());
+				ps.setInt(8, data.matchKarma.get());
+				ps.setInt(9, data.minutesPlayed.get());
+				ps.setInt(10, data.exp.get());
+				ps.setInt(11, data.emeralds.get());
+				ps.setString(12, data.mood.get());
+				ps.setArray(13, connection.createArrayOf("integer", data.achievements.toArray()));
+				ps.setString(14, Util.ifNonNull(data.group.get(), PlayerGroup::tag));
+				ps.setInt(15, data.prestige.get());
+				ps.setInt(16, data.compExp.get());
+				ps.setInt(17, data.score.get());
+
+				ps.executeUpdate();
+				data.dirty.clear();
+			}
+		}
+
+		if (ignoreDirty || data.punishmentsDirty.isDirty()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"delete from punishment_records where player_uuid = ?"
+			)) {
+				ps.setObject(1, data.uuid);
+
+				ps.executeUpdate();
+			}
+
+			if (!data.punishments.isEmpty()) {
+				try (PreparedStatement ps = connection.prepareStatement(
+					"insert into punishment_records (uuid, player_uuid, issuer, type_ordinal, reason, start_time, end_time) values (?, ?, ?, ?, ?, ?, ?)"
+				)) {
+					for (Punishment punishment : data.punishments) {
+						ps.setObject(1, punishment.uuid());
+						ps.setObject(2, data.uuid);
+						ps.setString(3, punishment.issuer());
+						ps.setInt(4, punishment.type().ordinal());
+						ps.setString(5, punishment.reason());
+						ps.setTimestamp(6, Timestamp.valueOf(punishment.start()));
+						ps.setTimestamp(7, Timestamp.valueOf(punishment.end()));
+						ps.addBatch();
+					}
+
+					ps.executeBatch();
+					data.punishmentsDirty.clear();
+				}
+			}
+		}
+
+		if (ignoreDirty || data.friendsDirty.isDirty()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"delete from player_friends where player_uuid = ?"
+			)) {
+				ps.setObject(1, data.uuid);
+
+				ps.executeUpdate();
+			}
+
+			if (!data.friends.isEmpty()) {
+				try (PreparedStatement ps = connection.prepareStatement(
+					"insert into player_friends (player_uuid, friend_uuid) values (?, ?)"
+				)) {
+					for (UUID friend : data.friends) {
+						ps.setObject(1, data.uuid);
+						ps.setObject(2, friend);
+						ps.addBatch();
+					}
+
+					ps.executeBatch();
+					data.friendsDirty.clear();
+				}
+			}
+		}
+
+		if (ignoreDirty || data.friendRequestsDirty.isDirty()) {
+			try (PreparedStatement ps = connection.prepareStatement(
+				"delete from player_friend_requests where player_uuid = ?"
+			)) {
+				ps.setObject(1, data.uuid);
+
+				ps.executeUpdate();
+			}
+
+			if (!data.friendRequests.isEmpty()) {
+				try (PreparedStatement ps = connection.prepareStatement(
+					"insert into player_friend_requests (player_uuid, requester_uuid) values (?, ?)"
+				)) {
+					for (UUID friend : data.friendRequests) {
+						ps.setObject(1, data.uuid);
+						ps.setObject(2, friend);
+						ps.addBatch();
+					}
+
+					ps.executeBatch();
+					data.friendRequestsDirty.clear();
+				}
+			}
+		}
+	}
+
+	public PlayerData loadPlayerData(Connection connection, UUID uuid) throws SQLException {
 		PlayerData data;
 
 		try (PreparedStatement ps = connection.prepareStatement(
@@ -244,10 +263,7 @@ public final class CloudDatabase {
 		return data;
 	}
 
-	public UUID loadPlayerUuid(String username) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-
+	public UUID loadPlayerUuid(Connection connection, String username) throws SQLException {
 		try (PreparedStatement ps = connection.prepareStatement(
 			"select uuid from players where username = ?"
 		)) {
@@ -263,10 +279,7 @@ public final class CloudDatabase {
 		}
 	}
 
-	public List<Pair<String, Integer>> loadPlayerScores(int limit) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-
+	public List<Pair<String, Integer>> loadPlayerScores(Connection connection, int limit) throws SQLException {
 		ImmutableList.Builder<Pair<String, Integer>> result = ImmutableList.builder();
 
 		try (Statement st = connection.createStatement()) {
@@ -283,84 +296,62 @@ public final class CloudDatabase {
 		return result.build();
 	}
 
-	public void resetPlayerScores() throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-		connection.setAutoCommit(false);
-
-		try {
-			try (Statement st = connection.createStatement()) {
-				st.executeUpdate("update players set score = 0 where score <> 0");
-			}
-
-			connection.commit();
-		} catch (SQLException e) {
-			connection.rollback();
-			throw e;
+	public void resetPlayerScores(Connection connection) throws SQLException {
+		try (Statement st = connection.createStatement()) {
+			st.executeUpdate("update players set score = 0 where score <> 0");
 		}
 	}
 
-	public void savePlayerInventory(PlayerInventory inventory) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-		connection.setAutoCommit(false);
-
+	public void savePlayerInventory(Connection connection, PlayerInventory inventory) throws SQLException {
 		UUID ownerUuid = inventory.getOwnerUuid();
 
-		try {
-			try (PreparedStatement ps = connection.prepareStatement(
-				"delete from player_inventories where owner_uuid = ?"
-			)) {
-				ps.setObject(1, ownerUuid);
+		try (PreparedStatement ps = connection.prepareStatement(
+			"delete from player_inventories where owner_uuid = ?"
+		)) {
+			ps.setObject(1, ownerUuid);
 
-				ps.executeUpdate();
+			ps.executeUpdate();
+		}
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"insert into player_inventories (uuid, owner_uuid, item_id, nametag, equipped) " +
+				"values (?, ?, ?, ?, ?) " +
+				"on conflict (uuid) do update set " +
+				"owner_uuid = excluded.owner_uuid, item_id = excluded.item_id, nametag = excluded.nametag, equipped = excluded.equipped"
+		)) {
+			for (CloudItemStack stack : inventory.getItemStacks()) {
+				ps.setObject(1, stack.uuid);
+				ps.setObject(2, ownerUuid);
+				ps.setInt(3, stack.item.getId());
+				ps.setString(4, stack.nametag);
+				ps.setBoolean(5, inventory.isDefaultStack(stack.uuid));
+
+				ps.addBatch();
 			}
 
-			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into player_inventories (uuid, owner_uuid, item_id, nametag, equipped) " +
-					"values (?, ?, ?, ?, ?) " +
-					"on conflict (uuid) do update set " +
-					"owner_uuid = excluded.owner_uuid, item_id = excluded.item_id, nametag = excluded.nametag, equipped = excluded.equipped"
-			)) {
-				for (CloudItemStack stack : inventory.getItemStacks()) {
-					ps.setObject(1, stack.uuid);
-					ps.setObject(2, ownerUuid);
-					ps.setInt(3, stack.item.getId());
-					ps.setString(4, stack.nametag);
-					ps.setBoolean(5, inventory.isDefaultStack(stack.uuid));
+			ps.executeBatch();
+		}
+
+		try (PreparedStatement ps = connection.prepareStatement(
+			"insert into player_case_stats (player_uuid, case_item_id, result_item_id, count) " +
+				"values (?, ?, ?, ?) " +
+				"on conflict (player_uuid, case_item_id, result_item_id) do update set " +
+				"count = excluded.count"
+		)) {
+			for (Map.Entry<CloudItemCase, Multiset<CloudItem>> caseEntry : inventory.caseStats.entrySet()) {
+				int caseItemId = caseEntry.getKey().getId();
+
+				for (Multiset.Entry<CloudItem> resultItem : caseEntry.getValue().entrySet()) {
+					ps.setObject(1, ownerUuid);
+					ps.setInt(2, caseItemId);
+					ps.setInt(3, resultItem.getElement().getId());
+					ps.setInt(4, resultItem.getCount());
 
 					ps.addBatch();
 				}
-
-				ps.executeBatch();
 			}
 
-			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into player_case_stats (player_uuid, case_item_id, result_item_id, count) " +
-					"values (?, ?, ?, ?) " +
-					"on conflict (player_uuid, case_item_id, result_item_id) do update set " +
-					"count = excluded.count"
-			)) {
-				for (Map.Entry<CloudItemCase, Multiset<CloudItem>> caseEntry : inventory.caseStats.entrySet()) {
-					int caseItemId = caseEntry.getKey().getId();
-
-					for (Multiset.Entry<CloudItem> resultItem : caseEntry.getValue().entrySet()) {
-						ps.setObject(1, ownerUuid);
-						ps.setInt(2, caseItemId);
-						ps.setInt(3, resultItem.getElement().getId());
-						ps.setInt(4, resultItem.getCount());
-
-						ps.addBatch();
-					}
-				}
-
-				ps.executeBatch();
-			}
-
-			connection.commit();
-		} catch (SQLException e) {
-			connection.rollback();
-			throw e;
+			ps.executeBatch();
 		}
 	}
 
@@ -374,10 +365,7 @@ public final class CloudDatabase {
 		return stack;
 	}
 
-	public PlayerInventory loadPlayerInventory(UUID ownerUuid) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-
+	public PlayerInventory loadPlayerInventory(Connection connection, UUID ownerUuid) throws SQLException {
 		PlayerInventory inventory = null;
 
 		List<Pair<CloudItemStack, Boolean>> loadedStacks = new ArrayList<>();
@@ -443,40 +431,25 @@ public final class CloudDatabase {
 		return inventory;
 	}
 
-	public void saveTrade(UUID uuid, Trade trade) throws SQLException {
-		if (!trade.dirty.isDirty()) {
-			return;
-		}
+	public void saveTrade(Connection connection, UUID uuid, Trade trade) throws SQLException {
+		try (PreparedStatement ps = connection.prepareStatement(
+			"insert into trades (uuid, offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks) " +
+				"values (?, ?, ?, ?, ?, ?, ?, ?) " +
+				"on conflict (uuid) do update set " +
+				"offerer_uuid = excluded.offerer_uuid, returner_uuid = excluded.returner_uuid, start_time = excluded.start_time, end_time = excluded.end_time, " +
+				"result_ordinal = excluded.result_ordinal, offer_stacks = excluded.offer_stacks, return_stacks = excluded.return_stacks"
+		)) {
+			ps.setObject(1, uuid);
+			ps.setObject(2, trade.offererUuid);
+			ps.setObject(3, trade.returnerUuid);
+			ps.setTimestamp(4, Timestamp.valueOf(trade.start));
+			ps.setTimestamp(5, Util.ifNonNull(trade.end, Timestamp::valueOf));
+			ps.setInt(6, trade.result.ordinal());
+			ps.setArray(7, connection.createArrayOf("uuid", trade.offerStacks.stream().map(CloudItemStack::getUuid).toArray()));
+			ps.setArray(8, connection.createArrayOf("uuid", trade.returnStacks.stream().map(CloudItemStack::getUuid).toArray()));
 
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-		connection.setAutoCommit(false);
-
-		try {
-			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into trades (uuid, offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks) " +
-					"values (?, ?, ?, ?, ?, ?, ?, ?) " +
-					"on conflict (uuid) do update set " +
-					"offerer_uuid = excluded.offerer_uuid, returner_uuid = excluded.returner_uuid, start_time = excluded.start_time, end_time = excluded.end_time, " +
-					"result_ordinal = excluded.result_ordinal, offer_stacks = excluded.offer_stacks, return_stacks = excluded.return_stacks"
-			)) {
-				ps.setObject(1, uuid);
-				ps.setObject(2, trade.offererUuid);
-				ps.setObject(3, trade.returnerUuid);
-				ps.setTimestamp(4, Timestamp.valueOf(trade.start));
-				ps.setTimestamp(5, Util.ifNonNull(trade.end, Timestamp::valueOf));
-				ps.setInt(6, trade.result.ordinal());
-				ps.setArray(7, connection.createArrayOf("uuid", trade.offerStacks.stream().map(CloudItemStack::getUuid).toArray()));
-				ps.setArray(8, connection.createArrayOf("uuid", trade.returnStacks.stream().map(CloudItemStack::getUuid).toArray()));
-
-				ps.executeUpdate();
-				trade.dirty.clear();
-			}
-
-			connection.commit();
-		} catch (SQLException e) {
-			connection.rollback();
-			throw e;
+			ps.executeUpdate();
+			trade.dirty.clear();
 		}
 	}
 
@@ -524,10 +497,7 @@ public final class CloudDatabase {
 		return trade;
 	}
 
-	public Trade loadTrade(UUID uuid) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-
+	public Trade loadTrade(Connection connection, UUID uuid) throws SQLException {
 		try (PreparedStatement ps = connection.prepareStatement(
 			"select offerer_uuid, returner_uuid, start_time, end_time, result_ordinal, offer_stacks, return_stacks from trades where uuid = ?"
 		)) {
@@ -552,10 +522,7 @@ public final class CloudDatabase {
 		}
 	}
 
-	public Map<UUID, Trade> loadPlayerTrades(UUID playerUuid) throws SQLException {
-		@Cleanup
-		Connection connection = dataSource.getConnection();
-
+	public Map<UUID, Trade> loadPlayerTrades(Connection connection, UUID playerUuid) throws SQLException {
 		Map<UUID, Trade> result = new HashMap<>();
 
 		try (PreparedStatement ps = connection.prepareStatement(

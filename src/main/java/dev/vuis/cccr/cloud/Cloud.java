@@ -7,6 +7,7 @@ import com.f3rullo14.cloud.server.ICloud;
 import com.f3rullo14.fds.tag.FDSTagCompound;
 import dev.vuis.cccr.cloud.console.CommandSource;
 import dev.vuis.cccr.cloud.console.Commands;
+import dev.vuis.cccr.cloud.data.CloudDatabase;
 import dev.vuis.cccr.cloud.data.CloudStats;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.Permission;
@@ -19,7 +20,6 @@ import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
 import dev.vuis.cccr.cloud.packet.PacketRequestedInventory;
 import dev.vuis.cccr.cloud.packet.PacketRequestedPlayerData;
 import dev.vuis.cccr.cloud.util.ReflectUtil;
-import java.sql.SQLException;
 import java.time.LocalDate;
 import java.time.Month;
 import java.time.ZoneOffset;
@@ -123,6 +123,7 @@ public final class Cloud implements ICloud {
 	}
 
 	private void onMinute() {
+		CloudDatabase db = dataHandler.getDatabase();
 		Collection<PlayerData> cachedPlayerData = dataHandler.getCachedPlayerData();
 
 		Month newMonth = LocalDate.now(ZoneOffset.UTC).getMonth();
@@ -132,57 +133,46 @@ public final class Cloud implements ICloud {
 			for (PlayerData data : cachedPlayerData) {
 				data.score.set(0);
 			}
-			try {
-				dataHandler.getDatabase().resetPlayerScores();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
+			db.acceptConnetion(db::resetPlayerScores);
 		}
 
-		long dataStart = System.nanoTime();
 		for (PlayerData data : cachedPlayerData) {
 			if (data.online.get()) {
 				data.minutesPlayed.incrementAndGet();
 				data.dirty.mark();
 			}
-			try {
-				dataHandler.getDatabase().savePlayerData(data, false);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
 		}
+
+		long dataStart = System.nanoTime();
+		db.acceptConnetion(conn -> {
+			for (PlayerData data : cachedPlayerData) {
+				db.savePlayerData(conn, data, false);
+			}
+		});
 		long dataEnd = System.nanoTime();
 		log("Saved %d cached player data entries in %.2f ms", cachedPlayerData.size(), (dataEnd - dataStart) / 1000000f);
 
 		long invStart = System.nanoTime();
 		Collection<PlayerInventory> cachedPlayerInventories = dataHandler.getCachedPlayerInventories();
-		for (PlayerInventory inventory : cachedPlayerInventories) {
-			try {
-				dataHandler.getDatabase().savePlayerInventory(inventory);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		db.acceptConnetion(conn -> {
+			for (PlayerInventory inventory : cachedPlayerInventories) {
+				db.savePlayerInventory(conn, inventory);
 			}
-		}
+		});
 		long invEnd = System.nanoTime();
 		log("Saved %d cached player inventory entries in %.2f ms", cachedPlayerInventories.size(), (invEnd - invStart) / 1000000f);
 
 		long tradeStart = System.nanoTime();
 		Set<Map.Entry<UUID, Trade>> cachedTrades = dataHandler.getCachedTrades();
-		for (Map.Entry<UUID, Trade> trade : cachedTrades) {
-			try {
-				dataHandler.getDatabase().saveTrade(trade.getKey(), trade.getValue());
-			} catch (SQLException e) {
-				e.printStackTrace();
+		db.acceptConnetion(conn -> {
+			for (Map.Entry<UUID, Trade> entry : cachedTrades) {
+				db.saveTrade(conn, entry.getKey(), entry.getValue());
 			}
-		}
+		});
 		long tradeEnd = System.nanoTime();
 		log("Saved %d cached trade entries in %.2f ms", cachedTrades.size(), (tradeEnd - tradeStart) / 1000000f);
 
-		try {
-			CloudStats.PLAYER_SCOREBOARD.set(dataHandler.getDatabase().loadPlayerScores(CloudStats.SCOREBOARD_LIMIT));
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		CloudStats.PLAYER_SCOREBOARD.set(db.applyConnection(conn -> db.loadPlayerScores(conn, CloudStats.SCOREBOARD_LIMIT)));
 		log("Refreshed player scoreboard");
 	}
 

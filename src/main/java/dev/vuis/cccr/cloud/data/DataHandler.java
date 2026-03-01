@@ -5,7 +5,6 @@ import com.google.common.cache.CacheBuilder;
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.item.CloudItemStack;
 import dev.vuis.cccr.cloud.item.CloudItems;
-import java.sql.SQLException;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
@@ -35,39 +34,27 @@ public final class DataHandler {
 		this.playerDataCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener(notification -> {
-				try {
-					Object value = notification.getValue();
-					assert value != null;
-					database.savePlayerData((PlayerData) value, true);
-				} catch (SQLException e) {
-					throw new RuntimeException(e);
-				}
+				Object value = notification.getValue();
+				assert value != null;
+				database.acceptConnetion(conn -> database.savePlayerData(conn, (PlayerData) value, true));
 			})
 			.build();
 		this.playerInventoryCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener(notification -> {
-				try {
-					Object value = notification.getValue();
-					assert value != null;
-					database.savePlayerInventory((PlayerInventory) value);
-				} catch (SQLException e) {
-					throw new RuntimeException(e);
-				}
+				Object value = notification.getValue();
+				assert value != null;
+				database.acceptConnetion(conn -> database.savePlayerInventory(conn, (PlayerInventory) value));
 			})
 			.build();
 		this.tradeCache = CacheBuilder.newBuilder()
 			.expireAfterAccess(5, TimeUnit.MINUTES)
 			.removalListener(notification -> {
-				try {
-					Object key = notification.getKey();
-					assert key != null;
-					Object value = notification.getValue();
-					assert value != null;
-					database.saveTrade((UUID) key, (Trade) value);
-				} catch (SQLException e) {
-					throw new RuntimeException(e);
-				}
+				Object key = notification.getKey();
+				assert key != null;
+				Object value = notification.getValue();
+				assert value != null;
+				database.acceptConnetion(conn -> database.saveTrade(conn, (UUID) key, (Trade) value));
 			})
 			.build();
 	}
@@ -77,13 +64,7 @@ public final class DataHandler {
 	}
 
 	public UUID getPlayerUuid(String username) {
-		return playerUuids.computeIfAbsent(username, key -> {
-			try {
-				return database.loadPlayerUuid(key);
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
-		});
+		return playerUuids.computeIfAbsent(username, key -> database.applyConnection(conn -> database.loadPlayerUuid(conn, key)));
 	}
 
 	public String getPlayerUsername(UUID uuid) {
@@ -96,11 +77,7 @@ public final class DataHandler {
 			return data;
 		}
 
-		try {
-			data = database.loadPlayerData(uuid);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		data = database.applyConnection(conn -> database.loadPlayerData(conn, uuid));
 		if (data != null) {
 			playerDataCache.put(uuid, data);
 		}
@@ -141,11 +118,7 @@ public final class DataHandler {
 			return inventory;
 		}
 
-		try {
-			inventory = database.loadPlayerInventory(uuid);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		inventory = database.applyConnection(conn -> database.loadPlayerInventory(conn, uuid));
 		if (inventory != null) {
 			playerInventoryCache.put(uuid, inventory);
 		}
@@ -184,11 +157,7 @@ public final class DataHandler {
 			return trade;
 		}
 
-		try {
-			trade = database.loadTrade(uuid);
-		} catch (SQLException e) {
-			throw new RuntimeException(e);
-		}
+		trade = database.applyConnection(conn -> database.loadTrade(conn, uuid));
 		if (trade != null) {
 			tradeCache.put(uuid, trade);
 		}
@@ -197,28 +166,23 @@ public final class DataHandler {
 
 	public Map<UUID, Trade> getPlayerTrades(UUID playerUuid) {
 		Set<UUID> tradeUuids = playerTradeUuids.get(playerUuid);
-		if (tradeUuids == null) {
-			Map<UUID, Trade> trades;
-			try {
-				trades = database.loadPlayerTrades(playerUuid);
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
-			}
+		Map<UUID, Trade> trades;
 
+		if (tradeUuids == null) {
+			trades = database.applyConnection(conn -> database.loadPlayerTrades(conn, playerUuid));
 			tradeCache.putAll(trades);
 
 			Set<UUID> newTradeUuids = ConcurrentHashMap.newKeySet();
 			newTradeUuids.addAll(trades.keySet());
 			playerTradeUuids.put(playerUuid, newTradeUuids);
-
-			return trades;
 		} else {
-			Map<UUID, Trade> trades = new HashMap<>();
+			trades = new HashMap<>();
 			for (UUID uuid : tradeUuids) {
 				trades.put(uuid, getTrade(uuid));
 			}
-			return trades;
 		}
+
+		return trades;
 	}
 
 	public Map<UUID, Trade> getPlayerTrades(String username) {
@@ -245,26 +209,16 @@ public final class DataHandler {
 	}
 
 	public void fullSaveCachedData() {
-		for (PlayerData data : playerDataCache.asMap().values()) {
-			try {
-				database.savePlayerData(data, true);
-			} catch (SQLException e) {
-				e.printStackTrace();
+		database.acceptConnetion(conn -> {
+			for (PlayerData data : playerDataCache.asMap().values()) {
+				database.savePlayerData(conn, data, true);
 			}
-		}
-		for (PlayerInventory inventory : playerInventoryCache.asMap().values()) {
-			try {
-				database.savePlayerInventory(inventory);
-			} catch (SQLException e) {
-				e.printStackTrace();
+			for (PlayerInventory inventory : playerInventoryCache.asMap().values()) {
+				database.savePlayerInventory(conn, inventory);
 			}
-		}
-		for (Map.Entry<UUID, Trade> trade : tradeCache.asMap().entrySet()) {
-			try {
-				database.saveTrade(trade.getKey(), trade.getValue());
-			} catch (SQLException e) {
-				throw new RuntimeException(e);
+			for (Map.Entry<UUID, Trade> trade : tradeCache.asMap().entrySet()) {
+				database.saveTrade(conn, trade.getKey(), trade.getValue());
 			}
-		}
+		});
 	}
 }
