@@ -133,7 +133,7 @@ public final class Cloud implements ICloud {
 			for (PlayerData data : cachedPlayerData) {
 				data.score.set(0);
 			}
-			db.acceptConnetion(db::resetPlayerScores);
+			db.acceptConnection(db::resetPlayerScores);
 		}
 
 		for (PlayerData data : cachedPlayerData) {
@@ -144,7 +144,7 @@ public final class Cloud implements ICloud {
 		}
 
 		long dataStart = System.nanoTime();
-		db.acceptConnetion(conn -> {
+		db.acceptConnection(conn -> {
 			for (PlayerData data : cachedPlayerData) {
 				db.savePlayerData(conn, data, false);
 			}
@@ -154,7 +154,7 @@ public final class Cloud implements ICloud {
 
 		long invStart = System.nanoTime();
 		Collection<PlayerInventory> cachedPlayerInventories = dataHandler.getCachedPlayerInventories();
-		db.acceptConnetion(conn -> {
+		db.acceptConnection(conn -> {
 			for (PlayerInventory inventory : cachedPlayerInventories) {
 				db.savePlayerInventory(conn, inventory);
 			}
@@ -164,7 +164,7 @@ public final class Cloud implements ICloud {
 
 		long tradeStart = System.nanoTime();
 		Set<Map.Entry<UUID, Trade>> cachedTrades = dataHandler.getCachedTrades();
-		db.acceptConnetion(conn -> {
+		db.acceptConnection(conn -> {
 			for (Map.Entry<UUID, Trade> entry : cachedTrades) {
 				db.saveTrade(conn, entry.getKey(), entry.getValue());
 			}

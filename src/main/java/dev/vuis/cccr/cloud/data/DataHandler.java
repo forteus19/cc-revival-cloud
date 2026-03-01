@@ -36,7 +36,7 @@ public final class DataHandler {
 			.removalListener(notification -> {
 				Object value = notification.getValue();
 				assert value != null;
-				database.acceptConnetion(conn -> database.savePlayerData(conn, (PlayerData) value, true));
+				database.acceptConnection(conn -> database.savePlayerData(conn, (PlayerData) value, true));
 			})
 			.build();
 		this.playerInventoryCache = CacheBuilder.newBuilder()
@@ -44,7 +44,7 @@ public final class DataHandler {
 			.removalListener(notification -> {
 				Object value = notification.getValue();
 				assert value != null;
-				database.acceptConnetion(conn -> database.savePlayerInventory(conn, (PlayerInventory) value));
+				database.acceptConnection(conn -> database.savePlayerInventory(conn, (PlayerInventory) value));
 			})
 			.build();
 		this.tradeCache = CacheBuilder.newBuilder()
@@ -54,7 +54,7 @@ public final class DataHandler {
 				assert key != null;
 				Object value = notification.getValue();
 				assert value != null;
-				database.acceptConnetion(conn -> database.saveTrade(conn, (UUID) key, (Trade) value));
+				database.acceptConnection(conn -> database.saveTrade(conn, (UUID) key, (Trade) value));
 			})
 			.build();
 	}
@@ -209,7 +209,7 @@ public final class DataHandler {
 	}
 
 	public void fullSaveCachedData() {
-		database.acceptConnetion(conn -> {
+		database.acceptConnection(conn -> {
 			for (PlayerData data : playerDataCache.asMap().values()) {
 				database.savePlayerData(conn, data, true);
 			}

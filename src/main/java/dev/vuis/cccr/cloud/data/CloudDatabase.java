@@ -31,7 +31,7 @@ import lombok.RequiredArgsConstructor;
 public final class CloudDatabase {
 	private final DataSource dataSource;
 
-	public void acceptConnetion(ConnectionConsumer consumer) {
+	public void acceptConnection(ConnectionConsumer consumer) {
 		try (Connection connection = dataSource.getConnection()) {
 			connection.setAutoCommit(false);
 			try {
