@@ -61,7 +61,9 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 				data.compExp.addAndGet(amount);
 			}
 			case "compRankSubtractXP" -> {
-				data.compExp.addAndGet(-amount);
+				if (data.compExp.addAndGet(-amount) < 0) {
+					data.compExp.set(0);
+				}
 			}
 			case "deaths" -> {
 				CloudAchievement deathsAch = CloudAchievements.getDeathsAchievement(data.deaths.addAndGet(amount));
