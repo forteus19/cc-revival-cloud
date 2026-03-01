@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.item.impl;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.market.MarketCategory;
 
 public class CloudItemGeneric extends CloudItem {
 	private final boolean isTradable;
@@ -23,6 +24,11 @@ public class CloudItemGeneric extends CloudItem {
 	@Override
 	public CloudItemCategory getCategory() {
 		return CloudItemCategory.GENERIC;
+	}
+
+	@Override
+	public MarketCategory getMarketCategory() {
+		return MarketCategory.MISC;
 	}
 
 	@Override

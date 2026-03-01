@@ -5,6 +5,7 @@ import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.market.MarketCategory;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import dev.vuis.cccr.cloud.util.Util;
 import java.util.List;
@@ -50,12 +51,12 @@ public class CloudItemCase extends CloudItem {
 	}
 
 	@Override
-	public boolean isTradable() {
-		return true;
+	public MarketCategory getMarketCategory() {
+		return MarketCategory.CASE;
 	}
 
 	@Override
-	public boolean isSellable() {
+	public boolean isTradable() {
 		return true;
 	}
 

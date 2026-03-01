@@ -3,6 +3,7 @@ package dev.vuis.cccr.cloud.item.impl;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.market.MarketCategory;
 
 public class CloudItemStickerCapsule extends CloudItem {
 	public CloudItemStickerCapsule(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
@@ -15,12 +16,12 @@ public class CloudItemStickerCapsule extends CloudItem {
 	}
 
 	@Override
-	public boolean isTradable() {
-		return true;
+	public MarketCategory getMarketCategory() {
+		return MarketCategory.CASE;
 	}
 
 	@Override
-	public boolean isSellable() {
+	public boolean isTradable() {
 		return true;
 	}
 

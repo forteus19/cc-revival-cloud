@@ -6,26 +6,34 @@ import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemCollection;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.item.SuffixedCloudItem;
+import dev.vuis.cccr.cloud.market.MarketCategory;
 import dev.vuis.cccr.cloud.util.Util;
 import lombok.Getter;
 
-public class CloudItemGun extends CloudItem {
+public class CloudItemGun extends SuffixedCloudItem {
 	private static final Multiset<CloudItemGun> DROP_SET = HashMultiset.create();
 
 	@Getter
 	private final CloudItemCollection collection;
+	private final MarketCategory marketCategory;
 
-	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault, CloudItemCollection collection) {
-		super(id, mcId, rarity, suffix, isDefault);
+	private CloudItemGun(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, CloudItem defaultItem, CloudItemCollection collection, MarketCategory marketCategory) {
+		super(id, mcId, rarity, displayName, isDefault, defaultItem);
 		this.collection = collection;
+		this.marketCategory = marketCategory;
 
 		if (!isDefault) {
 			DROP_SET.add(this, rarity.getWeight());
 		}
 	}
 
-	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
-		this(id, mcId, rarity, suffix, isDefault, CloudItemCollection.NONE);
+	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, CloudItem defaultItem, CloudItemCollection collection) {
+		this(id, mcId, rarity, displayName, isDefault, defaultItem, collection, defaultItem.getMarketCategory());
+	}
+
+	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, MarketCategory marketCategory) {
+		this(id, mcId, rarity, displayName, isDefault, null, CloudItemCollection.NONE, marketCategory);
 	}
 
 	public static CloudItemGun getRandomForDrop() {
@@ -38,12 +46,12 @@ public class CloudItemGun extends CloudItem {
 	}
 
 	@Override
-	public boolean isTradable() {
-		return true;
+	public MarketCategory getMarketCategory() {
+		return marketCategory;
 	}
 
 	@Override
-	public boolean isSellable() {
+	public boolean isTradable() {
 		return true;
 	}
 

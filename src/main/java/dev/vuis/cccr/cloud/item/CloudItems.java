@@ -36,6 +36,11 @@ import static dev.vuis.cccr.cloud.item.CloudItemRarity.GOLD;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.IRON;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.LAPIS;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.OBSIDIAN;
+import static dev.vuis.cccr.cloud.market.MarketCategory.HEAVY;
+import static dev.vuis.cccr.cloud.market.MarketCategory.PISTOL;
+import static dev.vuis.cccr.cloud.market.MarketCategory.RIFLE;
+import static dev.vuis.cccr.cloud.market.MarketCategory.SMG;
+import static dev.vuis.cccr.cloud.market.MarketCategory.SNIPER;
 
 @SuppressWarnings("unused")
 public final class CloudItems {
@@ -43,117 +48,117 @@ public final class CloudItems {
 	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
 	static final Multimap<CloudItemRarity, CloudItem> RARITY_MAP = HashMultimap.create();
 
-	public static final CloudItemGun M4A4 = new CloudItemGun(100, 4256, DEFAULT, "M4A4", true);
-	public static final CloudItemGun M4A4_WAVES = new CloudItemGun(101, 4256, IRON, "M4A4 Waves", false, ALPHA_1);
-	public static final CloudItemGun M4A4_EVILDAIMYO = new CloudItemGun(102, 4256, GOLD, "M4A4 EvilDaimyo", false, ALPHA_1);
-	public static final CloudItemGun M4A4_CAKEY = new CloudItemGun(103, 4256, IRON, "M4A4 Cakey", false, ALPHA_2);
-	public static final CloudItemGun M4A4_HOWL = new CloudItemGun(104, 4256, OBSIDIAN, "M4A4 Howl", false, ALPHA_3);
-	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, IRON, "M4A4 Nerfed", false, ALPHA_3);
-	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, HALLOWEEN);
-	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, 4256, LAPIS, "M4A4 Patriot", false, EXO);
-	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, PREALPHA);
-	public static final CloudItemGun M4A4_LURKER = new CloudItemGun(109, 4256, DIAMOND, "M4A4 Lurker", false, BLAZE);
+	public static final CloudItemGun M4A4 = new CloudItemGun(100, 4256, DEFAULT, "M4A4", true, RIFLE);
+	public static final CloudItemGun M4A4_WAVES = new CloudItemGun(101, 4256, IRON, "M4A4 Waves", false, M4A4, ALPHA_1);
+	public static final CloudItemGun M4A4_EVILDAIMYO = new CloudItemGun(102, 4256, GOLD, "M4A4 EvilDaimyo", false, M4A4, ALPHA_1);
+	public static final CloudItemGun M4A4_CAKEY = new CloudItemGun(103, 4256, IRON, "M4A4 Cakey", false, M4A4, ALPHA_2);
+	public static final CloudItemGun M4A4_HOWL = new CloudItemGun(104, 4256, OBSIDIAN, "M4A4 Howl", false, M4A4, ALPHA_3);
+	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, IRON, "M4A4 Nerfed", false, M4A4, ALPHA_3);
+	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, M4A4, HALLOWEEN);
+	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, 4256, LAPIS, "M4A4 Patriot", false, M4A4, EXO);
+	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, M4A4, PREALPHA);
+	public static final CloudItemGun M4A4_LURKER = new CloudItemGun(109, 4256, DIAMOND, "M4A4 Lurker", false, M4A4, BLAZE);
 
-	public static final CloudItemGun AK47 = new CloudItemGun(200, 4257, DEFAULT, "AK47", true);
-	public static final CloudItemGun AK47_PROPAGANDA = new CloudItemGun(201, 4257, GOLD, "AK47 Propaganda", false, ALPHA_1);
-	public static final CloudItemGun AK47_ASMO = new CloudItemGun(202, 4257, DIAMOND, "AK47 Asmo", false, ALPHA_1);
-	public static final CloudItemGun AK47_NEONREVOLUTION = new CloudItemGun(203, 4257, GOLD, "AK47 Neon Revolution", false, ALPHA_2);
-	public static final CloudItemGun AK47_HAUNTED = new CloudItemGun(204, 4257, DIAMOND, "AK47 Haunted", false, HALLOWEEN);
-	public static final CloudItemGun AK47_BLOODSPORT = new CloudItemGun(205, 4257, IRON, "AK47 Bloodsport", false, EXO);
-	public static final CloudItemGun AK47_FOX = new CloudItemGun(206, 4257, LAPIS, "AK47 Fox", false, EXO);
-	public static final CloudItemGun AK47_VULCAN = new CloudItemGun(207, 4257, DIAMOND, "AK47 Vulcan", false, PREALPHA);
-	public static final CloudItemGun AK47_FUEL = new CloudItemGun(208, 4257, LAPIS, "AK47 Fuel", false, BLAZE);
-	public static final CloudItemGun AK47_SHIKARI = new CloudItemGun(209, 4257, IRON, "AK47 Shikari", false, BLAZE);
-	public static final CloudItemGun AK47_HORUS = new CloudItemGun(210, 4257, OBSIDIAN, "AK47 Horus", false, ALPHA_2);
+	public static final CloudItemGun AK47 = new CloudItemGun(200, 4257, DEFAULT, "AK47", true, RIFLE);
+	public static final CloudItemGun AK47_PROPAGANDA = new CloudItemGun(201, 4257, GOLD, "AK47 Propaganda", false, AK47, ALPHA_1);
+	public static final CloudItemGun AK47_ASMO = new CloudItemGun(202, 4257, DIAMOND, "AK47 Asmo", false, AK47, ALPHA_1);
+	public static final CloudItemGun AK47_NEONREVOLUTION = new CloudItemGun(203, 4257, GOLD, "AK47 Neon Revolution", false, AK47, ALPHA_2);
+	public static final CloudItemGun AK47_HAUNTED = new CloudItemGun(204, 4257, DIAMOND, "AK47 Haunted", false, AK47, HALLOWEEN);
+	public static final CloudItemGun AK47_BLOODSPORT = new CloudItemGun(205, 4257, IRON, "AK47 Bloodsport", false, AK47, EXO);
+	public static final CloudItemGun AK47_FOX = new CloudItemGun(206, 4257, LAPIS, "AK47 Fox", false, AK47, EXO);
+	public static final CloudItemGun AK47_VULCAN = new CloudItemGun(207, 4257, DIAMOND, "AK47 Vulcan", false, AK47, PREALPHA);
+	public static final CloudItemGun AK47_FUEL = new CloudItemGun(208, 4257, LAPIS, "AK47 Fuel", false, AK47, BLAZE);
+	public static final CloudItemGun AK47_SHIKARI = new CloudItemGun(209, 4257, IRON, "AK47 Shikari", false, AK47, BLAZE);
+	public static final CloudItemGun AK47_HORUS = new CloudItemGun(210, 4257, OBSIDIAN, "AK47 Horus", false, AK47, ALPHA_2);
 
-	public static final CloudItemGun FAMAS = new CloudItemGun(300, 4258, DEFAULT, "Famas", true);
-	public static final CloudItemGun FAMAS_AKARI = new CloudItemGun(301, 4258, LAPIS, "Famas Akari", false, ALPHA_2);
-	public static final CloudItemGun FAMAS_WARHAWK = new CloudItemGun(302, 4258, DIAMOND, "Famas Warhawk", false, ALPHA_3);
-	public static final CloudItemGun FAMAS_SPOOKY = new CloudItemGun(303, 4258, LAPIS, "Famas Spooky", false, HALLOWEEN);
-	public static final CloudItemGun FAMAS_PULSE = new CloudItemGun(304, 4258, LAPIS, "Famas Pulse", false, PREALPHA);
-	public static final CloudItemGun FAMAS_NUCLEAR = new CloudItemGun(305, 4258, IRON, "Famas Nuclear", false, BLAZE);
+	public static final CloudItemGun FAMAS = new CloudItemGun(300, 4258, DEFAULT, "Famas", true, RIFLE);
+	public static final CloudItemGun FAMAS_AKARI = new CloudItemGun(301, 4258, LAPIS, "Famas Akari", false, FAMAS, ALPHA_2);
+	public static final CloudItemGun FAMAS_WARHAWK = new CloudItemGun(302, 4258, DIAMOND, "Famas Warhawk", false, FAMAS, ALPHA_3);
+	public static final CloudItemGun FAMAS_SPOOKY = new CloudItemGun(303, 4258, LAPIS, "Famas Spooky", false, FAMAS, HALLOWEEN);
+	public static final CloudItemGun FAMAS_PULSE = new CloudItemGun(304, 4258, LAPIS, "Famas Pulse", false, FAMAS, PREALPHA);
+	public static final CloudItemGun FAMAS_NUCLEAR = new CloudItemGun(305, 4258, IRON, "Famas Nuclear", false, FAMAS, BLAZE);
 
-	public static final CloudItemGun FNFAL = new CloudItemGun(400, 4259, DEFAULT, "FN FAL", true);
-	public static final CloudItemGun FNFAL_VAPORWAVE = new CloudItemGun(401, 4259, GOLD, "FN FAL Vaporwave", false, ALPHA_3);
-	public static final CloudItemGun FNFAL_ASMO = new CloudItemGun(402, 4259, GOLD, "FN FAL Asmo", false, EXO);
-	public static final CloudItemGun FNFAL_STAIN = new CloudItemGun(403, 4259, IRON, "FN FAL Stain", false, PREALPHA);
-	public static final CloudItemGun FNFAL_REBEL = new CloudItemGun(404, 4259, GOLD, "FN FAL Rebel", false, BLAZE);
+	public static final CloudItemGun FNFAL = new CloudItemGun(400, 4259, DEFAULT, "FN FAL", true, RIFLE);
+	public static final CloudItemGun FNFAL_VAPORWAVE = new CloudItemGun(401, 4259, GOLD, "FN FAL Vaporwave", false, FNFAL, ALPHA_3);
+	public static final CloudItemGun FNFAL_ASMO = new CloudItemGun(402, 4259, GOLD, "FN FAL Asmo", false, FNFAL, EXO);
+	public static final CloudItemGun FNFAL_STAIN = new CloudItemGun(403, 4259, IRON, "FN FAL Stain", false, FNFAL, PREALPHA);
+	public static final CloudItemGun FNFAL_REBEL = new CloudItemGun(404, 4259, GOLD, "FN FAL Rebel", false, FNFAL, BLAZE);
 
-	public static final CloudItemGun GALIL = new CloudItemGun(450, 4260, DEFAULT, "Galil AR", true);
+	public static final CloudItemGun GALIL = new CloudItemGun(450, 4260, DEFAULT, "Galil AR", true, RIFLE);
 
-	public static final CloudItemGun M1911 = new CloudItemGun(500, 4266, DEFAULT, "M1911", true);
-	public static final CloudItemGun M1911_DRAGON = new CloudItemGun(501, 4266, LAPIS, "M1911 Dragon", false, ALPHA_3);
-	public static final CloudItemGun M1911_TUXEDO = new CloudItemGun(502, 4266, IRON, "M1911 Tuxedo", false, HALLOWEEN);
-	public static final CloudItemGun M1911_RAIN = new CloudItemGun(503, 4266, COAL, "M1911 Rain", false, PREALPHA);
-	public static final CloudItemGun M1911_OLDWEST = new CloudItemGun(504, 4266, IRON, "M1911 OldWest", false, BLAZE);
-	public static final CloudItemGun M1911_SHOCK = new CloudItemGun(505, 4266, COAL, "M1911 Shock", false, BLAZE);
+	public static final CloudItemGun M1911 = new CloudItemGun(500, 4266, DEFAULT, "M1911", true, PISTOL);
+	public static final CloudItemGun M1911_DRAGON = new CloudItemGun(501, 4266, LAPIS, "M1911 Dragon", false, M1911, ALPHA_3);
+	public static final CloudItemGun M1911_TUXEDO = new CloudItemGun(502, 4266, IRON, "M1911 Tuxedo", false, M1911, HALLOWEEN);
+	public static final CloudItemGun M1911_RAIN = new CloudItemGun(503, 4266, COAL, "M1911 Rain", false, M1911, PREALPHA);
+	public static final CloudItemGun M1911_OLDWEST = new CloudItemGun(504, 4266, IRON, "M1911 OldWest", false, M1911, BLAZE);
+	public static final CloudItemGun M1911_SHOCK = new CloudItemGun(505, 4266, COAL, "M1911 Shock", false, M1911, BLAZE);
 
-	public static final CloudItemGun G18 = new CloudItemGun(600, 4267, DEFAULT, "G18", true);
-	public static final CloudItemGun G18_RACE = new CloudItemGun(601, 4267, IRON, "G18 Race", false, ALPHA_3);
-	public static final CloudItemGun G18_HIGHROLLER = new CloudItemGun(602, 4267, DIAMOND, "G18 Highroller", false, HALLOWEEN);
-	public static final CloudItemGun G18_DEEP_BLUE = new CloudItemGun(603, 4267, IRON, "G18 Deep Blue", false, HALLOWEEN);
-	public static final CloudItemGun G18_FADE = new CloudItemGun(604, 4267, GOLD, "G18 Fade", false, PREALPHA);
-	public static final CloudItemGun G18_URBAN = new CloudItemGun(605, 4267, COAL, "G18 Urban", false, BLAZE);
+	public static final CloudItemGun G18 = new CloudItemGun(600, 4267, DEFAULT, "G18", true, PISTOL);
+	public static final CloudItemGun G18_RACE = new CloudItemGun(601, 4267, IRON, "G18 Race", false, G18, ALPHA_3);
+	public static final CloudItemGun G18_HIGHROLLER = new CloudItemGun(602, 4267, DIAMOND, "G18 Highroller", false, G18, HALLOWEEN);
+	public static final CloudItemGun G18_DEEP_BLUE = new CloudItemGun(603, 4267, IRON, "G18 Deep Blue", false, G18, HALLOWEEN);
+	public static final CloudItemGun G18_FADE = new CloudItemGun(604, 4267, GOLD, "G18 Fade", false, G18, PREALPHA);
+	public static final CloudItemGun G18_URBAN = new CloudItemGun(605, 4267, COAL, "G18 Urban", false, G18, BLAZE);
 
-	public static final CloudItemGun TEC9 = new CloudItemGun(650, 4270, DEFAULT, "TEC9", true);
-	public static final CloudItemGun TEC9_QUAKORONIC = new CloudItemGun(651, 4270, IRON, "TEC9 Quakoronic", false, ALPHA_2);
-	public static final CloudItemGun TEC9_ECO = new CloudItemGun(652, 4270, IRON, "TEC9 Eco", false, EXO);
-	public static final CloudItemGun TEC9_AQUARIUM = new CloudItemGun(653, 4270, DIAMOND, "TEC9 Aquarium", false, EXO);
+	public static final CloudItemGun TEC9 = new CloudItemGun(650, 4270, DEFAULT, "TEC9", true, PISTOL);
+	public static final CloudItemGun TEC9_QUAKORONIC = new CloudItemGun(651, 4270, IRON, "TEC9 Quakoronic", false, TEC9, ALPHA_2);
+	public static final CloudItemGun TEC9_ECO = new CloudItemGun(652, 4270, IRON, "TEC9 Eco", false, TEC9, EXO);
+	public static final CloudItemGun TEC9_AQUARIUM = new CloudItemGun(653, 4270, DIAMOND, "TEC9 Aquarium", false, TEC9, EXO);
 
-	public static final CloudItemGun DEAGLE = new CloudItemGun(700, 4268, DEFAULT, "Deagle", true);
-	public static final CloudItemGun DEAGLE_NIGHTRAZER = new CloudItemGun(701, 4268, LAPIS, "Deagle NightRazer", false, ALPHA_1);
-	public static final CloudItemGun DEAGLE_DEADHORIZON = new CloudItemGun(702, 4268, GOLD, "Deagle Dead Horizon", false, ALPHA_3);
-	public static final CloudItemGun DEAGLE_GRIN = new CloudItemGun(703, 4268, LAPIS, "Deagle Grin", false, HALLOWEEN);
-	public static final CloudItemGun DEAGLE_NAVY = new CloudItemGun(704, 4268, COAL, "Deagle Navy", false, PREALPHA);
-	public static final CloudItemGun DEAGLE_WATERMELON = new CloudItemGun(705, 4268, LAPIS, "Deagle Watermelon", false, BLAZE);
+	public static final CloudItemGun DEAGLE = new CloudItemGun(700, 4268, DEFAULT, "Deagle", true, PISTOL);
+	public static final CloudItemGun DEAGLE_NIGHTRAZER = new CloudItemGun(701, 4268, LAPIS, "Deagle NightRazer", false, DEAGLE, ALPHA_1);
+	public static final CloudItemGun DEAGLE_DEADHORIZON = new CloudItemGun(702, 4268, GOLD, "Deagle Dead Horizon", false, DEAGLE, ALPHA_3);
+	public static final CloudItemGun DEAGLE_GRIN = new CloudItemGun(703, 4268, LAPIS, "Deagle Grin", false, DEAGLE, HALLOWEEN);
+	public static final CloudItemGun DEAGLE_NAVY = new CloudItemGun(704, 4268, COAL, "Deagle Navy", false, DEAGLE, PREALPHA);
+	public static final CloudItemGun DEAGLE_WATERMELON = new CloudItemGun(705, 4268, LAPIS, "Deagle Watermelon", false, DEAGLE, BLAZE);
 
-	public static final CloudItemGun P250 = new CloudItemGun(750, 4269, DEFAULT, "P250", true);
-	public static final CloudItemGun P250_IRRADIATED = new CloudItemGun(751, 4269, IRON, "P250 Irradiated", false, ALPHA_1);
-	public static final CloudItemGun P250_SEEYALATER = new CloudItemGun(752, 4269, DIAMOND, "P250 SeeYaLater", false, ALPHA_2);
-	public static final CloudItemGun P250_CITY = new CloudItemGun(753, 4269, IRON, "P250 City", false, ALPHA_3);
-	public static final CloudItemGun P250_BEAST = new CloudItemGun(754, 4269, GOLD, "P250 Beast", false, EXO);
-	public static final CloudItemGun P250_ARCTIC = new CloudItemGun(755, 4269, COAL, "P250 Arctic", false, PREALPHA);
+	public static final CloudItemGun P250 = new CloudItemGun(750, 4269, DEFAULT, "P250", true, PISTOL);
+	public static final CloudItemGun P250_IRRADIATED = new CloudItemGun(751, 4269, IRON, "P250 Irradiated", false, P250, ALPHA_1);
+	public static final CloudItemGun P250_SEEYALATER = new CloudItemGun(752, 4269, DIAMOND, "P250 SeeYaLater", false, P250, ALPHA_2);
+	public static final CloudItemGun P250_CITY = new CloudItemGun(753, 4269, IRON, "P250 City", false, P250, ALPHA_3);
+	public static final CloudItemGun P250_BEAST = new CloudItemGun(754, 4269, GOLD, "P250 Beast", false, P250, EXO);
+	public static final CloudItemGun P250_ARCTIC = new CloudItemGun(755, 4269, COAL, "P250 Arctic", false, P250, PREALPHA);
 
-	public static final CloudItemGun P90 = new CloudItemGun(800, 4276, DEFAULT, "P90", true);
-	public static final CloudItemGun P90_RUST = new CloudItemGun(801, 4276, IRON, "P90 Rust", false, ALPHA_1);
-	public static final CloudItemGun P90_KRAKEN = new CloudItemGun(802, 4276, GOLD, "P90 Kraken", false, ALPHA_2);
-	public static final CloudItemGun P90_RUBY = new CloudItemGun(803, 4276, IRON, "P90 Ruby", false, PREALPHA);
+	public static final CloudItemGun P90 = new CloudItemGun(800, 4276, DEFAULT, "P90", true, SMG);
+	public static final CloudItemGun P90_RUST = new CloudItemGun(801, 4276, IRON, "P90 Rust", false, P90, ALPHA_1);
+	public static final CloudItemGun P90_KRAKEN = new CloudItemGun(802, 4276, GOLD, "P90 Kraken", false, P90, ALPHA_2);
+	public static final CloudItemGun P90_RUBY = new CloudItemGun(803, 4276, IRON, "P90 Ruby", false, P90, PREALPHA);
 
-	public static final CloudItemGun MAC10 = new CloudItemGun(900, 4277, DEFAULT, "MAC10", true);
-	public static final CloudItemGun MAC10_RACE = new CloudItemGun(901, 4277, IRON, "MAC10 Race", false, ALPHA_2);
-	public static final CloudItemGun MAC10_PUMPKIN = new CloudItemGun(902, 4277, LAPIS, "MAC10 Pumpkin", false, HALLOWEEN);
-	public static final CloudItemGun MAC10_VIOLET = new CloudItemGun(903, 4277, LAPIS, "MAC10 Violet", false, PREALPHA);
-	public static final CloudItemGun MAC10_CHICKEN = new CloudItemGun(904, 4277, DIAMOND, "MAC10 Chicken", false, BLAZE);
+	public static final CloudItemGun MAC10 = new CloudItemGun(900, 4277, DEFAULT, "MAC10", true, SMG);
+	public static final CloudItemGun MAC10_RACE = new CloudItemGun(901, 4277, IRON, "MAC10 Race", false, MAC10, ALPHA_2);
+	public static final CloudItemGun MAC10_PUMPKIN = new CloudItemGun(902, 4277, LAPIS, "MAC10 Pumpkin", false, MAC10, HALLOWEEN);
+	public static final CloudItemGun MAC10_VIOLET = new CloudItemGun(903, 4277, LAPIS, "MAC10 Violet", false, MAC10, PREALPHA);
+	public static final CloudItemGun MAC10_CHICKEN = new CloudItemGun(904, 4277, DIAMOND, "MAC10 Chicken", false, MAC10, BLAZE);
 
-	public static final CloudItemGun VECTOR = new CloudItemGun(1000, 4278, DEFAULT, "Vector", true);
-	public static final CloudItemGun VECTOR_CIRCUIT = new CloudItemGun(1001, 4278, IRON, "Vector Circuit", false, ALPHA_1);
-	public static final CloudItemGun VECTOR_BLOODYEQUATION = new CloudItemGun(1002, 4278, IRON, "Vector Bloody Equation", false, ALPHA_3);
-	public static final CloudItemGun VECTOR_ARCTIC = new CloudItemGun(1003, 4278, GOLD, "Vector Arctic", false, PREALPHA);
-	public static final CloudItemGun VECTOR_SUNNY = new CloudItemGun(1004, 4278, COAL, "Vector Sunny", false, BLAZE);
+	public static final CloudItemGun VECTOR = new CloudItemGun(1000, 4278, DEFAULT, "Vector", true, SMG);
+	public static final CloudItemGun VECTOR_CIRCUIT = new CloudItemGun(1001, 4278, IRON, "Vector Circuit", false, VECTOR, ALPHA_1);
+	public static final CloudItemGun VECTOR_BLOODYEQUATION = new CloudItemGun(1002, 4278, IRON, "Vector Bloody Equation", false, VECTOR, ALPHA_3);
+	public static final CloudItemGun VECTOR_ARCTIC = new CloudItemGun(1003, 4278, GOLD, "Vector Arctic", false, VECTOR, PREALPHA);
+	public static final CloudItemGun VECTOR_SUNNY = new CloudItemGun(1004, 4278, COAL, "Vector Sunny", false, VECTOR, BLAZE);
 
-	public static final CloudItemGun AWP = new CloudItemGun(1100, 4286, DEFAULT, "AWP", true);
-	public static final CloudItemGun AWP_DRAGON = new CloudItemGun(1101, 4286, OBSIDIAN, "AWP Dragon", false, ALPHA_1);
-	public static final CloudItemGun AWP_MANOWAR = new CloudItemGun(1102, 4286, LAPIS, "AWP Man O War", false, ALPHA_2);
-	public static final CloudItemGun AWP_ASMO = new CloudItemGun(1103, 4286, DIAMOND, "AWP Asmo", false, ALPHA_3);
-	public static final CloudItemGun AWP_BONES = new CloudItemGun(1104, 4286, GOLD, "AWP Bones", false, HALLOWEEN);
-	public static final CloudItemGun AWP_REDLINE = new CloudItemGun(1105, 4286, IRON, "AWP Redline", false, EXO);
-	public static final CloudItemGun AWP_BOOM = new CloudItemGun(1106, 4286, GOLD, "AWP Boom", false, EXO);
-	public static final CloudItemGun AWP_LIGHTNING = new CloudItemGun(1107, 4286, DIAMOND, "AWP Lightning", false, PREALPHA);
-	public static final CloudItemGun AWP_BEAST = new CloudItemGun(1108, 4286, GOLD, "AWP Beast", false, BLAZE);
-	public static final CloudItemGun AWP_MECHA_DRAGON = new CloudItemGun(1109, 4286, OBSIDIAN, "AWP Mecha Dragon", false, BLAZE);
+	public static final CloudItemGun AWP = new CloudItemGun(1100, 4286, DEFAULT, "AWP", true, SNIPER);
+	public static final CloudItemGun AWP_DRAGON = new CloudItemGun(1101, 4286, OBSIDIAN, "AWP Dragon", false, AWP, ALPHA_1);
+	public static final CloudItemGun AWP_MANOWAR = new CloudItemGun(1102, 4286, LAPIS, "AWP Man O War", false, AWP, ALPHA_2);
+	public static final CloudItemGun AWP_ASMO = new CloudItemGun(1103, 4286, DIAMOND, "AWP Asmo", false, AWP, ALPHA_3);
+	public static final CloudItemGun AWP_BONES = new CloudItemGun(1104, 4286, GOLD, "AWP Bones", false, AWP, HALLOWEEN);
+	public static final CloudItemGun AWP_REDLINE = new CloudItemGun(1105, 4286, IRON, "AWP Redline", false, AWP, EXO);
+	public static final CloudItemGun AWP_BOOM = new CloudItemGun(1106, 4286, GOLD, "AWP Boom", false, AWP, EXO);
+	public static final CloudItemGun AWP_LIGHTNING = new CloudItemGun(1107, 4286, DIAMOND, "AWP Lightning", false, AWP, PREALPHA);
+	public static final CloudItemGun AWP_BEAST = new CloudItemGun(1108, 4286, GOLD, "AWP Beast", false, AWP, BLAZE);
+	public static final CloudItemGun AWP_MECHA_DRAGON = new CloudItemGun(1109, 4286, OBSIDIAN, "AWP Mecha Dragon", false, AWP, BLAZE);
 
-	public static final CloudItemGun DRAGUNOV = new CloudItemGun(1200, 4287, DEFAULT, "Dragunov", true);
-	public static final CloudItemGun DRAGUNOV_SKY = new CloudItemGun(1201, 4287, IRON, "Dragunov Sky", false, ALPHA_1);
-	public static final CloudItemGun DRAGUNOV_STEAMPUNK = new CloudItemGun(1202, 4287, LAPIS, "Dragunov Steampunk", false, EXO);
-	public static final CloudItemGun DRAGUNOV_JUNGLE = new CloudItemGun(1203, 4287, IRON, "Dragunov Jungle", false, PREALPHA);
+	public static final CloudItemGun DRAGUNOV = new CloudItemGun(1200, 4287, DEFAULT, "Dragunov", true, SNIPER);
+	public static final CloudItemGun DRAGUNOV_SKY = new CloudItemGun(1201, 4287, IRON, "Dragunov Sky", false, DRAGUNOV, ALPHA_1);
+	public static final CloudItemGun DRAGUNOV_STEAMPUNK = new CloudItemGun(1202, 4287, LAPIS, "Dragunov Steampunk", false, DRAGUNOV, EXO);
+	public static final CloudItemGun DRAGUNOV_JUNGLE = new CloudItemGun(1203, 4287, IRON, "Dragunov Jungle", false, DRAGUNOV, PREALPHA);
 
-	public static final CloudItemGun SCAR20 = new CloudItemGun(1300, 4288, DEFAULT, "Scar20", true);
-	public static final CloudItemGun SCAR20_CYREX = new CloudItemGun(1301, 4288, LAPIS, "Scar20 Cyrex", false, ALPHA_1);
-	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, 4288, DIAMOND, "Scar20 Unicorn", false, ALPHA_2);
-	public static final CloudItemGun SCAR20_ELITE = new CloudItemGun(1303, 4288, COAL, "Scar20 Elite", false, PREALPHA);
-	public static final CloudItemGun SCAR20_SHOCK = new CloudItemGun(1304, 4288, LAPIS, "Scar20 Shock", false, BLAZE);
+	public static final CloudItemGun SCAR20 = new CloudItemGun(1300, 4288, DEFAULT, "Scar20", true, SNIPER);
+	public static final CloudItemGun SCAR20_CYREX = new CloudItemGun(1301, 4288, LAPIS, "Scar20 Cyrex", false, SCAR20, ALPHA_1);
+	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, 4288, DIAMOND, "Scar20 Unicorn", false, SCAR20, ALPHA_2);
+	public static final CloudItemGun SCAR20_ELITE = new CloudItemGun(1303, 4288, COAL, "Scar20 Elite", false, SCAR20, PREALPHA);
+	public static final CloudItemGun SCAR20_SHOCK = new CloudItemGun(1304, 4288, LAPIS, "Scar20 Shock", false, SCAR20, BLAZE);
 
-	public static final CloudItemGun SSG08 = new CloudItemGun(1400, 4289, DEFAULT, "SSG-08", true);
+	public static final CloudItemGun SSG08 = new CloudItemGun(1400, 4289, DEFAULT, "SSG-08", true, SNIPER);
 
 	public static final CloudItemKnife KNIFE_TAC = new CloudItemKnife(1500, 4456, DEFAULT, "Tac Knife", true);
 	public static final CloudItemKnife KNIFE_TAC_DISPLAY = new CloudItemKnife(1501, 4457, OBSIDIAN, "Special Item", false);
@@ -188,35 +193,35 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_BFL = new CloudItemKnife(1530, 4486, DIAMOND, "Butterfly", false);
 	public static final CloudItemKnife KNIFE_BFL_PRESTIGE = new CloudItemKnife(1531, 4487, OBSIDIAN, "Butterfly Prestige", false);
 
-	public static final CloudItemGun NOVA = new CloudItemGun(1600, 4296, DEFAULT, "Nova", true);
-	public static final CloudItemGun NOVA_OXIDEBLAZE = new CloudItemGun(1601, 4296, IRON, "Nova Oxide Blaze", false, ALPHA_2);
-	public static final CloudItemGun NOVA_HYPER_BEAST = new CloudItemGun(1602, 4296, DIAMOND, "Nova Hyper Beast", false, EXO);
+	public static final CloudItemGun NOVA = new CloudItemGun(1600, 4296, DEFAULT, "Nova", true, HEAVY);
+	public static final CloudItemGun NOVA_OXIDEBLAZE = new CloudItemGun(1601, 4296, IRON, "Nova Oxide Blaze", false, NOVA, ALPHA_2);
+	public static final CloudItemGun NOVA_HYPER_BEAST = new CloudItemGun(1602, 4296, DIAMOND, "Nova Hyper Beast", false, NOVA, EXO);
 
-	public static final CloudItemGun SAWEDOFF = new CloudItemGun(1650, 4297, DEFAULT, "Sawed-Off", true);
-	public static final CloudItemGun SAWEDOFF_WASTELANDPRINCESS = new CloudItemGun(1651, 4297, GOLD, "Sawed-Off WastelandPrincess", false, ALPHA_1);
-	public static final CloudItemGun SAWEDOFF_KRAKEN = new CloudItemGun(1652, 4297, LAPIS, "Sawed-Off Kraken", false, ALPHA_2);
-	public static final CloudItemGun SAWEDOFF_MIDNIGHT = new CloudItemGun(1653, 4297, IRON, "Sawed-Off Midnight", false, EXO);
+	public static final CloudItemGun SAWEDOFF = new CloudItemGun(1650, 4297, DEFAULT, "Sawed-Off", true, HEAVY);
+	public static final CloudItemGun SAWEDOFF_WASTELANDPRINCESS = new CloudItemGun(1651, 4297, GOLD, "Sawed-Off WastelandPrincess", false, SAWEDOFF, ALPHA_1);
+	public static final CloudItemGun SAWEDOFF_KRAKEN = new CloudItemGun(1652, 4297, LAPIS, "Sawed-Off Kraken", false, SAWEDOFF, ALPHA_2);
+	public static final CloudItemGun SAWEDOFF_MIDNIGHT = new CloudItemGun(1653, 4297, IRON, "Sawed-Off Midnight", false, SAWEDOFF, EXO);
 
-	public static final CloudItemGun MAG7 = new CloudItemGun(1700, 4298, DEFAULT, "Mag-7", true);
-	public static final CloudItemGun MAG7_ROYALFIRE = new CloudItemGun(1701, 4298, LAPIS, "Mag-7 Royal Fire", false, ALPHA_1);
-	public static final CloudItemGun MAG7_VAMPIRE = new CloudItemGun(1702, 4298, GOLD, "Mag-7 Vampire", false, HALLOWEEN);
+	public static final CloudItemGun MAG7 = new CloudItemGun(1700, 4298, DEFAULT, "Mag-7", true, HEAVY);
+	public static final CloudItemGun MAG7_ROYALFIRE = new CloudItemGun(1701, 4298, LAPIS, "Mag-7 Royal Fire", false, MAG7, ALPHA_1);
+	public static final CloudItemGun MAG7_VAMPIRE = new CloudItemGun(1702, 4298, GOLD, "Mag-7 Vampire", false, MAG7, HALLOWEEN);
 
-	public static final CloudItemGun M249 = new CloudItemGun(1750, 4299, DEFAULT, "M249", true);
-	public static final CloudItemGun M249_NEON = new CloudItemGun(1751, 4299, LAPIS, "M249 Neon", false, ALPHA_1);
-	public static final CloudItemGun M249_GHOST = new CloudItemGun(1752, 4299, IRON, "M249 Ghost", false, HALLOWEEN);
+	public static final CloudItemGun M249 = new CloudItemGun(1750, 4299, DEFAULT, "M249", true, HEAVY);
+	public static final CloudItemGun M249_NEON = new CloudItemGun(1751, 4299, LAPIS, "M249 Neon", false, M249, ALPHA_1);
+	public static final CloudItemGun M249_GHOST = new CloudItemGun(1752, 4299, IRON, "M249 Ghost", false, M249, HALLOWEEN);
 
-	public static final CloudItemGun CZ75 = new CloudItemGun(1800, 4271, DEFAULT, "CZ75", true);
-	public static final CloudItemGun CZ75_PHANTOM = new CloudItemGun(1801, 4271, GOLD, "CZ75 Phantom", false, ALPHA_3);
+	public static final CloudItemGun CZ75 = new CloudItemGun(1800, 4271, DEFAULT, "CZ75", true, PISTOL);
+	public static final CloudItemGun CZ75_PHANTOM = new CloudItemGun(1801, 4271, GOLD, "CZ75 Phantom", false, CZ75, ALPHA_3);
 
-	public static final CloudItemGun FIVESEVEN = new CloudItemGun(1815, 4272, DEFAULT, "Fiveseven", true);
+	public static final CloudItemGun FIVESEVEN = new CloudItemGun(1815, 4272, DEFAULT, "Fiveseven", true, PISTOL);
 
-	public static final CloudItemGun R8 = new CloudItemGun(1826, 4273, DEFAULT, "R8", true);
-	public static final CloudItemGun R8_FADE = new CloudItemGun(1827, 4273, DIAMOND, "R8 Fade", false, ALPHA_1);
-	public static final CloudItemGun R8_GOLD = new CloudItemGun(1828, 4273, LAPIS, "R8 Gold", false, ALPHA_3);
+	public static final CloudItemGun R8 = new CloudItemGun(1826, 4273, DEFAULT, "R8", true, PISTOL);
+	public static final CloudItemGun R8_FADE = new CloudItemGun(1827, 4273, DIAMOND, "R8 Fade", false, R8, ALPHA_1);
+	public static final CloudItemGun R8_GOLD = new CloudItemGun(1828, 4273, LAPIS, "R8 Gold", false, R8, ALPHA_3);
 
-	public static final CloudItemGun UMP45 = new CloudItemGun(1850, 4279, DEFAULT, "UMP-45", true);
-	public static final CloudItemGun UMP45_PRIMAL = new CloudItemGun(1851, 4279, LAPIS, "UMP-45 Primal", false, ALPHA_3);
-	public static final CloudItemGun UMP45_EDIFICE = new CloudItemGun(1852, 4279, IRON, "UMP-45 Edifice", false, HALLOWEEN);
+	public static final CloudItemGun UMP45 = new CloudItemGun(1850, 4279, DEFAULT, "UMP-45", true, SMG);
+	public static final CloudItemGun UMP45_PRIMAL = new CloudItemGun(1851, 4279, LAPIS, "UMP-45 Primal", false, UMP45, ALPHA_3);
+	public static final CloudItemGun UMP45_EDIFICE = new CloudItemGun(1852, 4279, IRON, "UMP-45 Edifice", false, UMP45, HALLOWEEN);
 
 	public static final CloudItemHat HAT_TOPHAT = new CloudItemHat(1900, 4656, LAPIS, "Top Hat", false);
 	public static final CloudItemHat HAT_CATHAT = new CloudItemHat(1901, 4657, DIAMOND, "Cat's Hat", false);
@@ -228,7 +233,7 @@ public final class CloudItems {
 	public static final CloudItemHat HAT_FIREMANCHIEF = new CloudItemHat(1907, 4663, IRON, "Fire Chief Hat", false);
 	public static final CloudItemHat HAT_TV = new CloudItemHat(1908, 4664, LAPIS, "TV Hat", false);
 
-	public static final CloudItemGeneric TRADE_CONTRACT = new CloudItemGeneric(2040, 4706, DEFAULT, "Trade Contract", true, true, true, true, true, true);
+	public static final CloudItemGeneric TRADE_CONTRACT = new CloudItemGeneric(2040, 4706, DEFAULT, "Trade Contract", true, false, false, false, false, false);
 
 	public static final CloudItemGeneric NAME_TAG = new CloudItemGeneric(2041, 4707, COAL, "Name Tag", false, true, true, false, false, false);
 

@@ -1,13 +1,18 @@
 package dev.vuis.cccr.cloud.item;
 
+import dev.vuis.cccr.cloud.market.MarketCategory;
 import lombok.Getter;
 
-@Getter
 public abstract class CloudItem {
+	@Getter
 	private final int id;
+	@Getter
 	private final int mcId;
+	@Getter
 	private final CloudItemRarity rarity;
+	@Getter
 	private final String displayName;
+	@Getter
 	private final boolean isDefault;
 
 	protected CloudItem(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault) {
@@ -30,15 +35,19 @@ public abstract class CloudItem {
 
 	public abstract CloudItemCategory getCategory();
 
-	public abstract boolean isTradable();
+	public abstract MarketCategory getMarketCategory();
 
-	public abstract boolean isSellable();
+	public abstract boolean isTradable();
 
 	public abstract boolean isShowcasable();
 
 	public abstract boolean isNamable();
 
 	public abstract boolean isContractable();
+
+	public boolean isSellable() {
+		return !isDefault;
+	}
 
 	public boolean isEquippable() {
 		return getCategory().getId() != null;
