@@ -4,6 +4,7 @@ import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
 import dev.vuis.cccr.cloud.data.DataHandler;
 import dev.vuis.cccr.cloud.data.PlayerData;
+import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.PacketUtil;
@@ -62,7 +63,8 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 		if (!hasGame) {
 			ServerStatus.GAME.remove(connectionHandler.getConnectionUsername());
 			for (PlayerData playerData : DataHandler.instance().getCachedPlayerData()) {
-				if (playerData.lastComp.get().server().equals(connectionHandler.getConnectionUsername())) {
+				SearchHandler.JoinData lastComp = playerData.lastComp.get();
+				if (lastComp != null && lastComp.server().equals(connectionHandler.getConnectionUsername())) {
 					playerData.lastComp.set(null);
 				}
 			}
