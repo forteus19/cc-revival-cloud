@@ -1,6 +1,7 @@
 package dev.vuis.cccr.cloud.data;
 
 import com.f3rullo14.fds.tag.FDSTagCompound;
+import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.util.Util;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -32,15 +33,18 @@ public final class PlayerData {
 	public final AtomicInteger matchKarma = new AtomicInteger(0);
 	public final AtomicInteger minutesPlayed = new AtomicInteger(0);
 	public final AtomicInteger exp = new AtomicInteger(0);
-	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicInteger emeralds = new AtomicInteger(999999999); // FIXME on alpha release
 	public final AtomicReference<String> mood = new AtomicReference<>();
-	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 	public final AtomicInteger compExp = new AtomicInteger(0);
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
 	public final AtomicReference<PlayerGroup> group = new AtomicReference<>();
 	public final AtomicInteger score = new AtomicInteger(0);
+
+	// player state
+	public final AtomicBoolean online = new AtomicBoolean(false);
+	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
+	public final AtomicReference<SearchHandler.JoinData> lastComp = new AtomicReference<>();
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
@@ -76,6 +80,9 @@ public final class PlayerData {
 		tag.setInteger("games", games.get());
 		tag.setInteger("statfb", firstBloods.get());
 		tag.setInteger("matchKarma", matchKarma.get());
+		if (lastComp.get() != null) {
+			tag.setBoolean("lastcomp", true);
+		}
 		tag.setInteger("time", minutesPlayed.get() * 60);
 		tag.setInteger("exp", exp.get());
 		tag.setBoolean("online", online.get());

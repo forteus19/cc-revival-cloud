@@ -2,6 +2,8 @@ package dev.vuis.cccr.cloud.mm;
 
 import dev.vuis.cccr.cloud.Cloud;
 import dev.vuis.cccr.cloud.data.CloudStats;
+import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMJoinServer;
@@ -23,7 +25,7 @@ public final class SearchHandler {
 		Map.entry("tdm", List.of("Dome", "Dust", "Haunts", "Laputa", "Mirage", "Nuke", "Range", "Salvage", "Terminal"))
 	);
 
-	private static final Map<String, Data> ONGOING = new ConcurrentHashMap<>();
+	private static final Map<String, SearchData> ONGOING = new ConcurrentHashMap<>();
 
 	private SearchHandler() {
 	}
@@ -42,7 +44,7 @@ public final class SearchHandler {
 		}
 
 		Cloud.instanceLog("Adding %s to search handler", username);
-		ONGOING.put(username, new Data(game, region, new ArrayList<>(maps)));
+		ONGOING.put(username, new SearchData(game, region, new ArrayList<>(maps)));
 	}
 
 	public static void removeSearch(String username) {
@@ -57,12 +59,20 @@ public final class SearchHandler {
 
 		ONGOING.entrySet().removeIf(entry -> {
 			String username = entry.getKey();
-			Data data = entry.getValue();
+			SearchData searchData = entry.getValue();
 
-			PacketMMJoinServer result = findOngoingGame(data);
+			JoinData result = findOngoingGame(searchData);
 			if (result != null) {
-				Cloud.instanceLog("Found match for player %s! (%s)", username, result.tag.getString("address"))
-					.sendPacketToPlayer(username, result);
+				Cloud.instanceLog("Found match for player %s! (%s - %s)", username, result.server, result.address)
+					.sendPacketToPlayer(username, result.createPacket());
+
+				if (result.game.equals("cbd")) {
+					PlayerData playerData = DataHandler.instance().getPlayerData(username);
+					if (playerData != null) {
+						playerData.lastComp.set(result);
+					}
+				}
+
 				return true;
 			} else {
 				return false;
@@ -70,17 +80,18 @@ public final class SearchHandler {
 		});
 	}
 
-	private static PacketMMJoinServer findOngoingGame(Data data) {
+	private static JoinData findOngoingGame(SearchData searchData) {
 		Set<Map.Entry<String, GameStatus>> gameCandidates = new HashSet<>();
 
 		for (Map.Entry<String, GameStatus> gameEntry : ServerStatus.GAME.entrySet()) {
 			String server = gameEntry.getKey();
 			GameStatus status = gameEntry.getValue();
 
-			if (canJoinRegion(data.region(), ServerStatus.REGION.getOrDefault(server, "ALL")) &&
-				data.game().equals(status.gameType) &&
-				data.maps().contains(status.mapType) &&
-				status.remainingPlayerSlots > 0
+			if (status.acceptingPlayers &&
+				status.remainingPlayerSlots > 0 &&
+				canJoinRegion(searchData.region(), ServerStatus.REGION.getOrDefault(server, "ALL")) &&
+				searchData.game().equals(status.gameType) &&
+				searchData.maps().contains(status.mapType)
 			) {
 				gameCandidates.add(gameEntry);
 			}
@@ -91,22 +102,22 @@ public final class SearchHandler {
 				String entryServer = entry.getKey();
 				String entryRegion = entry.getValue();
 
-				if (ServerStatus.GAME.containsKey(entryServer) || !canJoinRegion(data.region(), entryRegion)) {
+				if (ServerStatus.GAME.containsKey(entryServer) || !canJoinRegion(searchData.region(), entryRegion)) {
 					continue;
 				}
 
-				String map = getRandomMap(data.game());
+				String map = getRandomMap(searchData.game());
 				if (map == null) {
 					return null;
 				}
 
-				PacketMMJoinServer packet = new PacketMMJoinServer();
-				packet.tag.setString("address", getServerAddress(entryServer));
-				packet.tag.setString("game", data.game());
-				packet.tag.setString("map", map);
-				packet.tag.setString("team", getRandomTeam(data.game()));
-
-				return packet;
+				return new JoinData(
+					entryServer,
+					getServerAddress(entryServer),
+					searchData.game(),
+					map,
+					getRandomTeam(searchData.game())
+				);
 			}
 
 			return null;
@@ -120,13 +131,13 @@ public final class SearchHandler {
 		String resultServer = result.getKey();
 		GameStatus resultStatus = result.getValue();
 
-		PacketMMJoinServer packet = new PacketMMJoinServer();
-		packet.tag.setString("address", getServerAddress(resultServer));
-		packet.tag.setString("game", resultStatus.gameType);
-		packet.tag.setString("map", resultStatus.mapType);
-		packet.tag.setString("team", getExistingTeam(resultStatus.teams));
-
-		return packet;
+		return new JoinData(
+			resultServer,
+			getServerAddress(resultServer),
+			resultStatus.gameType,
+			resultStatus.mapType,
+			getExistingTeam(resultStatus.teams)
+		);
 	}
 	
 	private static boolean canJoinRegion(String selected, String target) {
@@ -155,10 +166,27 @@ public final class SearchHandler {
 		return teams.stream().filter(team -> !team.name().equals("Spectator")).min(Comparator.comparingInt(GameStatus.Team::players)).orElseThrow().name();
 	}
 
-	private record Data(
+	private record SearchData(
 		String game,
 		String region,
 		ArrayList<String> maps
 	) {
+	}
+
+	public record JoinData(
+		String server,
+		String address,
+		String game,
+		String map,
+		String team
+	) {
+		public PacketMMJoinServer createPacket() {
+			PacketMMJoinServer packet = new PacketMMJoinServer();
+			packet.tag.setString("address", address);
+			packet.tag.setString("game", game);
+			packet.tag.setString("map", map);
+			packet.tag.setString("team", team);
+			return packet;
+		}
 	}
 }

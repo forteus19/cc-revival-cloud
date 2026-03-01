@@ -2,6 +2,8 @@ package dev.vuis.cccr.cloud.packet.server;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
+import dev.vuis.cccr.cloud.data.DataHandler;
+import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.PacketUtil;
@@ -59,10 +61,15 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 
 		if (!hasGame) {
 			ServerStatus.GAME.remove(connectionHandler.getConnectionUsername());
+			for (PlayerData playerData : DataHandler.instance().getCachedPlayerData()) {
+				if (playerData.lastComp.get().server().equals(connectionHandler.getConnectionUsername())) {
+					playerData.lastComp.set(null);
+				}
+			}
 			return;
 		}
 
-		GameStatus game = ServerStatus.GAME.computeIfAbsent(connectionHandler.getConnectionUsername(), k -> new GameStatus());
+		GameStatus game = ServerStatus.GAME.computeIfAbsent(connectionHandler.getConnectionUsername(), _ -> new GameStatus());
 		game.gameType = gameType;
 		game.mapType = mapType;
 		game.remainingPlayerSlots = remainingPlayerSlots;

@@ -37,6 +37,7 @@ import dev.vuis.cccr.cloud.packet.mm.PacketMMSearch;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMSearchCloudCanceled;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMSearchHostCanceled;
 import dev.vuis.cccr.cloud.packet.mm.PacketPartyCreate;
+import dev.vuis.cccr.cloud.packet.server.PacketCompetitiveRejoin;
 import dev.vuis.cccr.cloud.packet.server.PacketPlayerDataIncreaseValue;
 import dev.vuis.cccr.cloud.packet.server.PacketPlayerDataRandomDrop;
 import dev.vuis.cccr.cloud.packet.server.PacketServerGameStatus;
@@ -91,6 +92,7 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(72, PacketInventoryContract.class);
 		G_TcpPacket.addPacketMapping(74, PacketConsoleCommand.class);
 		G_TcpPacket.addPacketMapping(75, PacketConsoleMessage.class);
+		G_TcpPacket.addPacketMapping(79, PacketCompetitiveRejoin.class);
 		G_TcpPacket.addPacketMapping(96, PacketCheckPrestige.class);
 	}
 }
