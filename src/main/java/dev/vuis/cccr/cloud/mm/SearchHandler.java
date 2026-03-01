@@ -7,7 +7,6 @@ import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMJoinServer;
-import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
@@ -38,13 +37,13 @@ public final class SearchHandler {
 		return maps.get(ThreadLocalRandom.current().nextInt(maps.size()));
 	}
 
-	public static void addSearch(String username, String game, String region, ArrayList<String> maps) {
+	public static void addSearch(String username, String game, String region, List<String> maps) {
 		if (game.equals("cbd") && !CloudStats.compActive) {
 			return;
 		}
 
 		Cloud.instanceLog("Adding %s to search handler", username);
-		ONGOING.put(username, new SearchData(game, region, new ArrayList<>(maps)));
+		ONGOING.put(username, new SearchData(game, region, maps));
 	}
 
 	public static void removeSearch(String username) {
@@ -61,7 +60,7 @@ public final class SearchHandler {
 			String username = entry.getKey();
 			SearchData searchData = entry.getValue();
 
-			JoinData result = findOngoingGame(searchData);
+			JoinData result = findGame(searchData);
 			if (result != null) {
 				Cloud.instanceLog("Found match for player %s! (%s - %s)", username, result.server, result.address)
 					.sendPacketToPlayer(username, result.createPacket());
@@ -80,7 +79,7 @@ public final class SearchHandler {
 		});
 	}
 
-	private static JoinData findOngoingGame(SearchData searchData) {
+	private static JoinData findGame(SearchData searchData) {
 		Set<Map.Entry<String, GameStatus>> gameCandidates = new HashSet<>();
 
 		for (Map.Entry<String, GameStatus> gameEntry : ServerStatus.GAME.entrySet()) {
@@ -169,7 +168,7 @@ public final class SearchHandler {
 	private record SearchData(
 		String game,
 		String region,
-		ArrayList<String> maps
+		List<String> maps
 	) {
 	}
 

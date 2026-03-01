@@ -13,7 +13,7 @@ public final class PacketUtil {
 		return !Cloud.instance().getAuth().isAuthenticated(connectionHandler.getConnectionUsername());
 	}
 
-	public static boolean kickIfServer(G_ITcpConnectionHandler connectionHandler) {
+	public static boolean kickIfNotServer(G_ITcpConnectionHandler connectionHandler) {
 		G_CloudTcpConnectionHandler cloudHandler = (G_CloudTcpConnectionHandler) connectionHandler;
 		if (!cloudHandler.channel.equals(CloudConstants.CHANNEL_SERVER)) {
 			cloudHandler.kickClientConnection("Attempted to send server packet on player channel");

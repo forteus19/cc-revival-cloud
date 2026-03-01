@@ -28,7 +28,7 @@ public final class PacketPlayerDataRandomDrop extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		if (PacketUtil.kickIfServer(connectionHandler)) {
+		if (PacketUtil.kickIfNotServer(connectionHandler)) {
 			return;
 		}
 		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {

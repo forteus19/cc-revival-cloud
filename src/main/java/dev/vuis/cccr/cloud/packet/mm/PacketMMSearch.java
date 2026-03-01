@@ -15,11 +15,12 @@ import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 public final class PacketMMSearch extends G_TcpPacketCustomPayload {
 	private String game;
 	private String region;
-	private ArrayList<String> maps;
+	private List<String> maps;
 
 	@Override
 	public void writePacketToStream(DataOutputStream out) throws IOException {

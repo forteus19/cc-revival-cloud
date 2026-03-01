@@ -45,6 +45,7 @@ public final class PlayerData {
 	public final AtomicBoolean online = new AtomicBoolean(false);
 	public final AtomicReference<String> status = new AtomicReference<>("Main Menu");
 	public final AtomicReference<SearchHandler.JoinData> lastComp = new AtomicReference<>();
+	public final AtomicBoolean compRejoin = new AtomicBoolean(false);
 
 	// friends
 	public final Set<UUID> friends = ConcurrentHashMap.newKeySet();
@@ -80,7 +81,7 @@ public final class PlayerData {
 		tag.setInteger("games", games.get());
 		tag.setInteger("statfb", firstBloods.get());
 		tag.setInteger("matchKarma", matchKarma.get());
-		if (lastComp.get() != null) {
+		if (compRejoin.get()) {
 			tag.setBoolean("lastcomp", true);
 		}
 		tag.setInteger("time", minutesPlayed.get() * 60);

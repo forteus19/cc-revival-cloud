@@ -2,9 +2,6 @@ package dev.vuis.cccr.cloud.packet.server;
 
 import com.f3rullo14.cloud.G_ITcpConnectionHandler;
 import com.f3rullo14.cloud.G_TcpPacketCustomPayload;
-import dev.vuis.cccr.cloud.data.DataHandler;
-import dev.vuis.cccr.cloud.data.PlayerData;
-import dev.vuis.cccr.cloud.mm.SearchHandler;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.util.PacketUtil;
@@ -53,7 +50,7 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		if (PacketUtil.kickIfServer(connectionHandler)) {
+		if (PacketUtil.kickIfNotServer(connectionHandler)) {
 			return;
 		}
 		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {
@@ -62,12 +59,6 @@ public final class PacketServerGameStatus extends G_TcpPacketCustomPayload {
 
 		if (!hasGame) {
 			ServerStatus.GAME.remove(connectionHandler.getConnectionUsername());
-			for (PlayerData playerData : DataHandler.instance().getCachedPlayerData()) {
-				SearchHandler.JoinData lastComp = playerData.lastComp.get();
-				if (lastComp != null && lastComp.server().equals(connectionHandler.getConnectionUsername())) {
-					playerData.lastComp.set(null);
-				}
-			}
 			return;
 		}
 

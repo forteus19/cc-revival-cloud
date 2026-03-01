@@ -32,7 +32,7 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 
 	@Override
 	public void processPacketOnMainThread(G_ITcpConnectionHandler connectionHandler) throws IOException {
-		if (PacketUtil.kickIfServer(connectionHandler)) {
+		if (PacketUtil.kickIfNotServer(connectionHandler)) {
 			return;
 		}
 		if (!ServerStatus.REGION.containsKey(connectionHandler.getConnectionUsername())) {
@@ -56,6 +56,10 @@ public final class PacketPlayerDataIncreaseValue extends G_TcpPacketCustomPayloa
 					achievement.handleUnlock(data, connectionHandler);
 				}
 				return;
+			}
+			case "comp" -> {
+				data.lastComp.set(null);
+				data.compRejoin.set(false);
 			}
 			case "compRankAddXP" -> {
 				data.compExp.addAndGet(amount);
