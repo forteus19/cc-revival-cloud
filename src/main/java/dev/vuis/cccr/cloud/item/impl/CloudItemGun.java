@@ -26,6 +26,8 @@ public class CloudItemGun extends SuffixedCloudItem {
 		if (!isDefault) {
 			DROP_SET.add(this, rarity.getWeight());
 		}
+
+		initFinished();
 	}
 
 	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, CloudItem defaultItem, CloudItemCollection collection) {

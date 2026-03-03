@@ -30,6 +30,8 @@ public class CloudItemCase extends CloudItem {
 		if (drop) {
 			DROP_SET.add(this, rarity.getWeight());
 		}
+
+		initFinished();
 	}
 
 	public static CloudItemCase getRandomForDrop() {

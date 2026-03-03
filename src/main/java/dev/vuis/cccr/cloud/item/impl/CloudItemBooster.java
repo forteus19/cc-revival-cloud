@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.market.MarketCategory;
 public class CloudItemBooster extends CloudItem {
 	public CloudItemBooster(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
 		super(id, mcId, rarity, suffix, isDefault);
+		initFinished();
 	}
 
 	@Override

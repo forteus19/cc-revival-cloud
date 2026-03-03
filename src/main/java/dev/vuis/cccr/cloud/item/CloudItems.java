@@ -14,9 +14,12 @@ import dev.vuis.cccr.cloud.item.impl.CloudItemKey;
 import dev.vuis.cccr.cloud.item.impl.CloudItemKnife;
 import dev.vuis.cccr.cloud.item.impl.CloudItemSticker;
 import dev.vuis.cccr.cloud.item.impl.CloudItemStickerCapsule;
+import dev.vuis.cccr.cloud.market.MarketCategory;
+import dev.vuis.cccr.cloud.market.SuffixMap;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,6 +50,7 @@ public final class CloudItems {
 	static final List<CloudItem> DEFAULTS = new ArrayList<>();
 	static final Map<Integer, CloudItem> ID_MAP = new HashMap<>();
 	static final Multimap<CloudItemRarity, CloudItem> RARITY_MAP = HashMultimap.create();
+	static final Map<MarketCategory, Map<String, SuffixMap>> MARKET_MAP = new EnumMap<>(MarketCategory.class);
 
 	public static final CloudItemGun M4A4 = new CloudItemGun(100, 4256, DEFAULT, "M4A4", true, RIFLE);
 	public static final CloudItemGun M4A4_WAVES = new CloudItemGun(101, 4256, IRON, "M4A4 Waves", false, M4A4, ALPHA_1);

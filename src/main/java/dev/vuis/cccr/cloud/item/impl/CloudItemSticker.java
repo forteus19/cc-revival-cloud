@@ -8,6 +8,7 @@ import dev.vuis.cccr.cloud.market.MarketCategory;
 public class CloudItemSticker extends CloudItem {
 	public CloudItemSticker(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {
 		super(id, mcId, rarity, suffix, isDefault);
+		initFinished();
 	}
 
 	@Override

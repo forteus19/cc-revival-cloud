@@ -63,7 +63,12 @@ public final class CloudMain {
 		consoleThread.start();
 
 		while (!cloud.getCloudManager().isCloudStopped) {
-			cloud.onUpdate();
+			try {
+				cloud.onUpdate();
+			} catch (Exception e) {
+				e.printStackTrace();
+				break;
+			}
 
 			try {
 				Thread.sleep(TICK_MS);

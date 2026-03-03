@@ -1,6 +1,8 @@
 package dev.vuis.cccr.cloud.item;
 
 import dev.vuis.cccr.cloud.market.MarketCategory;
+import dev.vuis.cccr.cloud.market.SuffixMap;
+import java.util.HashMap;
 import lombok.Getter;
 
 public abstract class CloudItem {
@@ -25,9 +27,17 @@ public abstract class CloudItem {
 		this.rarity = rarity;
 		this.displayName = displayName;
 		this.isDefault = isDefault;
+	}
 
+	protected void initFinished() {
 		if (isDefault) {
 			CloudItems.DEFAULTS.add(this);
+		} else if (isSellable()) {
+			addToSuffixMap(
+				CloudItems.MARKET_MAP
+					.computeIfAbsent(getMarketCategory(), _ -> new HashMap<>())
+					.computeIfAbsent(getPrefix(), _ -> SuffixMap.createForItem(this))
+			);
 		}
 		CloudItems.ID_MAP.put(id, this);
 		CloudItems.RARITY_MAP.put(rarity, this);
@@ -45,12 +55,20 @@ public abstract class CloudItem {
 
 	public abstract boolean isContractable();
 
+	public String getPrefix() {
+		return displayName;
+	}
+
 	public boolean isSellable() {
 		return !isDefault;
 	}
 
 	public boolean isEquippable() {
 		return getCategory().getId() != null;
+	}
+
+	public void addToSuffixMap(SuffixMap map) {
+		map.put(null, this);
 	}
 
 	@Override

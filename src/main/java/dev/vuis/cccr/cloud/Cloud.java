@@ -97,7 +97,14 @@ public final class Cloud implements ICloud {
 	}
 
 	public void onStartup() {
-		minuteExecutor.scheduleAtFixedRate(this::onMinute, 1, 1, TimeUnit.MINUTES);
+		minuteExecutor.scheduleAtFixedRate(() -> {
+			try {
+				onMinute();
+			} catch (Exception e) {
+				e.printStackTrace();
+				cloudManager.initiateShutdown();
+			}
+		}, 1, 1, TimeUnit.MINUTES);
 	}
 
 	public void onShutdown() {
@@ -154,8 +161,10 @@ public final class Cloud implements ICloud {
 
 		long invStart = System.nanoTime();
 		Collection<PlayerInventory> cachedPlayerInventories = dataHandler.getCachedPlayerInventories();
+		log("DEBUG - inventory acceptConnection");
 		db.acceptConnection(conn -> {
 			for (PlayerInventory inventory : cachedPlayerInventories) {
+				log("DEBUG - saving inventory %s (size: %d)", inventory.getOwnerUuid().toString(), inventory.size());
 				db.savePlayerInventory(conn, inventory);
 			}
 		});

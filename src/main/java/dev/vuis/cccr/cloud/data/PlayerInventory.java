@@ -56,6 +56,10 @@ public final class PlayerInventory {
 		return Collections.unmodifiableCollection(stackMap.values());
 	}
 
+	public int size() {
+		return stackMap.size();
+	}
+
 	public void addItemStack(CloudItemStack itemStack, boolean sendPacket) {
 		// safeguard to prevent inventory from breaking
 		if (itemStack.item == null) {

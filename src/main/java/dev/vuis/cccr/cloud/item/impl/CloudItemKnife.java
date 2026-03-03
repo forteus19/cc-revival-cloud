@@ -9,6 +9,7 @@ import dev.vuis.cccr.cloud.market.MarketCategory;
 public class CloudItemKnife extends SuffixedCloudItem {
 	public CloudItemKnife(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, CloudItem defaultItem) {
 		super(id, mcId, rarity, displayName, isDefault, defaultItem);
+		initFinished();
 	}
 
 	public CloudItemKnife(int id, int mcId, CloudItemRarity rarity, String suffix, boolean isDefault) {

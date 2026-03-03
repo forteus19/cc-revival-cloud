@@ -19,6 +19,8 @@ public class CloudItemGeneric extends CloudItem {
 		this.isShowcasable = isShowcasable;
 		this.isNamable = isNamable;
 		this.isContractable = isContractable;
+
+		initFinished();
 	}
 
 	@Override
