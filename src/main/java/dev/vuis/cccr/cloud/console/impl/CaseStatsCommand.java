@@ -16,14 +16,15 @@ import java.util.Map;
 
 public class CaseStatsCommand implements Command {
 	private static final Map<String, CloudItemCase> CASE_NAMES = Map.ofEntries(
-		Map.entry("alpha1", CloudItems.CASE_ALPHA1),
-		Map.entry("alpha2", CloudItems.CASE_ALPHA2),
-		Map.entry("alpha3", CloudItems.CASE_ALPHA3),
-		Map.entry("hat", CloudItems.CASE_HAT),
-		Map.entry("halloween", CloudItems.CASE_HALLOWEEN),
-		Map.entry("exo", CloudItems.CASE_EXO),
-		Map.entry("prealpha", CloudItems.CASE_PREALPHA),
-		Map.entry("blaze", CloudItems.CASE_BLAZE)
+		Map.entry("prestige", CloudItems.CASE_PRESTIGE),
+		Map.entry("alpha", CloudItems.CASE_ALPHA),
+		Map.entry("beta", CloudItems.CASE_BETA),
+		Map.entry("gamma", CloudItems.CASE_GAMMA),
+		Map.entry("delta", CloudItems.CASE_DELTA),
+		Map.entry("epsilon", CloudItems.CASE_EPSILON),
+		Map.entry("chronical", CloudItems.CASE_CHRONICAL),
+		Map.entry("mythic", CloudItems.CASE_MYTHIC),
+		Map.entry("oasis", CloudItems.CASE_OASIS)
 	);
 
 	@Override

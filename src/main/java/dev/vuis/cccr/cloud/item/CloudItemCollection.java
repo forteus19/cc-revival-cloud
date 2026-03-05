@@ -6,14 +6,14 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public enum CloudItemCollection {
-	NONE(null),
-	ALPHA_1("Alpha"),
-	ALPHA_2("Alpha2"),
-	ALPHA_3("Alpha3"),
-	HALLOWEEN("Halloween1"),
-	EXO("Exo"),
-	PREALPHA("Prealpha"),
-	BLAZE("Blaze");
+	ALPHA("Alpha"),
+	BETA("Beta"),
+	GAMMA("Gamma"),
+	DELTA("Delta"),
+	EPSILON("Epsilon"),
+	CHRONICAL("Chronical"),
+	MYTHIC("Mythic"),
+	OASIS("Oasis");
 
 	@Getter
 	private final String name;

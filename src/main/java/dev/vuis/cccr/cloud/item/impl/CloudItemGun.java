@@ -23,7 +23,7 @@ public class CloudItemGun extends SuffixedCloudItem {
 		this.collection = collection;
 		this.marketCategory = marketCategory;
 
-		if (!isDefault) {
+		if (!isDefault && collection != null) {
 			DROP_SET.add(this, rarity.getWeight());
 		}
 
@@ -35,7 +35,7 @@ public class CloudItemGun extends SuffixedCloudItem {
 	}
 
 	public CloudItemGun(int id, int mcId, CloudItemRarity rarity, String displayName, boolean isDefault, MarketCategory marketCategory) {
-		this(id, mcId, rarity, displayName, isDefault, null, CloudItemCollection.NONE, marketCategory);
+		this(id, mcId, rarity, displayName, isDefault, null, null, marketCategory);
 	}
 
 	public static CloudItemGun getRandomForDrop() {

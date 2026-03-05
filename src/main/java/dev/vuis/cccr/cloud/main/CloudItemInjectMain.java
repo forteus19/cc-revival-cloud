@@ -7,6 +7,7 @@ import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 import lombok.SneakyThrows;
 
@@ -16,15 +17,6 @@ public final class CloudItemInjectMain {
 
 	@SneakyThrows
 	static void main() {
-		Map<Integer, String> prefixes = new HashMap<>();
-
-		for (CloudItem item : CloudItems.defaults()) {
-			if (!(item instanceof CloudItemGun)) {
-				continue;
-			}
-			prefixes.put(item.getMcId(), item.getDisplayName());
-		}
-
 		Map<CloudItem, Field> fields = new HashMap<>();
 
 		for (Field itemField : CloudItems.class.getFields()) {
@@ -33,7 +25,7 @@ public final class CloudItemInjectMain {
 			}
 			fields.put(item, itemField);
 
-			if (item.isDefault()) {
+			if (item.isDefault() || (item instanceof CloudItemGun gunItem && gunItem.getCollection() == null)) {
 				continue;
 			}
 
@@ -46,16 +38,14 @@ public final class CloudItemInjectMain {
 
 			switch (item) {
 				case CloudItemGun gunItem -> {
-					String prefix = prefixes.get(gunItem.getMcId());
-
 					sb.append("CloudItemGun(");
 					sb.append(gunItem.getId());
 					sb.append(", ");
 					sb.append(expectedMcId);
 					sb.append(", \"");
-					sb.append(prefix);
+					sb.append(gunItem.getPrefix());
 					sb.append("\").setSuffix(\"");
-					sb.append(gunItem.getDisplayName().replaceFirst("^" + prefix, "").trim());
+					sb.append(gunItem.getSuffix());
 					sb.append("\").setValue(CloudItemRarity.");
 					sb.append(gunItem.getRarity().getLegacyName());
 					sb.append(")");
@@ -65,7 +55,19 @@ public final class CloudItemInjectMain {
 						sb.append(collection);
 						sb.append("\")");
 					}
-					sb.append(";");
+					sb.append(".setFilterMT(\"");
+					sb.append(gunItem.getMarketCategory().name().toLowerCase(Locale.ROOT));
+					sb.append("\");");
+
+					sb.append(System.lineSeparator());
+
+					sb.append("CloudItem.");
+					sb.append(itemField.getName());
+					sb.append(".setValue(CloudItemRarity.");
+					sb.append(gunItem.getRarity().getLegacyName());
+					sb.append(").setCollection(\"");
+					sb.append(collection);
+					sb.append("\");");
 
 					System.out.println(sb);
 				}

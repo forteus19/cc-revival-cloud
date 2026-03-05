@@ -52,6 +52,13 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 			return;
 		}
 
+		if (caseItem.contents.getEntries().isEmpty()) {
+			connectionHandler.sendPacket(new PacketNotificationFromCloud(
+				"This case is coming soon!", CloudConstants.CC_NAME, 0
+			));
+			return;
+		}
+
 		Optional<CloudItemStack> keyStack = inventory.getItemStacks(caseItem.getKeyItem()).findAny();
 		if (keyStack.isEmpty()) {
 			connectionHandler.sendPacket(new PacketNotificationFromCloud(
@@ -64,7 +71,7 @@ public final class PacketInventoryOpenCase extends G_TcpPacketCustomPayload {
 		inventory.removeItemStack(keyStack.get().uuid, true);
 
 		CloudItem result = caseItem.contents.getRandom();
-		if (result.getRarity() == CloudItemRarity.OBSIDIAN || result == CloudItems.KNIFE_TAC_DISPLAY) {
+		if (result.getRarity() == CloudItemRarity.OBSIDIAN) {
 			CloudAchievements.ACH_USER_INV_OPEN_ULTRA_RARE.handleUnlock(data, null);
 		}
 

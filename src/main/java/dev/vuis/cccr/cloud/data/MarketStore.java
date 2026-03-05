@@ -8,28 +8,28 @@ import java.util.List;
 public final class MarketStore {
 	public static final List<Category> CATEGORIES = List.of(
 		new Category("Cases 1", "Cases and Capsules", List.of(
-			new Item(CloudItems.CASE_ALPHA1, 100, 15),
-			new Item(CloudItems.CASE_ALPHA2, 100, 15),
-			new Item(CloudItems.CASE_ALPHA3, 100, 15),
-			new Item(CloudItems.CASE_HAT, 100, 15),
-			new Item(CloudItems.CASE_HALLOWEEN, 100, 15),
-			new Item(CloudItems.CASE_EXO, 100, 15)
+			new Item(CloudItems.CASE_ALPHA, 100, 15),
+			new Item(CloudItems.CASE_BETA, 100, 15),
+			new Item(CloudItems.CASE_GAMMA, 100, 15),
+			new Item(CloudItems.CASE_DELTA, 100, 15),
+			new Item(CloudItems.CASE_EPSILON, 100, 15),
+			new Item(CloudItems.CASE_CHRONICAL, 100, 15)
 		)),
 		new Category("Cases 2", "Cases and Capsules", List.of(
-			new Item(CloudItems.CASE_PREALPHA, 100, 15),
-			new Item(CloudItems.CASE_BLAZE, 100, 15)
+			new Item(CloudItems.CASE_MYTHIC, 100, 15),
+			new Item(CloudItems.CASE_OASIS, 100, 15)
 		)),
 		new Category("Keys 1", "Case/Capsule Keys", List.of(
 			new Item(CloudItems.CASE_KEY_ALPHA, 25, 15),
-			new Item(CloudItems.CASE_KEY_ALPHA2, 25, 15),
-			new Item(CloudItems.CASE_KEY_ALPHA3, 25, 15),
-			new Item(CloudItems.CASE_KEY_HAT, 25, 15),
-			new Item(CloudItems.CASE_KEY_HALLOWEEN, 25, 15),
-			new Item(CloudItems.CASE_KEY_EXO, 25, 15)
+			new Item(CloudItems.CASE_KEY_BETA, 25, 15),
+			new Item(CloudItems.CASE_KEY_GAMMA, 25, 15),
+			new Item(CloudItems.CASE_KEY_DELTA, 25, 15),
+			new Item(CloudItems.CASE_KEY_EPSILON, 25, 15),
+			new Item(CloudItems.CASE_KEY_CHRONICAL, 25, 15)
 		)),
 		new Category("Keys 2", "Case/Capsule Keys", List.of(
-			new Item(CloudItems.CASE_KEY_PREALPHA, 25, 15),
-			new Item(CloudItems.CASE_KEY_BLAZE, 25, 15)
+			new Item(CloudItems.CASE_MYTHIC, 25, 15),
+			new Item(CloudItems.CASE_OASIS, 25, 15)
 		)),
 		new Category("Misc", "Miscellaneous Items", List.of(
 			new Item(CloudItems.NAME_TAG, 50, 10)

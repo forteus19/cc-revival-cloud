@@ -33,7 +33,10 @@ public final class PacketInventoryContract extends G_TcpPacketCustomPayload {
 	static {
 		for (CloudItem item : CloudItems.all()) {
 			if (item instanceof CloudItemGun gunItem) {
-				RARITY_POOL.computeIfAbsent(item.getRarity(), _ -> ArrayListMultimap.create()).put(gunItem.getCollection(), gunItem);
+				CloudItemCollection collection = gunItem.getCollection();
+				if (collection != null) {
+					RARITY_POOL.computeIfAbsent(item.getRarity(), _ -> ArrayListMultimap.create()).put(collection, gunItem);
+				}
 			}
 		}
 	}
@@ -101,7 +104,7 @@ public final class PacketInventoryContract extends G_TcpPacketCustomPayload {
 		Multiset<CloudItemCollection> collections = HashMultiset.create();
 		for (CloudItemGun item : items) {
 			CloudItemCollection collection = item.getCollection();
-			if (!pool.get(collection).isEmpty()) {
+			if (collection != null && !pool.get(collection).isEmpty()) {
 				collections.add(collection);
 			}
 		}
