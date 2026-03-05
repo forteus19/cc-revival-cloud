@@ -13,7 +13,8 @@ public enum CloudItemCollection {
 	EPSILON("Epsilon"),
 	CHRONICAL("Chronical"),
 	MYTHIC("Mythic"),
-	OASIS("Oasis");
+	OASIS("Oasis"),
+	CLASH("Clash");
 
 	@Getter
 	private final String name;
