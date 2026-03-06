@@ -26,7 +26,8 @@ public class CaseStatsCommand implements Command {
 		Map.entry("mythic", CloudItems.CASE_MYTHIC),
 		Map.entry("oasis", CloudItems.CASE_OASIS),
 		Map.entry("clash", CloudItems.CASE_CLASH),
-		Map.entry("elemental", CloudItems.CASE_ELEMENTAL)
+		Map.entry("elemental", CloudItems.CASE_ELEMENTAL),
+		Map.entry("revolution", CloudItems.CASE_REVOLUTION)
 	);
 
 	@Override

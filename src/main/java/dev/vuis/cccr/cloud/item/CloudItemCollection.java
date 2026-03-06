@@ -15,7 +15,8 @@ public enum CloudItemCollection {
 	MYTHIC("Mythic"),
 	OASIS("Oasis"),
 	CLASH("Clash"),
-	ELEMENTAL("Elemental");
+	ELEMENTAL("Elemental"),
+	REVOLUTION("Revolution");
 
 	@Getter
 	private final String name;
