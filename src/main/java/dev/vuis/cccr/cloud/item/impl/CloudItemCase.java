@@ -5,11 +5,11 @@ import com.google.common.collect.Multiset;
 import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItemCategory;
 import dev.vuis.cccr.cloud.item.CloudItemRarity;
+import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.market.MarketCategory;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import dev.vuis.cccr.cloud.util.Util;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Consumer;
 import lombok.Getter;
 
@@ -35,11 +35,11 @@ public class CloudItemCase extends CloudItem {
 	}
 
 	public static CloudItemCase getRandomForDrop() {
-		return Util.getRandomFromMultiset(DROP_SET);
+		return Util.multisetRandom(DROP_SET);
 	}
 
 	public CloudItem getRandomSpecialDrop() {
-		return specialItemPool.get(ThreadLocalRandom.current().nextInt(specialItemPool.size()));
+		return Util.listRandom(Util.randomInt(5) > 0 ? specialItemPool : CloudItems.POOL_KNIFE_VANILLA);
 	}
 
 	public CloudItemCase modifyContents(Consumer<RandomCollection<CloudItem>> collectionConsumer) {

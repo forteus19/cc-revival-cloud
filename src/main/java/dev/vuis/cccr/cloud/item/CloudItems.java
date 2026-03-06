@@ -16,6 +16,7 @@ import dev.vuis.cccr.cloud.item.impl.CloudItemSticker;
 import dev.vuis.cccr.cloud.item.impl.CloudItemStickerCapsule;
 import dev.vuis.cccr.cloud.market.MarketCategory;
 import dev.vuis.cccr.cloud.market.SuffixMap;
+import dev.vuis.cccr.cloud.util.Util;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -23,7 +24,6 @@ import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ThreadLocalRandom;
 
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.ALPHA;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.BETA;
@@ -816,12 +816,6 @@ public final class CloudItems {
 	}
 
 	public static CloudItem getRandomDrop() {
-		// [0, 3]
-		int value = ThreadLocalRandom.current().nextInt(4);
-		if (value < 3) {
-			return CloudItemCase.getRandomForDrop();
-		} else {
-			return CloudItemGun.getRandomForDrop();
-		}
+		return Util.randomInt(4) > 0 ? CloudItemCase.getRandomForDrop() : CloudItemGun.getRandomForDrop();
 	}
 }

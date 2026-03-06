@@ -7,13 +7,13 @@ import dev.vuis.cccr.cloud.data.PlayerData;
 import dev.vuis.cccr.cloud.mm.server.GameStatus;
 import dev.vuis.cccr.cloud.mm.server.ServerStatus;
 import dev.vuis.cccr.cloud.packet.mm.PacketMMJoinServer;
+import dev.vuis.cccr.cloud.util.Util;
 import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ThreadLocalRandom;
 
 public final class SearchHandler {
 	// TODO configurable
@@ -34,7 +34,7 @@ public final class SearchHandler {
 		if (maps == null) {
 			return null;
 		}
-		return maps.get(ThreadLocalRandom.current().nextInt(maps.size()));
+		return Util.listRandom(maps);
 	}
 
 	public static void addSearch(String username, String game, String region, List<String> maps) {
@@ -153,9 +153,9 @@ public final class SearchHandler {
 
 	private static String getRandomTeam(String gameType) {
 		return switch (gameType) {
-			case "cas", "cbd", "dom", "tdm" -> ThreadLocalRandom.current().nextInt(2) == 0 ? "Red" : "Blue";
+			case "cas", "cbd", "dom", "tdm" -> Util.randomBool() ? "Red" : "Blue";
 			case "ffa" -> "Players";
-			case "inf" -> ThreadLocalRandom.current().nextInt(2) == 0 ? "Dead" : "Living";
+			case "inf" -> Util.randomBool() ? "Dead" : "Living";
 			case "sg" -> "Tributes";
 			default -> throw new IllegalArgumentException();
 		};

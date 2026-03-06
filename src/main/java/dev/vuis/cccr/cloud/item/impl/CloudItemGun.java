@@ -39,7 +39,7 @@ public class CloudItemGun extends SuffixedCloudItem {
 	}
 
 	public static CloudItemGun getRandomForDrop() {
-		return Util.getRandomFromMultiset(DROP_SET);
+		return Util.multisetRandom(DROP_SET);
 	}
 
 	@Override

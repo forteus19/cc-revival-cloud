@@ -2,7 +2,6 @@ package dev.vuis.cccr.cloud.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Function;
 import java.util.function.Supplier;
 import lombok.Getter;
@@ -32,7 +31,7 @@ public class RandomCollection<T> {
 	}
 
 	public RandomCollection<T> add(List<T> objectList, int weight, boolean includeBulk) {
-		return add(() -> objectList.get(ThreadLocalRandom.current().nextInt(objectList.size())), weight, includeBulk);
+		return add(() -> Util.listRandom(objectList), weight, includeBulk);
 	}
 
 	public RandomCollection<T> add(Supplier<T> objectSupplier, int weight, boolean includeBulk) {
@@ -58,7 +57,7 @@ public class RandomCollection<T> {
 	public T getRandom(boolean useBulk) {
 		List<Entry<T>> targetEntries = useBulk ? bulkEntries : entries;
 
-		int threshold = ThreadLocalRandom.current().nextInt(useBulk ? totalWeightBulk : totalWeight);
+		int threshold = Util.randomInt(useBulk ? totalWeightBulk : totalWeight);
 		for (Entry<T> entry : targetEntries) {
 			if (threshold >= entry.minThreshold() && threshold < entry.maxThreshold()) {
 				return entry.objectSupplier().get();

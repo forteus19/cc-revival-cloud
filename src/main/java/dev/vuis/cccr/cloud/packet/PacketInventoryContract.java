@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ThreadLocalRandom;
 
 public final class PacketInventoryContract extends G_TcpPacketCustomPayload {
 	private static final Map<CloudItemRarity, ListMultimap<CloudItemCollection, CloudItemGun>> RARITY_POOL = new HashMap<>();
@@ -115,12 +114,12 @@ public final class PacketInventoryContract extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		List<CloudItemGun> target = pool.get(Util.getRandomFromMultiset(collections));
+		List<CloudItemGun> target = pool.get(Util.multisetRandom(collections));
 
 		for (UUID stackUuid : stackUuids) {
 			inventory.removeItemStack(stackUuid, true);
 		}
-		inventory.addItemStack(new CloudItemStack(target.get(ThreadLocalRandom.current().nextInt(target.size()))), true);
+		inventory.addItemStack(new CloudItemStack(Util.listRandom(target)), true);
 	}
 
 	private static PacketNotificationFromCloud invalidNotification() {
