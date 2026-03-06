@@ -27,7 +27,11 @@ public class CaseStatsCommand implements Command {
 		Map.entry("oasis", CloudItems.CASE_OASIS),
 		Map.entry("clash", CloudItems.CASE_CLASH),
 		Map.entry("elemental", CloudItems.CASE_ELEMENTAL),
-		Map.entry("revolution", CloudItems.CASE_REVOLUTION)
+		Map.entry("revolution", CloudItems.CASE_REVOLUTION),
+		Map.entry("vectorized", CloudItems.CASE_VECTORIZED),
+		Map.entry("biomechanic", CloudItems.CASE_BIOMECHANIC),
+		Map.entry("phantasmagoria", CloudItems.CASE_PHANTASMAGORIA),
+		Map.entry("sepulcher", CloudItems.CASE_SEPULCHER)
 	);
 
 	@Override

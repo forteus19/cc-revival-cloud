@@ -27,6 +27,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.ALPHA;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.BETA;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.BIOMECHANIC;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.CHRONICAL;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.CLASH;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.DELTA;
@@ -35,7 +36,10 @@ import static dev.vuis.cccr.cloud.item.CloudItemCollection.EPSILON;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.GAMMA;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.MYTHIC;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.OASIS;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.PHANTASMAGORIA;
 import static dev.vuis.cccr.cloud.item.CloudItemCollection.REVOLUTION;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.SEPULCHER;
+import static dev.vuis.cccr.cloud.item.CloudItemCollection.VECTORIZED;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.COAL;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.DEFAULT;
 import static dev.vuis.cccr.cloud.item.CloudItemRarity.DIAMOND;
@@ -62,26 +66,28 @@ public final class CloudItems {
 	public static final CloudItemGun M4A4_CAKEY = new CloudItemGun(103, 4256, LAPIS, "M4A4 Cakey", false, M4A4, BETA);
 	public static final CloudItemGun M4A4_HOWL = new CloudItemGun(104, 4256, OBSIDIAN, "M4A4 Howl", false, M4A4, ELEMENTAL);
 	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, IRON, "M4A4 Nerfed", false, M4A4, CLASH);
-	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, M4A4, null);
+	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, M4A4, PHANTASMAGORIA);
 	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, 4256, LAPIS, "M4A4 Patriot", false, M4A4, null);
-	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, M4A4, null);
+	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, M4A4, VECTORIZED);
 	public static final CloudItemGun M4A4_LURKER = new CloudItemGun(109, 4256, IRON, "M4A4 Lurker", false, M4A4, REVOLUTION);
 	public static final CloudItemGun M4A4_ASMO = new CloudItemGun(110, 4256, DIAMOND, "M4A4 Asmo", false, M4A4, ALPHA);
 	public static final CloudItemGun M4A4_DESERT = new CloudItemGun(111, 4256, COAL, "M4A4 Desert", false, M4A4, OASIS);
 	public static final CloudItemGun M4A4_DESOLATE_SPACE = new CloudItemGun(112, 4256, OBSIDIAN, "M4A4 Desolate Space", false, M4A4, MYTHIC);
 	public static final CloudItemGun M4A4_SPORT = new CloudItemGun(113, 4256, GOLD, "M4A4 Sport", false, M4A4, DELTA);
 	public static final CloudItemGun M4A4_VERTEX = new CloudItemGun(114, 4256, LAPIS, "M4A4 Vertex", false, M4A4, DELTA);
+	public static final CloudItemGun M4A4_GOLDEN_COIL = new CloudItemGun(115, 4256, GOLD, "M4A4 Golden Coil", false, M4A4, BIOMECHANIC);
+	public static final CloudItemGun M4A4_DAYBREAK = new CloudItemGun(116, 4256, IRON, "M4A4 Daybreak", false, M4A4, BIOMECHANIC);
 
 	public static final CloudItemGun AK47 = new CloudItemGun(200, 4257, DEFAULT, "AK47", true, RIFLE);
 	public static final CloudItemGun AK47_PROPAGANDA = new CloudItemGun(201, 4257, GOLD, "AK47 Propaganda", false, AK47, CLASH);
 	public static final CloudItemGun AK47_ASMO = new CloudItemGun(202, 4257, GOLD, "AK47 Asmo", false, AK47, BETA);
 	public static final CloudItemGun AK47_NEONREVOLUTION = new CloudItemGun(203, 4257, GOLD, "AK47 Neon Revolution", false, AK47, null);
-	public static final CloudItemGun AK47_HAUNTED = new CloudItemGun(204, 4257, DIAMOND, "AK47 Haunted", false, AK47, null);
-	public static final CloudItemGun AK47_BLOODSPORT = new CloudItemGun(205, 4257, IRON, "AK47 Bloodsport", false, AK47, null);
+	public static final CloudItemGun AK47_HAUNTED = new CloudItemGun(204, 4257, DIAMOND, "AK47 Haunted", false, AK47, SEPULCHER);
+	public static final CloudItemGun AK47_BLOODSPORT = new CloudItemGun(205, 4257, GOLD, "AK47 Bloodsport", false, AK47, VECTORIZED);
 	public static final CloudItemGun AK47_FOX = new CloudItemGun(206, 4257, LAPIS, "AK47 Fox", false, AK47, EPSILON);
 	public static final CloudItemGun AK47_VULCAN = new CloudItemGun(207, 4257, DIAMOND, "AK47 Vulcan", false, AK47, ALPHA);
 	public static final CloudItemGun AK47_FUEL = new CloudItemGun(208, 4257, IRON, "AK47 Fuel", false, AK47, BETA);
-	public static final CloudItemGun AK47_SHIKARI = new CloudItemGun(209, 4257, IRON, "AK47 Shikari", false, AK47, null);
+	public static final CloudItemGun AK47_SHIKARI = new CloudItemGun(209, 4257, IRON, "AK47 Shikari", false, AK47, BIOMECHANIC);
 	public static final CloudItemGun AK47_HORUS = new CloudItemGun(210, 4257, OBSIDIAN, "AK47 Horus", false, AK47, OASIS);
 	public static final CloudItemGun AK47_FRONTSIDE = new CloudItemGun(211, 4257, DIAMOND, "AK47 Frontside", false, AK47, CHRONICAL);
 	public static final CloudItemGun AK47_IRON_BEAST = new CloudItemGun(212, 4257, GOLD, "AK47 Iron Beast", false, AK47, GAMMA);
@@ -89,11 +95,13 @@ public final class CloudItems {
 	public static final CloudItemGun AK47_STRIPE = new CloudItemGun(214, 4257, IRON, "AK47 Stripe", false, AK47, EPSILON);
 	public static final CloudItemGun AK47_MACAW = new CloudItemGun(215, 4257, LAPIS, "AK47 Macaw", false, AK47, CLASH);
 	public static final CloudItemGun AK47_XRAY = new CloudItemGun(216, 4257, LAPIS, "AK47 X-Ray", false, AK47, REVOLUTION);
+	public static final CloudItemGun AK47_CREEP = new CloudItemGun(217, 4257, OBSIDIAN, "AK47 Creep", false, AK47, PHANTASMAGORIA);
+	public static final CloudItemGun AK47_BONES = new CloudItemGun(218, 4257, LAPIS, "AK47 Bones", false, AK47, SEPULCHER);
 
 	public static final CloudItemGun FAMAS = new CloudItemGun(300, 4258, DEFAULT, "Famas", true, RIFLE);
-	public static final CloudItemGun FAMAS_AKARI = new CloudItemGun(301, 4258, LAPIS, "Famas Akari", false, FAMAS, null);
+	public static final CloudItemGun FAMAS_AKARI = new CloudItemGun(301, 4258, IRON, "Famas Akari", false, FAMAS, BIOMECHANIC);
 	public static final CloudItemGun FAMAS_WARHAWK = new CloudItemGun(302, 4258, DIAMOND, "Famas Warhawk", false, FAMAS, REVOLUTION);
-	public static final CloudItemGun FAMAS_SPOOKY = new CloudItemGun(303, 4258, LAPIS, "Famas Spooky", false, FAMAS, null);
+	public static final CloudItemGun FAMAS_SPOOKY = new CloudItemGun(303, 4258, IRON, "Famas Spooky", false, FAMAS, PHANTASMAGORIA);
 	public static final CloudItemGun FAMAS_PULSE = new CloudItemGun(304, 4258, COAL, "Famas Pulse", false, FAMAS, BETA);
 	public static final CloudItemGun FAMAS_NUCLEAR = new CloudItemGun(305, 4258, LAPIS, "Famas Nuclear", false, FAMAS, ELEMENTAL);
 	public static final CloudItemGun FAMAS_SANDSTORM = new CloudItemGun(306, 4258, COAL, "Famas Sandstorm", false, FAMAS, OASIS);
@@ -114,7 +122,7 @@ public final class CloudItems {
 
 	public static final CloudItemGun M1911 = new CloudItemGun(500, 4266, DEFAULT, "M1911", true, PISTOL);
 	public static final CloudItemGun M1911_DRAGON = new CloudItemGun(501, 4266, LAPIS, "M1911 Dragon", false, M1911, ALPHA);
-	public static final CloudItemGun M1911_TUXEDO = new CloudItemGun(502, 4266, IRON, "M1911 Tuxedo", false, M1911, null);
+	public static final CloudItemGun M1911_TUXEDO = new CloudItemGun(502, 4266, COAL, "M1911 Tuxedo", false, M1911, PHANTASMAGORIA);
 	public static final CloudItemGun M1911_RAIN = new CloudItemGun(503, 4266, COAL, "M1911 Rain", false, M1911, EPSILON);
 	public static final CloudItemGun M1911_OLDWEST = new CloudItemGun(504, 4266, COAL, "M1911 OldWest", false, M1911, REVOLUTION);
 	public static final CloudItemGun M1911_SHOCK = new CloudItemGun(505, 4266, IRON, "M1911 Shock", false, M1911, CHRONICAL);
@@ -123,6 +131,7 @@ public final class CloudItems {
 	public static final CloudItemGun M1911_BLAZE = new CloudItemGun(508, 4266, LAPIS, "M1911 Blaze", false, M1911, MYTHIC);
 	public static final CloudItemGun M1911_GOLD = new CloudItemGun(509, 4266, LAPIS, "M1911 Gold", false, M1911, ELEMENTAL);
 	public static final CloudItemGun M1911_INDIRECT = new CloudItemGun(510, 4266, IRON, "M1911 Indirect", false, M1911, REVOLUTION);
+	public static final CloudItemGun M1911_MUMMY = new CloudItemGun(511, 4266, COAL, "M1911 Mummy", false, M1911, SEPULCHER);
 
 	public static final CloudItemGun G18 = new CloudItemGun(600, 4267, DEFAULT, "G18", true, PISTOL);
 	public static final CloudItemGun G18_RACE = new CloudItemGun(601, 4267, IRON, "G18 Race", false, G18, EPSILON);
@@ -132,10 +141,16 @@ public final class CloudItems {
 	public static final CloudItemGun G18_URBAN = new CloudItemGun(605, 4267, COAL, "G18 Urban", false, G18, EPSILON);
 	public static final CloudItemGun G18_CYREX = new CloudItemGun(606, 4267, IRON, "G18 Cyrex", false, G18, ALPHA);
 	public static final CloudItemGun G18_HORNET = new CloudItemGun(607, 4267, IRON, "G18 Hornet", false, G18, OASIS);
+	public static final CloudItemGun G18_VULCAN = new CloudItemGun(608, 4267, LAPIS, "G18 Vulcan", false, G18, VECTORIZED);
+	public static final CloudItemGun G18_CANDY_APPLE = new CloudItemGun(609, 4267, COAL, "G18 Candy Apple", false, G18, VECTORIZED);
+	public static final CloudItemGun G18_MOONRISE = new CloudItemGun(610, 4267, LAPIS, "G18 Moonrise", false, G18, BIOMECHANIC);
+	public static final CloudItemGun G18_CIRCUIT = new CloudItemGun(611, 4267, COAL, "G18 Circuit", false, G18, BIOMECHANIC);
+	public static final CloudItemGun G18_GHOUL = new CloudItemGun(612, 4267, COAL, "G18 Ghoul", false, G18, PHANTASMAGORIA);
+	public static final CloudItemGun G18_GHOST = new CloudItemGun(613, 4267, COAL, "G18 Ghost", false, G18, SEPULCHER);
 
 	public static final CloudItemGun TEC9 = new CloudItemGun(650, 4270, DEFAULT, "TEC9", true, PISTOL);
 	public static final CloudItemGun TEC9_QUAKORONIC = new CloudItemGun(651, 4270, COAL, "TEC9 Quakoronic", false, TEC9, CHRONICAL);
-	public static final CloudItemGun TEC9_ECO = new CloudItemGun(652, 4270, IRON, "TEC9 Eco", false, TEC9, null);
+	public static final CloudItemGun TEC9_ECO = new CloudItemGun(652, 4270, LAPIS, "TEC9 Eco", false, TEC9, BIOMECHANIC);
 	public static final CloudItemGun TEC9_AQUARIUM = new CloudItemGun(653, 4270, LAPIS, "TEC9 Aquarium", false, TEC9, REVOLUTION);
 	public static final CloudItemGun TEC9_TORQUE = new CloudItemGun(654, 4270, LAPIS, "TEC9 Torque", false, TEC9, MYTHIC);
 	public static final CloudItemGun TEC9_HORNET = new CloudItemGun(655, 4270, IRON, "TEC9 Hornet", false, TEC9, DELTA);
@@ -145,8 +160,8 @@ public final class CloudItems {
 	public static final CloudItemGun DEAGLE = new CloudItemGun(700, 4268, DEFAULT, "Deagle", true, PISTOL);
 	public static final CloudItemGun DEAGLE_NIGHTRAZER = new CloudItemGun(701, 4268, IRON, "Deagle NightRazer", false, DEAGLE, CHRONICAL);
 	public static final CloudItemGun DEAGLE_DEADHORIZON = new CloudItemGun(702, 4268, LAPIS, "Deagle Dead Horizon", false, DEAGLE, CHRONICAL);
-	public static final CloudItemGun DEAGLE_GRIN = new CloudItemGun(703, 4268, LAPIS, "Deagle Grin", false, DEAGLE, null);
-	public static final CloudItemGun DEAGLE_NAVY = new CloudItemGun(704, 4268, COAL, "Deagle Navy", false, DEAGLE, null);
+	public static final CloudItemGun DEAGLE_GRIN = new CloudItemGun(703, 4268, LAPIS, "Deagle Grin", false, DEAGLE, SEPULCHER);
+	public static final CloudItemGun DEAGLE_NAVY = new CloudItemGun(704, 4268, COAL, "Deagle Navy", false, DEAGLE, VECTORIZED);
 	public static final CloudItemGun DEAGLE_WATERMELON = new CloudItemGun(705, 4268, GOLD, "Deagle Watermelon", false, DEAGLE, ALPHA);
 	public static final CloudItemGun DEAGLE_MYSTIC = new CloudItemGun(706, 4268, COAL, "Deagle Mystic", false, DEAGLE, MYTHIC);
 	public static final CloudItemGun DEAGLE_BLOODSPORT = new CloudItemGun(707, 4268, GOLD, "Deagle Bloodsport", false, DEAGLE, GAMMA);
@@ -157,15 +172,17 @@ public final class CloudItems {
 	public static final CloudItemGun DEAGLE_COBALT = new CloudItemGun(712, 4268, IRON, "Deagle Cobalt", false, DEAGLE, CLASH);
 	public static final CloudItemGun DEAGLE_GOLD = new CloudItemGun(713, 4268, LAPIS, "Deagle Gold", false, DEAGLE, ELEMENTAL);
 	public static final CloudItemGun DEAGLE_DEVI = new CloudItemGun(714, 4268, COAL, "Deagle Devi", false, DEAGLE, REVOLUTION);
+	public static final CloudItemGun DEAGLE_MECHAINDUSTRIES = new CloudItemGun(715, 4268, LAPIS, "Deagle Mechaindustries", false, DEAGLE, BIOMECHANIC);
 
 	public static final CloudItemGun P250 = new CloudItemGun(750, 4269, DEFAULT, "P250", true, PISTOL);
 	public static final CloudItemGun P250_IRRADIATED = new CloudItemGun(751, 4269, IRON, "P250 Irradiated", false, P250, DELTA);
-	public static final CloudItemGun P250_SEEYALATER = new CloudItemGun(752, 4269, DIAMOND, "P250 SeeYaLater", false, P250, MYTHIC);
+	public static final CloudItemGun P250_SEEYALATER = new CloudItemGun(752, 4269, DIAMOND, "P250 SeeYaLater", false, P250, BIOMECHANIC);
 	public static final CloudItemGun P250_CITY = new CloudItemGun(753, 4269, LAPIS, "P250 City", false, P250, REVOLUTION);
 	public static final CloudItemGun P250_BEAST = new CloudItemGun(754, 4269, GOLD, "P250 Beast", false, P250, CHRONICAL);
-	public static final CloudItemGun P250_ARCTIC = new CloudItemGun(755, 4269, COAL, "P250 Arctic", false, P250, null);
+	public static final CloudItemGun P250_ARCTIC = new CloudItemGun(755, 4269, COAL, "P250 Arctic", false, P250, BIOMECHANIC);
 	public static final CloudItemGun P250_DUNE = new CloudItemGun(756, 4269, COAL, "P250 Dune", false, P250, OASIS);
 	public static final CloudItemGun P250_NIPPON = new CloudItemGun(757, 4269, LAPIS, "P250 Nippon", false, P250, EPSILON);
+	public static final CloudItemGun P250_HAUNTED = new CloudItemGun(758, 4269, LAPIS, "P250 Haunted", false, P250, SEPULCHER);
 
 	public static final CloudItemGun P90 = new CloudItemGun(800, 4276, DEFAULT, "P90", true, SMG);
 	public static final CloudItemGun P90_RUST = new CloudItemGun(801, 4276, COAL, "P90 Rust", false, P90, ELEMENTAL);
@@ -174,29 +191,35 @@ public final class CloudItems {
 	public static final CloudItemGun P90_ARROW = new CloudItemGun(804, 4276, IRON, "P90 Arrow", false, P90, ALPHA);
 	public static final CloudItemGun P90_MEDICINE = new CloudItemGun(805, 4276, GOLD, "P90 Medicine", false, P90, DELTA);
 	public static final CloudItemGun P90_MODULE = new CloudItemGun(806, 4276, IRON, "P90 Module", false, P90, REVOLUTION);
+	public static final CloudItemGun P90_GRIM = new CloudItemGun(807, 4276, DIAMOND, "P90 Grim", false, P90, PHANTASMAGORIA);
 
 	public static final CloudItemGun MAC10 = new CloudItemGun(900, 4277, DEFAULT, "MAC10", true, SMG);
 	public static final CloudItemGun MAC10_RACE = new CloudItemGun(901, 4277, IRON, "MAC10 Race", false, MAC10, CLASH);
-	public static final CloudItemGun MAC10_PUMPKIN = new CloudItemGun(902, 4277, LAPIS, "MAC10 Pumpkin", false, MAC10, null);
+	public static final CloudItemGun MAC10_PUMPKIN = new CloudItemGun(902, 4277, IRON, "MAC10 Pumpkin", false, MAC10, PHANTASMAGORIA);
 	public static final CloudItemGun MAC10_VIOLET = new CloudItemGun(903, 4277, COAL, "MAC10 Violet", false, MAC10, REVOLUTION);
 	public static final CloudItemGun MAC10_CHICKEN = new CloudItemGun(904, 4277, DIAMOND, "MAC10 Chicken", false, MAC10, OASIS);
 	public static final CloudItemGun MAC10_CANDY_APPLE = new CloudItemGun(905, 4277, COAL, "MAC10 Candy Apple", false, MAC10, GAMMA);
 	public static final CloudItemGun MAC10_CIRCUIT = new CloudItemGun(906, 4277, COAL, "MAC10 Circuit", false, MAC10, DELTA);
 	public static final CloudItemGun MAC10_NEON = new CloudItemGun(907, 4277, DIAMOND, "MAC10 Neon", false, MAC10, CLASH);
 	public static final CloudItemGun MAC10_FADE = new CloudItemGun(908, 4277, GOLD, "MAC10 Fade", false, MAC10, ELEMENTAL);
+	public static final CloudItemGun MAC10_ASMO = new CloudItemGun(909, 4277, GOLD, "MAC10 Asmo", false, MAC10, VECTORIZED);
+	public static final CloudItemGun MAC10_SPIDER = new CloudItemGun(910, 4277, GOLD, "MAC10 Spider", false, MAC10, PHANTASMAGORIA);
+	public static final CloudItemGun MAC10_SWARM = new CloudItemGun(911, 4277, IRON, "MAC10 Swarm", false, MAC10, SEPULCHER);
 
 	public static final CloudItemGun VECTOR = new CloudItemGun(1000, 4278, DEFAULT, "Vector", true, SMG);
-	public static final CloudItemGun VECTOR_CIRCUIT = new CloudItemGun(1001, 4278, IRON, "Vector Circuit", false, VECTOR, null);
+	public static final CloudItemGun VECTOR_CIRCUIT = new CloudItemGun(1001, 4278, COAL, "Vector Circuit", false, VECTOR, BIOMECHANIC);
 	public static final CloudItemGun VECTOR_BLOODYEQUATION = new CloudItemGun(1002, 4278, IRON, "Vector Bloody Equation", false, VECTOR, GAMMA);
-	public static final CloudItemGun VECTOR_ARCTIC = new CloudItemGun(1003, 4278, GOLD, "Vector Arctic", false, VECTOR, null);
+	public static final CloudItemGun VECTOR_ARCTIC = new CloudItemGun(1003, 4278, IRON, "Vector Arctic", false, VECTOR, VECTORIZED);
 	public static final CloudItemGun VECTOR_SUNNY = new CloudItemGun(1004, 4278, COAL, "Vector Sunny", false, VECTOR, ELEMENTAL);
 	public static final CloudItemGun VECTOR_SLIME = new CloudItemGun(1005, 4278, IRON, "Vector Slime", false, VECTOR, MYTHIC);
+	public static final CloudItemGun VECTOR_EXTINCT = new CloudItemGun(1006, 4278, DIAMOND, "Vector Extinct", false, VECTOR, VECTORIZED);
+	public static final CloudItemGun VECTOR_ORTHUS = new CloudItemGun(1007, 4278, LAPIS, "Vector Orthus", false, VECTOR, PHANTASMAGORIA);
 
 	public static final CloudItemGun AWP = new CloudItemGun(1100, 4286, DEFAULT, "AWP", true, SNIPER);
 	public static final CloudItemGun AWP_DRAGON = new CloudItemGun(1101, 4286, DIAMOND, "AWP Dragon", false, AWP, BETA);
 	public static final CloudItemGun AWP_MANOWAR = new CloudItemGun(1102, 4286, LAPIS, "AWP Man O War", false, AWP, OASIS);
 	public static final CloudItemGun AWP_ASMO = new CloudItemGun(1103, 4286, GOLD, "AWP Asmo", false, AWP, CLASH);
-	public static final CloudItemGun AWP_BONES = new CloudItemGun(1104, 4286, GOLD, "AWP Bones", false, AWP, null);
+	public static final CloudItemGun AWP_BONES = new CloudItemGun(1104, 4286, LAPIS, "AWP Bones", false, AWP, PHANTASMAGORIA);
 	public static final CloudItemGun AWP_REDLINE = new CloudItemGun(1105, 4286, IRON, "AWP Redline", false, AWP, BETA);
 	public static final CloudItemGun AWP_BOOM = new CloudItemGun(1106, 4286, LAPIS, "AWP Boom", false, AWP, CHRONICAL);
 	public static final CloudItemGun AWP_LIGHTNING = new CloudItemGun(1107, 4286, DIAMOND, "AWP Lightning", false, AWP, ELEMENTAL);
@@ -206,6 +229,9 @@ public final class CloudItems {
 	public static final CloudItemGun AWP_OCEANDEPTH = new CloudItemGun(1111, 4286, DIAMOND, "AWP OceanDepth", false, AWP, DELTA);
 	public static final CloudItemGun AWP_AKARI = new CloudItemGun(1112, 4286, LAPIS, "AWP Akari", false, AWP, DELTA);
 	public static final CloudItemGun AWP_CROWD = new CloudItemGun(1113, 4286, GOLD, "AWP Crowd", false, AWP, EPSILON);
+	public static final CloudItemGun AWP_FOREST = new CloudItemGun(1114, 4286, COAL, "AWP Forest", false, AWP, VECTORIZED);
+	public static final CloudItemGun AWP_STEAMPUNK = new CloudItemGun(1115, 4286, GOLD, "AWP Steampunk", false, AWP, BIOMECHANIC);
+	public static final CloudItemGun AWP_PUMPKIN = new CloudItemGun(1116, 4286, GOLD, "AWP Pumpkin", false, AWP, SEPULCHER);
 
 	public static final CloudItemGun DRAGUNOV = new CloudItemGun(1200, 4287, DEFAULT, "Dragunov", true, SNIPER);
 	public static final CloudItemGun DRAGUNOV_SKY = new CloudItemGun(1201, 4287, IRON, "Dragunov Sky", false, DRAGUNOV, OASIS);
@@ -213,12 +239,13 @@ public final class CloudItems {
 	public static final CloudItemGun DRAGUNOV_JUNGLE = new CloudItemGun(1203, 4287, COAL, "Dragunov Jungle", false, DRAGUNOV, ALPHA);
 	public static final CloudItemGun DRAGUNOV_WORMGOD = new CloudItemGun(1204, 4287, DIAMOND, "Dragunov Wormgod", false, DRAGUNOV, MYTHIC);
 	public static final CloudItemGun DRAGUNOV_ELITE = new CloudItemGun(1205, 4287, COAL, "Dragunov Elite", false, DRAGUNOV, CLASH);
+	public static final CloudItemGun DRAGUNOV_GHOST = new CloudItemGun(1206, 4287, COAL, "Dragunov Ghost", false, DRAGUNOV, SEPULCHER);
 
 	public static final CloudItemGun SCAR20 = new CloudItemGun(1300, 4288, DEFAULT, "Scar20", true, SNIPER);
 	public static final CloudItemGun SCAR20_CYREX = new CloudItemGun(1301, 4288, IRON, "Scar20 Cyrex", false, SCAR20, ALPHA);
 	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, 4288, DIAMOND, "Scar20 Unicorn", false, SCAR20, CHRONICAL);
 	public static final CloudItemGun SCAR20_ELITE = new CloudItemGun(1303, 4288, COAL, "Scar20 Elite", false, SCAR20, MYTHIC);
-	public static final CloudItemGun SCAR20_SHOCK = new CloudItemGun(1304, 4288, LAPIS, "Scar20 Shock", false, SCAR20, null);
+	public static final CloudItemGun SCAR20_SHOCK = new CloudItemGun(1304, 4288, IRON, "Scar20 Shock", false, SCAR20, VECTORIZED);
 	public static final CloudItemGun SCAR20_SPORT = new CloudItemGun(1305, 4288, DIAMOND, "Scar20 Sport", false, SCAR20, BETA);
 	public static final CloudItemGun SCAR20_POWERCORE = new CloudItemGun(1306, 4288, COAL, "Scar20 Powercore", false, SCAR20, GAMMA);
 	public static final CloudItemGun SCAR20_ARCTIC = new CloudItemGun(1307, 4288, COAL, "Scar20 Arctic", false, SCAR20, CHRONICAL);
@@ -239,6 +266,9 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_TAC_RUBY = new CloudItemKnife(1541, 4497, OBSIDIAN, "Tac Knife Ruby", false, KNIFE_TAC);
 	public static final CloudItemKnife KNIFE_TAC_FADE = new CloudItemKnife(1542, 4498, OBSIDIAN, "Tac Knife Fade", false, KNIFE_TAC);
 	public static final CloudItemKnife KNIFE_TAC_RUST = new CloudItemKnife(1543, 4499, OBSIDIAN, "Tac Knife Rust", false, KNIFE_TAC);
+	public static final CloudItemKnife KNIFE_TAC_ETHERFIRE = new CloudItemKnife(1544, 4500, OBSIDIAN, "Tac Knife Etherfire", false, KNIFE_TAC);
+	public static final CloudItemKnife KNIFE_TAC_WATERMELON = new CloudItemKnife(1545, 4501, OBSIDIAN, "Tac Knife Watermelon", false, KNIFE_TAC);
+	public static final CloudItemKnife KNIFE_TAC_INVERTED = new CloudItemKnife(1546, 4502, OBSIDIAN, "Tac Knife Inverted", false, KNIFE_TAC);
 
 	public static final CloudItemKnife KNIFE_BAY = new CloudItemKnife(1510, 4466, OBSIDIAN, "Bayonet", false);
 	public static final CloudItemKnife KNIFE_BAY_MARBLE = new CloudItemKnife(1511, 4467, OBSIDIAN, "Bayonet Marble", false, KNIFE_BAY);
@@ -254,6 +284,9 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_BAY_RUBY = new CloudItemKnife(1551, 4507, OBSIDIAN, "Bayonet Ruby", false, KNIFE_BAY);
 	public static final CloudItemKnife KNIFE_BAY_FADE = new CloudItemKnife(1552, 4508, OBSIDIAN, "Bayonet Fade", false, KNIFE_BAY);
 	public static final CloudItemKnife KNIFE_BAY_RUST = new CloudItemKnife(1553, 4509, OBSIDIAN, "Bayonet Rust", false, KNIFE_BAY);
+	public static final CloudItemKnife KNIFE_BAY_ETHERFIRE = new CloudItemKnife(1554, 4510, OBSIDIAN, "Bayonet Etherfire", false, KNIFE_BAY);
+	public static final CloudItemKnife KNIFE_BAY_WATERMELON = new CloudItemKnife(1555, 4511, OBSIDIAN, "Bayonet Watermelon", false, KNIFE_BAY);
+	public static final CloudItemKnife KNIFE_BAY_INVERTED = new CloudItemKnife(1556, 4512, OBSIDIAN, "Bayonet Inverted", false, KNIFE_BAY);
 
 	public static final CloudItemKnife KNIFE_KAR = new CloudItemKnife(1520, 4476, OBSIDIAN, "Karambit", false);
 	public static final CloudItemKnife KNIFE_KAR_MARBLE = new CloudItemKnife(1521, 4477, OBSIDIAN, "Karambit Marble", false, KNIFE_KAR);
@@ -269,6 +302,9 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_KAR_RUBY = new CloudItemKnife(1561, 4517, OBSIDIAN, "Karambit Ruby", false, KNIFE_KAR);
 	public static final CloudItemKnife KNIFE_KAR_FADE = new CloudItemKnife(1562, 4518, OBSIDIAN, "Karambit Fade", false, KNIFE_KAR);
 	public static final CloudItemKnife KNIFE_KAR_RUST = new CloudItemKnife(1563, 4519, OBSIDIAN, "Karambit Rust", false, KNIFE_KAR);
+	public static final CloudItemKnife KNIFE_KAR_ETHERFIRE = new CloudItemKnife(1564, 4520, OBSIDIAN, "Karambit Etherfire", false, KNIFE_KAR);
+	public static final CloudItemKnife KNIFE_KAR_WATERMELON = new CloudItemKnife(1565, 4521, OBSIDIAN, "Karambit Watermelon", false, KNIFE_KAR);
+	public static final CloudItemKnife KNIFE_KAR_INVERTED = new CloudItemKnife(1566, 4522, OBSIDIAN, "Karambit Inverted", false, KNIFE_KAR);
 
 	public static final CloudItemKnife KNIFE_BFL = new CloudItemKnife(1530, 4486, OBSIDIAN, "Butterfly", false);
 	public static final CloudItemKnife KNIFE_BFL_MARBLE = new CloudItemKnife(1531, 4487, OBSIDIAN, "Butterfly Marble", false, KNIFE_BFL);
@@ -283,12 +319,16 @@ public final class CloudItems {
 	public static final CloudItemKnife KNIFE_BFL_RUBY = new CloudItemKnife(1571, 4527, OBSIDIAN, "Butterfly Ruby", false, KNIFE_BFL);
 	public static final CloudItemKnife KNIFE_BFL_FADE = new CloudItemKnife(1572, 4528, OBSIDIAN, "Butterfly Fade", false, KNIFE_BFL);
 	public static final CloudItemKnife KNIFE_BFL_RUST = new CloudItemKnife(1573, 4529, OBSIDIAN, "Butterfly Rust", false, KNIFE_BFL);
+	public static final CloudItemKnife KNIFE_BFL_ETHERFIRE = new CloudItemKnife(1574, 4530, OBSIDIAN, "Butterfly Etherfire", false, KNIFE_BFL);
+	public static final CloudItemKnife KNIFE_BFL_WATERMELON = new CloudItemKnife(1575, 4531, OBSIDIAN, "Butterfly Watermelon", false, KNIFE_BFL);
+	public static final CloudItemKnife KNIFE_BFL_INVERTED = new CloudItemKnife(1576, 4532, OBSIDIAN, "Butterfly Inverted", false, KNIFE_BFL);
 
 	public static final CloudItemGun NOVA = new CloudItemGun(1600, 4296, DEFAULT, "Nova", true, HEAVY);
 	public static final CloudItemGun NOVA_OXIDEBLAZE = new CloudItemGun(1601, 4296, IRON, "Nova Oxide Blaze", false, NOVA, ELEMENTAL);
 	public static final CloudItemGun NOVA_HYPER_BEAST = new CloudItemGun(1602, 4296, DIAMOND, "Nova Hyper Beast", false, NOVA, EPSILON);
 	public static final CloudItemGun NOVA_JUNK = new CloudItemGun(1603, 4296, COAL, "Nova Junk", false, NOVA, BETA);
 	public static final CloudItemGun NOVA_INFUSED = new CloudItemGun(1604, 4296, LAPIS, "Nova Infused", false, NOVA, CLASH);
+	public static final CloudItemGun NOVA_GHOST = new CloudItemGun(1605, 4296, LAPIS, "Nova Ghost", false, NOVA, PHANTASMAGORIA);
 
 	public static final CloudItemGun SAWEDOFF = new CloudItemGun(1650, 4297, DEFAULT, "Sawed-Off", true, HEAVY);
 	public static final CloudItemGun SAWEDOFF_WASTELANDPRINCESS = new CloudItemGun(1651, 4297, GOLD, "Sawed-Off WastelandPrincess", false, SAWEDOFF, REVOLUTION);
@@ -301,22 +341,26 @@ public final class CloudItems {
 
 	public static final CloudItemGun MAG7 = new CloudItemGun(1700, 4298, DEFAULT, "Mag-7", true, HEAVY);
 	public static final CloudItemGun MAG7_ROYALFIRE = new CloudItemGun(1701, 4298, IRON, "Mag-7 Royal Fire", false, MAG7, OASIS);
-	public static final CloudItemGun MAG7_VAMPIRE = new CloudItemGun(1702, 4298, GOLD, "Mag-7 Vampire", false, MAG7, null);
+	public static final CloudItemGun MAG7_VAMPIRE = new CloudItemGun(1702, 4298, GOLD, "Mag-7 Vampire", false, MAG7, SEPULCHER);
 	public static final CloudItemGun MAG7_BULLDOZER = new CloudItemGun(1703, 4298, COAL, "Mag-7 Bulldozer", false, MAG7, ALPHA);
 	public static final CloudItemGun MAG7_SEABIRD = new CloudItemGun(1704, 4298, COAL, "Mag-7 Seabird", false, MAG7, GAMMA);
 
 	public static final CloudItemGun M249 = new CloudItemGun(1750, 4299, DEFAULT, "M249", true, HEAVY);
 	public static final CloudItemGun M249_NEON = new CloudItemGun(1751, 4299, IRON, "M249 Neon", false, M249, DELTA);
-	public static final CloudItemGun M249_GHOST = new CloudItemGun(1752, 4299, IRON, "M249 Ghost", false, M249, null);
+	public static final CloudItemGun M249_GHOST = new CloudItemGun(1752, 4299, COAL, "M249 Ghost", false, M249, PHANTASMAGORIA);
 	public static final CloudItemGun M249_HEATSYNC = new CloudItemGun(1753, 4299, COAL, "M249 Heatsync", false, M249, ALPHA);
 	public static final CloudItemGun M249_LOUDMOUTH = new CloudItemGun(1754, 4299, IRON, "M249 Loudmouth", false, M249, EPSILON);
 	public static final CloudItemGun M249_TACTICAL_FOREST = new CloudItemGun(1755, 4299, LAPIS, "M249 Tactical Forest", false, M249, GAMMA);
+	public static final CloudItemGun M249_COGSYSTEMSCHEME = new CloudItemGun(1756, 4299, LAPIS, "M249 CogSystemScheme", false, M249, VECTORIZED);
 
 	public static final CloudItemGun CZ75 = new CloudItemGun(1800, 4271, DEFAULT, "CZ75", true, PISTOL);
 	public static final CloudItemGun CZ75_PHANTOM = new CloudItemGun(1801, 4271, GOLD, "CZ75 Phantom", false, CZ75, null);
 	public static final CloudItemGun CZ75_GREEN = new CloudItemGun(1802, 4271, COAL, "CZ75 Green", false, CZ75, BETA);
 	public static final CloudItemGun CZ75_TIGER = new CloudItemGun(1803, 4271, LAPIS, "CZ75 Tiger", false, CZ75, OASIS);
 	public static final CloudItemGun CZ75_ASMO = new CloudItemGun(1804, 4271, GOLD, "CZ75 Asmo", false, CZ75, REVOLUTION);
+	public static final CloudItemGun CZ75_NEONPAW = new CloudItemGun(1805, 4271, LAPIS, "CZ75 Neonpaw", false, CZ75, VECTORIZED);
+	public static final CloudItemGun CZ75_GHOST = new CloudItemGun(1806, 4271, IRON, "CZ75 Ghost", false, CZ75, PHANTASMAGORIA);
+	public static final CloudItemGun CZ75_AFTERLIFE = new CloudItemGun(1807, 4271, IRON, "CZ75 Afterlife", false, CZ75, SEPULCHER);
 
 	public static final CloudItemGun FIVESEVEN = new CloudItemGun(1815, 4272, DEFAULT, "Fiveseven", true, PISTOL);
 
@@ -326,7 +370,7 @@ public final class CloudItems {
 
 	public static final CloudItemGun UMP45 = new CloudItemGun(1850, 4279, DEFAULT, "UMP-45", true, SMG);
 	public static final CloudItemGun UMP45_PRIMAL = new CloudItemGun(1851, 4279, GOLD, "UMP-45 Primal", false, UMP45, ALPHA);
-	public static final CloudItemGun UMP45_EDIFICE = new CloudItemGun(1852, 4279, IRON, "UMP-45 Edifice", false, UMP45, null);
+	public static final CloudItemGun UMP45_EDIFICE = new CloudItemGun(1852, 4279, IRON, "UMP-45 Edifice", false, UMP45, SEPULCHER);
 	public static final CloudItemGun UMP45_XERYC = new CloudItemGun(1853, 4279, IRON, "UMP-45 Xeryc", false, UMP45, BETA);
 
 	public static final CloudItemHat HAT_TOPHAT = new CloudItemHat(1900, 4656, LAPIS, "Top Hat", false);
@@ -451,6 +495,10 @@ public final class CloudItems {
 	public static final CloudItemKey CASE_KEY_CLASH = new CloudItemKey(4509, 5765, COAL, "Key Clash", false);
 	public static final CloudItemKey CASE_KEY_ELEMENTAL = new CloudItemKey(4510, 5766, COAL, "Key Elemental", false);
 	public static final CloudItemKey CASE_KEY_REVOLUTION = new CloudItemKey(4511, 5767, COAL, "Key Revolution", false);
+	public static final CloudItemKey CASE_KEY_VECTORIZED = new CloudItemKey(4512, 5768, COAL, "Key Vectorized", false);
+	public static final CloudItemKey CASE_KEY_BIOMECHANIC = new CloudItemKey(4513, 5769, COAL, "Key Biomechanic", false);
+	public static final CloudItemKey CASE_KEY_PHANTASMAGORIA = new CloudItemKey(4514, 5770, COAL, "Key Phantasmagoria", false);
+	public static final CloudItemKey CASE_KEY_SEPULCHER = new CloudItemKey(4515, 5771, COAL, "Key Sepulcher", false);
 
 	public static final List<CloudItem> POOL_KNIFE_VANILLA = List.of(
 		KNIFE_BAY, KNIFE_KAR, KNIFE_BFL
@@ -458,8 +506,8 @@ public final class CloudItems {
 	public static final List<CloudItem> POOL_KNIFE_PRESTIGE = List.of(
 		KNIFE_TAC_PRESTIGE, KNIFE_BAY_PRESTIGE, KNIFE_KAR_PRESTIGE, KNIFE_BFL_PRESTIGE
 	);
-	public static final List<CloudItem> POOL_KNIFE_AUTOTRONIC = List.of(
-		KNIFE_TAC_AUTOTRONIC, KNIFE_BAY_AUTOTRONIC, KNIFE_KAR_AUTOTRONIC, KNIFE_BFL_AUTOTRONIC
+	public static final List<CloudItem> POOL_KNIFE_ETHERFIRE = List.of(
+		KNIFE_TAC_ETHERFIRE, KNIFE_BAY_ETHERFIRE, KNIFE_KAR_ETHERFIRE, KNIFE_BFL_ETHERFIRE
 	);
 	public static final List<CloudItem> POOL_KNIFE_DOPPLER = List.of(
 		KNIFE_TAC_DOPPLER, KNIFE_BAY_DOPPLER, KNIFE_KAR_DOPPLER, KNIFE_BFL_DOPPLER
@@ -491,9 +539,18 @@ public final class CloudItems {
 	public static final List<CloudItem> POOL_KNIFE_STEEL = List.of(
 		KNIFE_TAC_STEEL, KNIFE_BAY_STEEL, KNIFE_KAR_STEEL, KNIFE_BFL_STEEL
 	);
+	public static final List<CloudItem> POOL_KNIFE_AUTOTRONIC = List.of(
+		KNIFE_TAC_AUTOTRONIC, KNIFE_BAY_AUTOTRONIC, KNIFE_KAR_AUTOTRONIC, KNIFE_BFL_AUTOTRONIC
+	);
+	public static final List<CloudItem> POOL_KNIFE_WATERMELON = List.of(
+		KNIFE_TAC_WATERMELON, KNIFE_BAY_WATERMELON, KNIFE_KAR_WATERMELON, KNIFE_BFL_WATERMELON
+	);
+	public static final List<CloudItem> POOL_KNIFE_INVERTED = List.of(
+		KNIFE_TAC_INVERTED, KNIFE_BAY_INVERTED, KNIFE_KAR_INVERTED, KNIFE_BFL_INVERTED
+	);
 
 	public static final CloudItemCase CASE_PRESTIGE = new CloudItemCase(2000, 4356, OBSIDIAN, "Prestige Case", false, CASE_KEY_PRESTIGE, POOL_KNIFE_PRESTIGE, false);
-	public static final CloudItemCase CASE_ALPHA = new CloudItemCase(2001, 4357, COAL, "Alpha Case", false, CASE_KEY_ALPHA, POOL_KNIFE_AUTOTRONIC, true)
+	public static final CloudItemCase CASE_ALPHA = new CloudItemCase(2001, 4357, COAL, "Alpha Case", false, CASE_KEY_ALPHA, POOL_KNIFE_ETHERFIRE, true)
 		.modifyContents(contents -> contents
 			.add(KNIFE_TAC_DISPLAY, 2, false)
 			.add(AWP_MECHA_DRAGON, 2, false)
@@ -676,6 +733,71 @@ public final class CloudItems {
 			.add(MAC10_VIOLET, 200)
 			.add(DEAGLE_DEVI, 200)
 			.add(M1911_OLDWEST, 200)
+		);
+	public static final CloudItemCase CASE_VECTORIZED = new CloudItemCase(2012, 4368, COAL, "Vectorized Case", false, CASE_KEY_VECTORIZED, POOL_KNIFE_AUTOTRONIC, true)
+		.modifyContents(contents -> contents
+			.add(KNIFE_TAC_DISPLAY, 4, false)
+			.add(VECTOR_EXTINCT, 8)
+			.add(MAC10_ASMO, 15)
+			.add(AK47_BLOODSPORT, 15)
+			.add(G18_VULCAN, 54)
+			.add(CZ75_NEONPAW, 54)
+			.add(M249_COGSYSTEMSCHEME, 54)
+			.add(M4A4_CYREX, 133)
+			.add(VECTOR_ARCTIC, 133)
+			.add(SCAR20_SHOCK, 133)
+			.add(AWP_FOREST, 200)
+			.add(DEAGLE_NAVY, 200)
+			.add(G18_CANDY_APPLE, 200)
+		);
+	public static final CloudItemCase CASE_BIOMECHANIC = new CloudItemCase(2013, 4369, COAL, "Biomechanic Case", false, CASE_KEY_BIOMECHANIC, POOL_KNIFE_WATERMELON, true)
+		.modifyContents(contents -> contents
+			.add(KNIFE_TAC_DISPLAY, 4, false)
+			.add(P250_SEEYALATER, 8)
+			.add(AWP_STEAMPUNK, 15)
+			.add(M4A4_GOLDEN_COIL, 15)
+			.add(G18_MOONRISE, 54)
+			.add(TEC9_ECO, 54)
+			.add(DEAGLE_MECHAINDUSTRIES, 54)
+			.add(M4A4_DAYBREAK, 133)
+			.add(FAMAS_AKARI, 133)
+			.add(AK47_SHIKARI, 133)
+			.add(VECTOR_CIRCUIT, 200)
+			.add(G18_CIRCUIT, 200)
+			.add(P250_ARCTIC, 200)
+		);
+	public static final CloudItemCase CASE_PHANTASMAGORIA = new CloudItemCase(2014, 4370, COAL, "Phantasmagoria Case", false, CASE_KEY_PHANTASMAGORIA, POOL_KNIFE_INVERTED, true)
+		.modifyContents(contents -> contents
+			.add(KNIFE_TAC_DISPLAY, 2, false)
+			.add(AK47_CREEP, 2, false)
+			.add(P90_GRIM, 8)
+			.add(M4A4_PUMPKIN, 15)
+			.add(MAC10_SPIDER, 15)
+			.add(AWP_BONES, 54)
+			.add(VECTOR_ORTHUS, 54)
+			.add(NOVA_GHOST, 54)
+			.add(MAC10_PUMPKIN, 133)
+			.add(CZ75_GHOST, 133)
+			.add(FAMAS_SPOOKY, 133)
+			.add(G18_GHOUL, 200)
+			.add(M249_GHOST, 200)
+			.add(M1911_TUXEDO, 200)
+		);
+	public static final CloudItemCase CASE_SEPULCHER = new CloudItemCase(2015, 4371, COAL, "Sepulcher Case", false, CASE_KEY_SEPULCHER, POOL_KNIFE_INVERTED, true)
+		.modifyContents(contents -> contents
+			.add(KNIFE_TAC_DISPLAY, 4, false)
+			.add(AK47_HAUNTED, 8)
+			.add(MAG7_VAMPIRE, 15)
+			.add(AWP_PUMPKIN, 15)
+			.add(DEAGLE_GRIN, 54)
+			.add(AK47_BONES, 54)
+			.add(P250_HAUNTED, 54)
+			.add(MAC10_SWARM, 133)
+			.add(UMP45_EDIFICE, 133)
+			.add(CZ75_AFTERLIFE, 133)
+			.add(DRAGUNOV_GHOST, 200)
+			.add(M1911_MUMMY, 200)
+			.add(G18_GHOST, 200)
 		);
 
 	private CloudItems() {

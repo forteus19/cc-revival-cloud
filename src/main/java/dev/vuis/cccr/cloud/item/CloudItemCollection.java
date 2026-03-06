@@ -16,7 +16,11 @@ public enum CloudItemCollection {
 	OASIS("Oasis"),
 	CLASH("Clash"),
 	ELEMENTAL("Elemental"),
-	REVOLUTION("Revolution");
+	REVOLUTION("Revolution"),
+	VECTORIZED("Vectorized"),
+	BIOMECHANIC("Biomechanic"),
+	PHANTASMAGORIA("Phantasmagoria"),
+	SEPULCHER("Sepulcher");
 
 	@Getter
 	private final String name;
