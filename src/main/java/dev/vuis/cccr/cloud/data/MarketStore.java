@@ -18,7 +18,8 @@ public final class MarketStore {
 		new Category("Cases 2", "Cases and Capsules", List.of(
 			new Item(CloudItems.CASE_MYTHIC, 100, 15),
 			new Item(CloudItems.CASE_OASIS, 100, 15),
-			new Item(CloudItems.CASE_CLASH, 100, 15)
+			new Item(CloudItems.CASE_CLASH, 100, 15),
+			new Item(CloudItems.CASE_ELEMENTAL, 100, 15)
 		)),
 		new Category("Keys 1", "Case/Capsule Keys", List.of(
 			new Item(CloudItems.CASE_KEY_ALPHA, 25, 15),
@@ -31,7 +32,8 @@ public final class MarketStore {
 		new Category("Keys 2", "Case/Capsule Keys", List.of(
 			new Item(CloudItems.CASE_KEY_MYTHIC, 25, 15),
 			new Item(CloudItems.CASE_KEY_OASIS, 25, 15),
-			new Item(CloudItems.CASE_KEY_CLASH, 25, 15)
+			new Item(CloudItems.CASE_KEY_CLASH, 25, 15),
+			new Item(CloudItems.CASE_KEY_ELEMENTAL, 25, 15)
 		)),
 		new Category("Misc", "Miscellaneous Items", List.of(
 			new Item(CloudItems.NAME_TAG, 50, 10)
