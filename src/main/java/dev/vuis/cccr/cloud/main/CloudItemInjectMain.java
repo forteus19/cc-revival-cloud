@@ -4,6 +4,7 @@ import dev.vuis.cccr.cloud.item.CloudItem;
 import dev.vuis.cccr.cloud.item.CloudItems;
 import dev.vuis.cccr.cloud.item.impl.CloudItemCase;
 import dev.vuis.cccr.cloud.item.impl.CloudItemGun;
+import dev.vuis.cccr.cloud.item.impl.CloudItemKnife;
 import dev.vuis.cccr.cloud.util.RandomCollection;
 import java.lang.reflect.Field;
 import java.util.HashMap;
@@ -25,11 +26,12 @@ public final class CloudItemInjectMain {
 			}
 			fields.put(item, itemField);
 
-			if (item.isDefault() || (item instanceof CloudItemGun gunItem && gunItem.getCollection() == null)) {
+			if (item.isDefault()) {
 				continue;
 			}
 
 			int expectedMcId = item.getMcId() - 256;
+			boolean print = false;
 
 			StringBuilder sb = new StringBuilder();
 			sb.append("public static final CloudItem ");
@@ -38,6 +40,10 @@ public final class CloudItemInjectMain {
 
 			switch (item) {
 				case CloudItemGun gunItem -> {
+					print = true;
+
+					String collection = gunItem.getCollection() == null ? "Cheats" : gunItem.getCollection().getDisplayName();
+
 					sb.append("CloudItemGun(");
 					sb.append(gunItem.getId());
 					sb.append(", ");
@@ -48,14 +54,9 @@ public final class CloudItemInjectMain {
 					sb.append(gunItem.getSuffix());
 					sb.append("\").setValue(CloudItemRarity.");
 					sb.append(gunItem.getRarity().getLegacyName());
-					sb.append(")");
-					String collection = gunItem.getCollection().getName();
-					if (collection != null) {
-						sb.append(".setCollection(\"");
-						sb.append(collection);
-						sb.append("\")");
-					}
-					sb.append(".setFilterMT(\"");
+					sb.append(").setCollection(\"");
+					sb.append(collection);
+					sb.append("\").setFilterMT(\"");
 					sb.append(gunItem.getMarketCategory().name().toLowerCase(Locale.ROOT));
 					sb.append("\");");
 
@@ -68,10 +69,23 @@ public final class CloudItemInjectMain {
 					sb.append(").setCollection(\"");
 					sb.append(collection);
 					sb.append("\");");
+				}
+				case CloudItemKnife knifeItem -> {
+					print = true;
 
-					System.out.println(sb);
+					sb.append("CloudItemKnife(");
+					sb.append(knifeItem.getId());
+					sb.append(", ");
+					sb.append(expectedMcId);
+					sb.append(", \"");
+					sb.append(knifeItem.getPrefix());
+					sb.append("\").setSuffix(\"");
+					sb.append(knifeItem.getSuffix());
+					sb.append("\").setValue(CloudItemRarity.TIER6).setFilterMT(\"knife\");");
 				}
 				case CloudItemCase caseItem -> {
+					print = true;
+
 					sb.append("CloudItemCase(");
 					sb.append(caseItem.getId());
 					sb.append(", ");
@@ -79,18 +93,22 @@ public final class CloudItemInjectMain {
 					sb.append(", \"\", ");
 					sb.append(caseItem.getKeyItem().getId());
 					sb.append(")");
-					for (RandomCollection.Entry<CloudItem> entry : caseItem.contents.getEntries().reversed()) {
+					for (RandomCollection.Entry<CloudItem> entry : caseItem.contents.getEntries()) {
 						sb.append(System.lineSeparator());
 						sb.append("\t.addContent(");
 						sb.append(fields.get(entry.objectSupplier().get()).getName());
 						sb.append(", 0)");
 					}
-					sb.append(".setSuffix(\"Case\").setValue(CloudItemRarity.TIER1).disableNameable().disableShowcase().disableContracts();");
-
-					System.out.println(sb);
+					sb.append(System.lineSeparator());
+					sb.append("\t.setSuffix(\"Case\").setValue(CloudItemRarity.TIER1).setFilterMT(\"case\").disableNameable().disableShowcase().disableContracts();");
 				}
 				default -> {
 				}
+			}
+
+			if (print) {
+				System.out.println(sb);
+				System.out.println();
 			}
 		}
 	}

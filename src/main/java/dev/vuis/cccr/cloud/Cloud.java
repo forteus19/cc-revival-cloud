@@ -192,7 +192,7 @@ public final class Cloud implements ICloud {
 
 	@Override
 	public String getCloudVersion() {
-		return "DEV";
+		return CloudConstants.VERSION;
 	}
 
 	@Override

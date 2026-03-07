@@ -18,7 +18,7 @@ public class GiveCommand implements Command {
 
 	@Override
 	public String getUsage() {
-		return "<username> <item id> <amount>";
+		return "<username> <item id | \"everything\"> <amount>";
 	}
 
 	@Override
@@ -32,12 +32,6 @@ public class GiveCommand implements Command {
 			source.sendMessage(getFullUsage());
 			return;
 		}
-		int itemId = Integer.parseInt(args[1]);
-		CloudItem item = CloudItems.getById(itemId);
-		if (item == null) {
-			source.sendMessage("Unknown item id '%d'.", itemId);
-			return;
-		}
 		String username = args[0];
 		int amount = Integer.parseInt(args[2]);
 
@@ -47,8 +41,26 @@ public class GiveCommand implements Command {
 			return;
 		}
 
-		for (int i = 0; i < amount; i++) {
-			inventory.addItemStack(new CloudItemStack(item), true);
+		switch (args[1]) {
+			case "everything" -> {
+				for (CloudItem item : CloudItems.all()) {
+					if (!item.isDefault()) {
+						inventory.addItemStack(new CloudItemStack(item), true);
+					}
+				}
+			}
+			default -> {
+				int itemId = Integer.parseInt(args[1]);
+				CloudItem item = CloudItems.getById(itemId);
+				if (item == null) {
+					source.sendMessage("Unknown item id '%d'.", itemId);
+					return;
+				}
+
+				for (int i = 0; i < amount; i++) {
+					inventory.addItemStack(new CloudItemStack(item), true);
+				}
+			}
 		}
 	}
 }

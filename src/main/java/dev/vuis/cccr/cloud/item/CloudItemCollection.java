@@ -18,10 +18,10 @@ public enum CloudItemCollection {
 	ELEMENTAL("Elemental"),
 	REVOLUTION("Revolution"),
 	VECTORIZED("Vectorized"),
-	BIOMECHANIC("Biomechanic"),
-	PHANTASMAGORIA("Phantasmagoria"),
+	BIOMECHANIC("Biomech"),
+	PHANTASMAGORIA("Phantom"),
 	SEPULCHER("Sepulcher");
 
 	@Getter
-	private final String name;
+	private final String displayName;
 }
