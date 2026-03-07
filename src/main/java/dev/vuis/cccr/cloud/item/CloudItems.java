@@ -65,7 +65,7 @@ public final class CloudItems {
 	public static final CloudItemGun M4A4_EVILDAIMYO = new CloudItemGun(102, 4256, DIAMOND, "M4A4 EvilDaimyo", false, M4A4, GAMMA);
 	public static final CloudItemGun M4A4_CAKEY = new CloudItemGun(103, 4256, LAPIS, "M4A4 Cakey", false, M4A4, BETA);
 	public static final CloudItemGun M4A4_HOWL = new CloudItemGun(104, 4256, OBSIDIAN, "M4A4 Howl", false, M4A4, ELEMENTAL);
-	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, IRON, "M4A4 Nerfed", false, M4A4, CLASH);
+	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, LAPIS, "M4A4 Nerfed", false, M4A4, CLASH);
 	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, M4A4, PHANTASMAGORIA);
 	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, 4256, LAPIS, "M4A4 Patriot", false, M4A4, null);
 	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, M4A4, VECTORIZED);
@@ -243,7 +243,7 @@ public final class CloudItems {
 
 	public static final CloudItemGun SCAR20 = new CloudItemGun(1300, 4288, DEFAULT, "Scar20", true, SNIPER);
 	public static final CloudItemGun SCAR20_CYREX = new CloudItemGun(1301, 4288, IRON, "Scar20 Cyrex", false, SCAR20, ALPHA);
-	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, 4288, DIAMOND, "Scar20 Unicorn", false, SCAR20, CHRONICAL);
+	public static final CloudItemGun SCAR20_UNICORN = new CloudItemGun(1302, 4288, OBSIDIAN, "Scar20 Unicorn", false, SCAR20, CHRONICAL);
 	public static final CloudItemGun SCAR20_ELITE = new CloudItemGun(1303, 4288, COAL, "Scar20 Elite", false, SCAR20, MYTHIC);
 	public static final CloudItemGun SCAR20_SHOCK = new CloudItemGun(1304, 4288, IRON, "Scar20 Shock", false, SCAR20, VECTORIZED);
 	public static final CloudItemGun SCAR20_SPORT = new CloudItemGun(1305, 4288, DIAMOND, "Scar20 Sport", false, SCAR20, BETA);
