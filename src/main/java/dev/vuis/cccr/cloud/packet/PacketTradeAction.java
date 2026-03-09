@@ -65,12 +65,12 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 			return;
 		}
 
-		if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerData.username.get())) {
-			return;
-		}
-
 		switch (action) {
 			case 1 -> {
+				if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerData.username.get())) {
+					return;
+				}
+
 				for (CloudItemStack offerStack : trade.offerStacks) {
 					if (offererInventory.getItemStack(offerStack.uuid) == null) {
 						connectionHandler.sendPacket(new PacketNotificationFromCloud(
@@ -108,12 +108,26 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 				));
 			}
 			case 2 -> {
+				if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerData.username.get())) {
+					return;
+				}
+
 				trade.finalize(Trade.Result.DENIED);
 				connectionHandler.sendPacket(new PacketNotificationFromCloud(
 					"Trade request denied!", CloudConstants.CC_NAME, 0
 				));
 				Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
 					String.format("%s denied your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
+				));
+			}
+			case 3 -> {
+				if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(offererData.username.get())) {
+					return;
+				}
+
+				trade.finalize(Trade.Result.DENIED);
+				connectionHandler.sendPacket(new PacketNotificationFromCloud(
+					"Trade request closed!", CloudConstants.CC_NAME, 0
 				));
 			}
 		}

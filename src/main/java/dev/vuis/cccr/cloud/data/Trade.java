@@ -23,6 +23,9 @@ public final class Trade {
 	public LocalDateTime end;
 
 	public void finalize(Result result) {
+		if (result != Result.PENDING) {
+			return;
+		}
 		this.result = result;
 		end = Util.utcNow();
 	}
