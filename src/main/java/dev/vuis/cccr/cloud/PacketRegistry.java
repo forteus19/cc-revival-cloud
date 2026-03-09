@@ -17,6 +17,7 @@ import dev.vuis.cccr.cloud.packet.PacketInventoryContract;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemAdded;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemDelete;
 import dev.vuis.cccr.cloud.packet.PacketInventoryItemRemoved;
+import dev.vuis.cccr.cloud.packet.PacketInventoryItemRename;
 import dev.vuis.cccr.cloud.packet.PacketInventoryOpenCase;
 import dev.vuis.cccr.cloud.packet.PacketInventorySetItemDefault;
 import dev.vuis.cccr.cloud.packet.PacketNotificationFromCloud;
@@ -85,6 +86,7 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(50, PacketRequestedMarketStoreItems.class);
 		G_TcpPacket.addPacketMapping(51, PacketMarketStoreOrder.class);
 		G_TcpPacket.addPacketMapping(53, PacketEditMood.class);
+		G_TcpPacket.addPacketMapping(61, PacketInventoryItemRename.class);
 		G_TcpPacket.addPacketMapping(63, PacketServerMatchMakingAccepted.class);
 		G_TcpPacket.addPacketMapping(64, PacketMMJoinServer.class);
 		G_TcpPacket.addPacketMapping(66, PacketPlayerDataIncreaseValue.class);
