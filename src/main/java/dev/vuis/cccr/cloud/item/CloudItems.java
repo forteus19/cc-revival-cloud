@@ -68,7 +68,7 @@ public final class CloudItems {
 	public static final CloudItemGun M4A4_NERFED = new CloudItemGun(105, 4256, LAPIS, "M4A4 Nerfed", false, M4A4, CLASH);
 	public static final CloudItemGun M4A4_PUMPKIN = new CloudItemGun(106, 4256, GOLD, "M4A4 Pumpkin", false, M4A4, PHANTASMAGORIA);
 	public static final CloudItemGun M4A4_PATRIOT = new CloudItemGun(107, 4256, LAPIS, "M4A4 Patriot", false, M4A4, null);
-	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, LAPIS, "M4A4 Cyrex", false, M4A4, VECTORIZED);
+	public static final CloudItemGun M4A4_CYREX = new CloudItemGun(108, 4256, IRON, "M4A4 Cyrex", false, M4A4, VECTORIZED);
 	public static final CloudItemGun M4A4_LURKER = new CloudItemGun(109, 4256, IRON, "M4A4 Lurker", false, M4A4, REVOLUTION);
 	public static final CloudItemGun M4A4_ASMO = new CloudItemGun(110, 4256, DIAMOND, "M4A4 Asmo", false, M4A4, ALPHA);
 	public static final CloudItemGun M4A4_DESERT = new CloudItemGun(111, 4256, COAL, "M4A4 Desert", false, M4A4, OASIS);
