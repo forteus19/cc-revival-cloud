@@ -22,12 +22,13 @@ public final class Trade {
 	public Result result = Result.PENDING;
 	public LocalDateTime end;
 
-	public void finalize(Result result) {
-		if (result != Result.PENDING) {
-			return;
+	public boolean finalize(Result result) {
+		if (this.result != Result.PENDING) {
+			return false;
 		}
 		this.result = result;
 		end = Util.utcNow();
+		return true;
 	}
 
 	public void writeTag(FDSTagCompound tag) {

@@ -99,36 +99,39 @@ public final class PacketTradeAction extends G_TcpPacketCustomPayload {
 					offererInventory.addItemStack(returnStack, true);
 				}
 
-				trade.finalize(Trade.Result.ACCEPTED);
-				connectionHandler.sendPacket(new PacketNotificationFromCloud(
-					"Trade request accepted!", CloudConstants.CC_NAME, 0
-				));
-				Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
-					String.format("%s accepted your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
-				));
+				if (trade.finalize(Trade.Result.ACCEPTED)) {
+					connectionHandler.sendPacket(new PacketNotificationFromCloud(
+						"Trade request accepted!", CloudConstants.CC_NAME, 0
+					));
+					Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
+						String.format("%s accepted your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
+					));
+				}
 			}
 			case 2 -> {
 				if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(returnerData.username.get())) {
 					return;
 				}
 
-				trade.finalize(Trade.Result.DENIED);
-				connectionHandler.sendPacket(new PacketNotificationFromCloud(
-					"Trade request denied!", CloudConstants.CC_NAME, 0
-				));
-				Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
-					String.format("%s denied your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
-				));
+				if (trade.finalize(Trade.Result.DENIED)) {
+					connectionHandler.sendPacket(new PacketNotificationFromCloud(
+						"Trade request denied!", CloudConstants.CC_NAME, 0
+					));
+					Cloud.instance().sendPacketToPlayer(offererData.uuid, new PacketNotificationFromCloud(
+						String.format("%s denied your trade request!", connectionHandler.getConnectionUsername()), CloudConstants.CC_NAME, 0
+					));
+				}
 			}
 			case 3 -> {
 				if (!connectionHandler.getConnectionUsername().equalsIgnoreCase(offererData.username.get())) {
 					return;
 				}
 
-				trade.finalize(Trade.Result.DENIED);
-				connectionHandler.sendPacket(new PacketNotificationFromCloud(
-					"Trade request closed!", CloudConstants.CC_NAME, 0
-				));
+				if (trade.finalize(Trade.Result.DENIED)) {
+					connectionHandler.sendPacket(new PacketNotificationFromCloud(
+						"Trade request closed!", CloudConstants.CC_NAME, 0
+					));
+				}
 			}
 		}
 	}
