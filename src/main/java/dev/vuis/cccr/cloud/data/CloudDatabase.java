@@ -65,13 +65,14 @@ public final class CloudDatabase {
 	public void savePlayerData(Connection connection, PlayerData data, boolean ignoreDirty) throws SQLException {
 		if (ignoreDirty || data.dirty.isDirty()) {
 			try (PreparedStatement ps = connection.prepareStatement(
-				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score) " +
-					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
+				"insert into players (uuid, username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score, clan_tag) " +
+					"values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?) " +
 					"on conflict (uuid) do update set " +
 					"username = excluded.username, trophies = excluded.trophies, kills = excluded.kills, deaths = excluded.deaths, " +
 					"games = excluded.games, first_bloods = excluded.first_bloods, match_karma = excluded.match_karma, minutes_played = excluded.minutes_played, " +
 					"exp = excluded.exp, emeralds = excluded.emeralds, mood = excluded.mood, achievements = excluded.achievements, " +
-					"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp, score = excluded.score"
+					"group_tag = excluded.group_tag, prestige = excluded.prestige, comp_exp = excluded.comp_exp, score = excluded.score, " +
+					"clan_tag = excluded.clan_tag"
 			)) {
 				ps.setObject(1, data.uuid);
 				ps.setString(2, data.username.get());
@@ -90,6 +91,7 @@ public final class CloudDatabase {
 				ps.setInt(15, data.prestige.get());
 				ps.setInt(16, data.compExp.get());
 				ps.setInt(17, data.score.get());
+				ps.setString(18, data.clanTag.get());
 
 				ps.executeUpdate();
 				data.dirty.clear();
@@ -181,7 +183,7 @@ public final class CloudDatabase {
 		PlayerData data;
 
 		try (PreparedStatement ps = connection.prepareStatement(
-			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score from players where uuid = ?"
+			"select username, trophies, kills, deaths, games, first_bloods, match_karma, minutes_played, exp, emeralds, mood, achievements, group_tag, prestige, comp_exp, score, clan_tag from players where uuid = ?"
 		)) {
 			ps.setObject(1, uuid);
 
@@ -210,6 +212,7 @@ public final class CloudDatabase {
 			data.prestige.set(rs.getInt("prestige"));
 			data.compExp.set(rs.getInt("comp_exp"));
 			data.score.set(rs.getInt("score"));
+			data.clanTag.set(rs.getString("clan_tag"));
 		}
 
 		try (PreparedStatement ps = connection.prepareStatement(

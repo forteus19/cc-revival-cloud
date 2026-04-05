@@ -7,6 +7,7 @@ import dev.vuis.cccr.cloud.packet.PacketClientRequest;
 import dev.vuis.cccr.cloud.packet.PacketClientUpdateStatus;
 import dev.vuis.cccr.cloud.packet.PacketConsoleCommand;
 import dev.vuis.cccr.cloud.packet.PacketConsoleMessage;
+import dev.vuis.cccr.cloud.packet.PacketEditClanTag;
 import dev.vuis.cccr.cloud.packet.PacketEditMood;
 import dev.vuis.cccr.cloud.packet.PacketFriendPoke;
 import dev.vuis.cccr.cloud.packet.PacketFriendRemove;
@@ -99,6 +100,7 @@ public final class PacketRegistry {
 		G_TcpPacket.addPacketMapping(78, PacketCompetitiveAbandon.class);
 		G_TcpPacket.addPacketMapping(79, PacketCompetitiveRejoin.class);
 		G_TcpPacket.addPacketMapping(80, PacketCompetitiveLeave.class);
+		G_TcpPacket.addPacketMapping(81, PacketEditClanTag.class);
 		G_TcpPacket.addPacketMapping(96, PacketCheckPrestige.class);
 	}
 }

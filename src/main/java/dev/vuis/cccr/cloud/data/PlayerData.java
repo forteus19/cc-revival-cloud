@@ -35,6 +35,7 @@ public final class PlayerData {
 	public final AtomicInteger exp = new AtomicInteger(0);
 	public final AtomicInteger emeralds = new AtomicInteger(999999999); // FIXME on alpha release
 	public final AtomicReference<String> mood = new AtomicReference<>();
+	public final AtomicReference<String> clanTag = new AtomicReference<>();
 	public final AtomicInteger compExp = new AtomicInteger(0);
 	public final AtomicInteger prestige = new AtomicInteger(0);
 	public final Set<Integer> achievements = ConcurrentHashMap.newKeySet();
@@ -90,6 +91,10 @@ public final class PlayerData {
 		tag.setInteger("emeralds", emeralds.get());
 		String moodGet = mood.get();
 		tag.setString("mood", moodGet != null ? moodGet : "");
+		String clanTagGet = clanTag.get();
+		if (clanTagGet != null) {
+			tag.setString("clantag", clanTagGet);
+		}
 		tag.setString("status", status.get());
 		tag.setInteger("coinDisplayed", coinId);
 		int compExpGet = compExp.get();
